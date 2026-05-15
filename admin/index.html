@@ -60,6 +60,21 @@
   /* ── Country flag in table ── */
   .flag-emoji { font-size: 16px; line-height: 1; }
   .order-action a { font-size: 12px; color: var(--green); text-decoration: underline; text-underline-offset: 2px; }
+
+  @media (max-width: 900px) {
+    /* 7-column table needs more than the global 700px */
+    .table-wrap table { min-width: 800px; }
+    /* Approval items: wrap so buttons don't crowd the name */
+    .approval-item { flex-wrap: wrap; gap: 6px; }
+    .approval-actions { width: 100%; justify-content: flex-end; }
+  }
+  @media (max-width: 520px) {
+    /* Hide bar chart value labels — too cramped at 400px */
+    .bar-val { display: none; }
+    /* Merchant rows: compress spacing */
+    .merch-rank { font-size: 15px; width: 18px; }
+    .merch-gmv strong { font-size: 13px; }
+  }
 </style>
 </head>
 <body class="app">
