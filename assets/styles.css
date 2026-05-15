@@ -515,3 +515,170 @@ tbody tr:hover { background: var(--cream); }
   .form-row, .form-row.three { grid-template-columns: 1fr; }
   main { padding: 16px 18px 36px; }
 }
+
+/* =============================================
+   RESPONSIVE — added for mobile support
+   ============================================= */
+
+/* Hamburger button — hidden on desktop */
+.hamburger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  margin-bottom: 16px;
+  border: none;
+  border-radius: 10px;
+  background: var(--green);
+  color: var(--cream);
+  cursor: pointer;
+}
+.sidebar.light ~ main .hamburger,
+body.app:has(.sidebar.light) .hamburger {
+  background: #fff;
+  color: var(--green);
+  border: 1px solid var(--line);
+}
+
+/* Sidebar overlay */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 998;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+.sidebar-overlay.show { display: block; }
+
+/* Customer nav hamburger — hidden on desktop */
+.cust-ham {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+/* ── Tablet ≤ 900px ── */
+@media (max-width: 900px) {
+  /* body.app: single column */
+  body.app {
+    grid-template-columns: 1fr;
+  }
+  /* Sidebar: slide-in drawer */
+  aside.sidebar {
+    position: fixed;
+    left: -272px;
+    top: 0;
+    height: 100dvh;
+    z-index: 999;
+    width: 264px;
+    transition: left 0.28s cubic-bezier(.4,0,.2,1);
+    overflow-y: auto;
+  }
+  aside.sidebar.open {
+    left: 0;
+    box-shadow: 8px 0 32px rgba(0,0,0,0.22);
+  }
+  /* Show hamburger */
+  .hamburger { display: flex; }
+
+  /* Main area */
+  main { padding: 16px 16px 48px; }
+
+  /* KPI grid: 2 cols */
+  .kpi-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* Row layouts: stack */
+  .row,
+  .row.eq,
+  .row.split,
+  .row.thirds { grid-template-columns: 1fr; }
+
+  /* Tables: horizontal scroll */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { min-width: 580px; }
+
+  /* Topbar */
+  .topbar { flex-direction: column; align-items: stretch; gap: 10px; }
+  .topbar h1 { font-size: 22px; }
+  .topbar-right { flex-wrap: wrap; width: 100%; }
+  .search-box { min-width: 160px; flex: 1; }
+
+  /* Forms */
+  .form-row { grid-template-columns: 1fr; }
+  .form-row.three { grid-template-columns: 1fr; }
+
+  /* Panel */
+  .panel { overflow-x: auto; }
+
+  /* Customer nav */
+  .cust-ham { display: flex; }
+  .cust-menu { display: none !important; }
+  .cust-menu.open {
+    display: flex !important;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--cream);
+    border-bottom: 1px solid var(--line);
+    padding: 10px 16px 16px;
+    gap: 2px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    z-index: 100;
+  }
+  .cust-nav { position: relative; }
+  .cust-search { display: none; }
+  .cust-nav-top,
+  .cust-nav-inner { padding: 10px 14px !important; gap: 10px !important; }
+
+  /* Customer footer grid */
+  .cust-foot-inner { grid-template-columns: 1fr 1fr !important; gap: 24px !important; }
+
+  /* Trust bar */
+  .trust-bar-inner { grid-template-columns: 1fr 1fr !important; gap: 16px !important; }
+
+  /* Product grid (class-based) */
+  .prod-grid { grid-template-columns: 1fr 1fr !important; }
+
+  /* Merchant card in customer home */
+  .merchant-card { flex-direction: column !important; }
+
+  /* Landing page cards */
+  .cards { grid-template-columns: 1fr 1fr; }
+  .stats { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Mobile ≤ 520px ── */
+@media (max-width: 520px) {
+  main { padding: 12px 12px 40px; }
+  .kpi-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .kpi-value { font-size: 26px; }
+  .panel { padding: 14px; }
+  .topbar h1 { font-size: 19px; }
+
+  /* Customer footer: single col */
+  .cust-foot-inner { grid-template-columns: 1fr !important; }
+  .trust-bar-inner { grid-template-columns: 1fr !important; }
+
+  /* Product grid: single col on very small screens */
+  .prod-grid { grid-template-columns: 1fr !important; }
+
+  /* Landing page */
+  .cards { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .arch-flow { grid-template-columns: 1fr !important; }
+}
