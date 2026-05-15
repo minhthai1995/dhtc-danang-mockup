@@ -75,6 +75,9 @@
 @media (max-width: 900px) {
   .cust-menu, .cust-search { display: none; }
   .cust-foot-inner { grid-template-columns: 1fr 1fr; }
+  .shop-aside { position: relative !important; top: auto !important; }
+  .lang-pill { display: none; }
+  .cust-cats a { padding: 10px 12px; font-size: 12px; }
 }
 </style>
 </head>
@@ -148,7 +151,7 @@
 </div>
 
 <div style="display:grid;grid-template-columns:240px 1fr;gap:28px;">
-  <aside style="background:#fff;padding:22px;border-radius:14px;border:1px solid var(--line);height:fit-content;position:sticky;top:120px;">
+  <aside class="shop-aside" style="background:#fff;padding:22px;border-radius:14px;border:1px solid var(--line);height:fit-content;min-height:fit-content;position:sticky;top:70px;">
     <h3 style="font-family:'Fraunces',serif;font-size:16px;font-weight:500;margin-bottom:16px;"><span data-vi>Bộ lọc</span><span data-en>Filters</span></h3>
 
     <div style="padding:14px 0;border-top:1px dashed var(--line);">

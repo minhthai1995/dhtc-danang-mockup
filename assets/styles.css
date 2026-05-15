@@ -597,7 +597,7 @@ body.app:has(.sidebar.light) .hamburger {
 
   /* Tables: horizontal scroll */
   .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  table { min-width: 580px; }
+  table { min-width: 700px; }
 
   /* Topbar */
   .topbar { flex-direction: column; align-items: stretch; gap: 10px; }
@@ -611,6 +611,11 @@ body.app:has(.sidebar.light) .hamburger {
 
   /* Panel */
   .panel { overflow-x: auto; }
+
+  /* Nav account button hidden on mobile */
+  .nav-account { display: none; }
+  /* Lang pill hidden on very narrow nav */
+  .cust-nav-inner .lang-pill { display: none; }
 
   /* Customer nav */
   .cust-ham { display: flex; }
@@ -658,6 +663,12 @@ body.app:has(.sidebar.light) .hamburger {
   .kpi-value { font-size: 26px; }
   .panel { padding: 14px; }
   .topbar h1 { font-size: 19px; }
+
+  /* Search box doesn't force overflow on small screens */
+  .search-box { min-width: 0; width: 100%; }
+  /* Tab bars scroll horizontally instead of wrapping */
+  .tab-bar { overflow-x: auto; flex-wrap: nowrap; width: 100%; }
+  .tab-bar::-webkit-scrollbar { display: none; }
 
   /* Customer footer: single col */
   .cust-foot-inner { grid-template-columns: 1fr !important; }

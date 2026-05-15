@@ -75,6 +75,9 @@
 @media (max-width: 900px) {
   .cust-menu, .cust-search { display: none; }
   .cust-foot-inner { grid-template-columns: 1fr 1fr; }
+  .lang-pill { display: none; }
+  .cust-cats a { padding: 10px 12px; font-size: 12px; }
+  .prod-img-wrap[style*="height:84px"] { height: 64px !important; }
 }
 </style>
 </head>
@@ -133,10 +136,10 @@
 
 <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:36px;margin-bottom:48px;">
   <div>
-    <div style="background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;height:520px;display:grid;place-items:center;padding:32px;">
+    <div style="background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;height:auto;min-height:240px;aspect-ratio:1;display:grid;place-items:center;padding:32px;">
       <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/34-300x300.png" alt="Organic Coffee" style="max-width:100%;max-height:100%;object-fit:contain;">
     </div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:10px;margin-top:12px;">
       <div class="prod-img-wrap" style="height:84px;border-radius:10px;border:2px solid var(--green);cursor:pointer;"><img src="https://dhtcdanang.com/wp-content/uploads/2023/07/34-300x300.png"></div>
       <div class="prod-img-wrap" style="height:84px;border-radius:10px;border:1px solid var(--line);cursor:pointer;background:var(--cream);"><img src="https://dhtcdanang.com/wp-content/uploads/2023/07/24-300x300.png"></div>
       <div class="prod-img-wrap" style="height:84px;border-radius:10px;border:1px solid var(--line);cursor:pointer;background:var(--cream);"><img src="https://dhtcdanang.com/wp-content/uploads/2023/07/2-300x300.png"></div>
@@ -150,7 +153,7 @@
       <span class="tag" style="background:var(--green);color:var(--gold);font-size:10px;">USDA ORGANIC</span>
     </div>
     <div style="font-size:10.5px;color:var(--gold-deep);letter-spacing:0.18em;text-transform:uppercase;font-weight:700;margin-bottom:6px;font-family:'JetBrains Mono',monospace;"><span data-vi>HẠT & NGŨ CỐC · DHTC-NS-002</span><span data-en>NUTS & SEEDS · DHTC-NS-002</span></div>
-    <h1 style="font-family:'Fraunces',serif;font-size:42px;font-weight:500;line-height:1.1;letter-spacing:-0.02em;margin-bottom:12px;">
+    <h1 style="font-family:'Fraunces',serif;font-size:clamp(24px,6vw,42px);font-weight:500;line-height:1.1;letter-spacing:-0.02em;margin-bottom:12px;">
       <span data-vi>Cà phê hữu cơ rang xay</span>
       <span data-en>Organic Coffee · Roasted</span>
     </h1>
@@ -173,7 +176,7 @@
     </div>
 
     <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:20px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
-      <div style="font-family:'Fraunces',serif;font-size:42px;font-weight:600;color:var(--green);letter-spacing:-0.02em;">₫285,000</div>
+      <div style="font-family:'Fraunces',serif;font-size:clamp(28px,7vw,42px);font-weight:600;color:var(--green);letter-spacing:-0.02em;">₫285,000</div>
       <div style="font-size:14px;color:var(--ink-mute);font-family:'JetBrains Mono',monospace;">≈ $11.40 USD</div>
       <div style="margin-left:auto;text-align:right;">
         <div style="font-size:11px;color:var(--ink-mute);"><span data-vi>Khối lượng</span><span data-en>Weight</span></div>

@@ -75,6 +75,9 @@
 @media (max-width: 900px) {
   .cust-menu, .cust-search { display: none; }
   .cust-foot-inner { grid-template-columns: 1fr 1fr; }
+  .lang-pill { display: none; }
+  .cust-cats a { padding: 10px 12px; font-size: 12px; }
+  .account-sidebar { position: relative !important; top: auto !important; }
 }
 </style>
 </head>
@@ -124,7 +127,7 @@
 <h1 style="font-family:'Fraunces',serif;font-size:32px;font-weight:500;letter-spacing:-0.02em;margin-bottom:24px;"><span data-vi>Tài khoản của tôi</span><span data-en>My account</span></h1>
 
 <div style="display:grid;grid-template-columns:260px 1fr;gap:24px;">
-  <aside style="background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;height:fit-content;position:sticky;top:120px;">
+  <aside class="account-sidebar" style="background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;height:fit-content;position:sticky;top:120px;">
     <div style="display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--line);">
       <div style="width:48px;height:48px;border-radius:50%;background:var(--green);color:var(--gold);display:grid;place-items:center;font-weight:700;font-family:'Fraunces',serif;font-size:20px;">H</div>
       <div>
