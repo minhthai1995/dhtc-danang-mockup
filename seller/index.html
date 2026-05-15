@@ -31,6 +31,11 @@
   .calc-meta-label { font-size: 9.5px; opacity: .65; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
   .calc-meta-val { font-size: 13px; font-weight: 600; margin-top: 2px; }
 
+  @media (max-width: 520px) {
+    .dim-row { grid-template-columns: 1fr; }
+    .calc-meta { grid-template-columns: 1fr; }
+  }
+
   /* ── Pending orders mini ── */
   .pending-list { display: flex; flex-direction: column; gap: 8px; }
   .pending-item {

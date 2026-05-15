@@ -50,11 +50,14 @@
     document.querySelectorAll('[style]').forEach(function(el) {
       var gtc = el.style.gridTemplateColumns;
       if (!gtc) return;
-      /* skip: auto-fill / auto-fit / single-col / auto+something (icon+text) */
+      /* skip: auto-fill / auto-fit (already responsive) */
       if (/auto-(fill|fit)/.test(gtc)) return;
-      if (!gtc.trim().includes(' '))   return;          /* already 1-track */
-      if (/^auto\s/.test(gtc))         return;          /* icon + text rows */
-      if (/^min-content/.test(gtc))    return;
+      /* skip: icon+text rows like "auto 1fr" */
+      if (/^auto\s/.test(gtc)) return;
+      if (/^min-content/.test(gtc)) return;
+      /* detect multi-column: has a space OR is repeat(N>=2, ...) */
+      var isRepeatMulti = /^repeat\(\s*([2-9]|\d{2,})\s*,/.test(gtc);
+      if (!gtc.trim().includes(' ') && !isRepeatMulti) return; /* already 1-track */
 
       if (!el.dataset.gridOrig) el.dataset.gridOrig = gtc;
       if (!el.dataset.gapOrig  && el.style.gap) el.dataset.gapOrig = el.style.gap;
