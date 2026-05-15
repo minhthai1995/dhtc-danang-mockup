@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giỏ hàng · DHTC Marketplace</title>
+<link rel="icon" href="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-270x270.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,800&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+.cust-nav { background: var(--cream); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px); }
+.cust-nav-top { max-width: 1320px; margin: 0 auto; padding: 14px 28px; display: flex; align-items: center; gap: 24px; }
+.cust-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+.cust-logo img { width: 42px; height: 42px; object-fit: contain; }
+.cust-logo strong { display: block; font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; color: var(--green); }
+.cust-logo span { display: block; font-size: 10px; color: var(--gold-deep); letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; }
+.cust-menu { display: flex; gap: 4px; }
+.cust-menu a { padding: 8px 14px; border-radius: 8px; color: var(--ink-soft); text-decoration: none; font-weight: 500; font-size: 13.5px; transition: all .15s; }
+.cust-menu a:hover { background: var(--cream-dark); color: var(--ink); }
+.cust-menu a.active { color: var(--green); font-weight: 600; }
+.cust-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+.cust-search { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 7px 16px; display: flex; align-items: center; gap: 8px; min-width: 220px; }
+.cust-search input { flex: 1; border: 0; outline: 0; font: inherit; background: transparent; font-size: 13px; min-width: 0; }
+.cust-search svg { width: 15px; height: 15px; color: var(--ink-mute); }
+.cust-icon-btn { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; color: var(--ink); text-decoration: none; position: relative; transition: background .15s; }
+.cust-icon-btn:hover { background: var(--cream-dark); }
+.cust-icon-btn svg { width: 19px; height: 19px; }
+.cart-badge { position: absolute; top: 4px; right: 4px; background: var(--vermillion); color: #fff; font-size: 9.5px; padding: 1px 5px; border-radius: 999px; font-weight: 700; min-width: 16px; text-align: center; }
+.cust-cats { max-width: 1320px; margin: 0 auto; padding: 0 28px; display: flex; gap: 4px; overflow-x: auto; border-top: 1px solid var(--line-soft); }
+.cust-cats::-webkit-scrollbar { display: none; }
+.cust-cats a { padding: 12px 16px; font-size: 12.5px; font-weight: 500; color: var(--ink-soft); text-decoration: none; white-space: nowrap; border-bottom: 2px solid transparent; transition: all .15s; }
+.cust-cats a:hover { color: var(--green); }
+.cust-cats a.active { color: var(--green); border-bottom-color: var(--gold); font-weight: 600; }
+
+.cust-main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 32px; }
+
+.cust-foot { background: var(--green); color: var(--cream); padding: 56px 28px 24px; margin-top: 64px; }
+.cust-foot-inner { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; }
+.cust-foot-inner h5 { font-family: 'Fraunces', serif; font-size: 13px; margin-bottom: 14px; color: var(--gold); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.cust-foot-inner ul { list-style: none; }
+.cust-foot-inner ul li { padding: 5px 0; font-size: 12.5px; color: rgba(245,239,224,0.7); }
+.cust-foot-inner ul li a { color: inherit; }
+.cust-foot-inner ul li a:hover { color: var(--gold); }
+.cust-foot-bottom { max-width: 1320px; margin: 36px auto 0; padding-top: 22px; border-top: 1px solid rgba(201,169,97,0.2); display: flex; justify-content: space-between; gap: 16px; font-size: 11.5px; color: rgba(245,239,224,0.5); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; flex-wrap: wrap; }
+
+.chatbot-fab { position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; border-radius: 50%; background: var(--green); color: var(--cream); border: 0; cursor: pointer; display: grid; place-items: center; box-shadow: 0 18px 36px -10px rgba(27,59,47,0.4); z-index: 500; }
+.chatbot-fab svg { width: 24px; height: 24px; }
+.chatbot-fab .pulse { position: absolute; inset: 0; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.5); opacity: 0; } }
+
+.prod-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: all .25s; text-decoration: none; color: inherit; }
+.prod-card:hover { transform: translateY(-3px); border-color: var(--green); box-shadow: 0 18px 36px -12px rgba(27,59,47,0.15); }
+.prod-card .prod-img-wrap { height: 200px; }
+.prod-card-body { padding: 14px; display: flex; flex-direction: column; flex: 1; }
+.prod-card-cat { font-size: 10px; color: var(--gold-deep); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+.prod-card-name { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 500; line-height: 1.25; margin-bottom: 3px; min-height: 36px; }
+.prod-card-merchant { font-size: 11px; color: var(--ink-mute); margin-bottom: 8px; }
+.prod-card-rating { display: flex; align-items: center; gap: 4px; font-size: 11.5px; color: var(--gold-deep); margin-bottom: 8px; }
+.prod-card-rating .sold { color: var(--ink-mute); margin-left: 6px; font-size: 10.5px; }
+.prod-card-price-row { display: flex; align-items: baseline; justify-content: space-between; margin-top: auto; }
+.prod-card-price { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; color: var(--green); letter-spacing: -0.02em; }
+.prod-card-price small { font-size: 10.5px; color: var(--ink-mute); font-weight: 400; margin-left: 3px; }
+.prod-card-usd { font-size: 10px; color: var(--ink-mute); font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+
+.add-cart-btn { margin-top: 10px; width: 100%; background: var(--cream); color: var(--green); border: 1px solid var(--green); padding: 8px; border-radius: 9px; font: inherit; font-weight: 500; font-size: 12.5px; cursor: pointer; transition: all .15s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.add-cart-btn:hover { background: var(--green); color: var(--cream); }
+
+.prod-badges { position: absolute; top: 10px; left: 10px; display: flex; gap: 4px; z-index: 2; }
+.prod-badge { padding: 2px 8px; border-radius: 4px; font-size: 9.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+.prod-badge.ocop { background: var(--vermillion); color: #fff; }
+.prod-badge.organic { background: var(--green); color: var(--gold); }
+
+@media (max-width: 900px) {
+  .cust-menu, .cust-search { display: none; }
+  .cust-foot-inner { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+<header class="cust-nav">
+  <div class="cust-nav-top">
+    <a href="index.html" class="cust-logo">
+      <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-e1693969421521.png" alt="DHTC">
+      <div>
+        <strong>DHTC</strong>
+        <span data-vi>Đặc sản Việt Nam</span>
+        <span data-en>Vietnamese specialty</span>
+      </div>
+    </a>
+    <nav class="cust-menu">
+      <a href="index.html" class=""><span data-vi>Trang chủ</span><span data-en>Home</span></a><a href="shop.html" class=""><span data-vi>Mua sắm</span><span data-en>Shop</span></a><a href="#" class=""><span data-vi>Gian hàng</span><span data-en>Stores</span></a><a href="#" class=""><span data-vi>Cẩm nang</span><span data-en>Journal</span></a><a href="#" class=""><span data-vi>Liên hệ</span><span data-en>Contact</span></a>
+    </nav>
+    <div class="cust-actions">
+      <div class="cust-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input placeholder="Tìm sản phẩm...">
+      </div>
+      <div class="lang-pill">
+        <button class="active" onclick="setLang('vi', this)">VI</button>
+        <button onclick="setLang('en', this)">EN</button>
+      </div>
+      <a href="account.html" class="cust-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0 1 14 0v1"/></svg></a>
+      <a href="cart.html" class="cust-icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l3 12h11l2-8H6"/></svg>
+        <span class="cart-badge">3</span>
+      </a>
+    </div>
+  </div>
+  <nav class="cust-cats">
+    <a href="shop.html" class=""><span data-vi>Tất cả</span><span data-en>All</span></a>
+    <a href="shop.html?cat=dried-fruits"><span data-vi>Trái cây sấy</span><span data-en>Dried fruits</span></a>
+    <a href="shop.html?cat=nut-seeds"><span data-vi>Hạt & ngũ cốc</span><span data-en>Nuts & seeds</span></a>
+    <a href="shop.html?cat=spices"><span data-vi>Gia vị & trà</span><span data-en>Spices & tea</span></a>
+    <a href="shop.html?cat=cake-cracker"><span data-vi>Bánh & kẹo</span><span data-en>Cakes</span></a>
+    <a href="shop.html?cat=frozen"><span data-vi>Đông lạnh</span><span data-en>Frozen</span></a>
+    <a href="shop.html?ocop=1">★ OCOP</a>
+    <a href="shop.html?organic=1">ORGANIC</a>
+  </nav>
+</header>
+<main class="cust-main">
+
+<h1 style="font-family:'Fraunces',serif;font-size:32px;font-weight:500;letter-spacing:-0.02em;margin-bottom:8px;"><span data-vi>Giỏ hàng của bạn</span><span data-en>Your cart</span></h1>
+<p style="color:var(--ink-mute);margin-bottom:28px;"><span data-vi>3 sản phẩm từ 2 gian hàng</span><span data-en>3 items from 2 merchants</span></p>
+
+<div style="display:grid;grid-template-columns:1.6fr 1fr;gap:24px;">
+  <div>
+    <div class="panel">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--line);">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--green);color:var(--gold);display:grid;place-items:center;font-weight:700;font-family:'Fraunces',serif;font-size:14px;">Đ</div>
+        <strong style="font-size:14px;">Đắk Lắk Coffee Co-op</strong>
+        <span class="tag gold" style="font-size:9.5px;">GOLD</span>
+        <a href="merchant.html?id=M008" style="margin-left:auto;font-size:12px;color:var(--green);"><span data-vi>Xem gian hàng →</span><span data-en>View store →</span></a>
+      </div>
+
+      <div id="cart-m008"></div>
+    </div>
+
+    <div class="panel">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--line);">
+        <div style="width:32px;height:32px;border-radius:50%;background:var(--green);color:var(--gold);display:grid;place-items:center;font-weight:700;font-family:'Fraunces',serif;font-size:14px;">Q</div>
+        <strong style="font-size:14px;">Quảng Nam Cake</strong>
+        <span class="tag silver" style="font-size:9.5px;">SILVER</span>
+        <a href="#" style="margin-left:auto;font-size:12px;color:var(--green);"><span data-vi>Xem gian hàng →</span><span data-en>View store →</span></a>
+      </div>
+
+      <div id="cart-m101"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h2><span data-vi>Mã giảm giá</span><span data-en>Coupon code</span></h2></div>
+      <div style="display:flex;gap:10px;">
+        <input placeholder="Nhập mã giảm giá..." style="flex:1;padding:10px 14px;border:1px solid var(--line);border-radius:10px;font:inherit;font-size:13px;">
+        <button class="btn btn-ghost"><span data-vi>Áp dụng</span><span data-en>Apply</span></button>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:10px;font-size:11.5px;flex-wrap:wrap;">
+        <span style="padding:4px 10px;background:var(--cream);border-radius:6px;cursor:pointer;" onclick="document.querySelector('input').value='FRESH15'"><strong class="mono">FRESH15</strong> <span style="color:var(--ink-mute);">−15%</span></span>
+        <span style="padding:4px 10px;background:var(--cream);border-radius:6px;cursor:pointer;" onclick="document.querySelector('input').value='FREESHIP500'"><strong class="mono">FREESHIP500</strong> <span style="color:var(--ink-mute);">free ship</span></span>
+        <span style="padding:4px 10px;background:var(--cream);border-radius:6px;cursor:pointer;" onclick="document.querySelector('input').value='COMBO18'"><strong class="mono">COMBO18</strong> <span style="color:var(--ink-mute);">−18%</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="panel" style="position:sticky;top:120px;">
+      <div class="panel-head"><h2><span data-vi>Tóm tắt đơn hàng</span><span data-en>Order summary</span></h2></div>
+
+      <div style="font-size:13.5px;line-height:1.7;">
+        <div style="display:flex;justify-content:space-between;padding:6px 0;"><span><span data-vi>Tạm tính</span><span data-en>Subtotal</span></span><strong class="mono">₫690,000</strong></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;"><span><span data-vi>Phí ship DHL Express</span><span data-en>DHL Express shipping</span></span><strong class="mono">₫135,000</strong></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;color:var(--success);"><span><span data-vi>Mã FRESH15</span><span data-en>Code FRESH15</span></span><strong class="mono">−₫103,500</strong></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;"><span>VAT (10%)</span><strong class="mono">₫72,150</strong></div>
+        <div style="display:flex;justify-content:space-between;padding:14px 0 6px;border-top:1px dashed var(--line);margin-top:8px;font-size:18px;color:var(--green);"><strong style="font-family:'Fraunces',serif;font-weight:600;"><span data-vi>Tổng cộng</span><span data-en>Total</span></strong><strong class="mono" style="font-family:'Fraunces',serif;font-weight:600;">₫793,650</strong></div>
+      </div>
+
+      <a href="checkout.html" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:16px;padding:14px;font-size:14.5px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
+        <span data-vi>Thanh toán bằng VietQR</span><span data-en>Pay with VietQR</span>
+      </a>
+
+      <div style="margin-top:12px;padding:12px;background:var(--cream);border-radius:10px;font-size:11.5px;color:var(--ink-soft);line-height:1.5;text-align:center;">
+        <span data-vi>Vietcombank · Hỗ trợ thẻ quốc tế & ví điện tử<br>Giao DHL Express · ETA 4-7 ngày</span>
+        <span data-en>Vietcombank · International cards & e-wallets<br>DHL Express · ETA 4-7 days</span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:14px;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--green);"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span style="font-size:11.5px;color:var(--ink-mute);"><span data-vi>Thanh toán an toàn · SSL · PCI DSS</span><span data-en>Secure checkout · SSL · PCI DSS</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+<button class="chatbot-fab" title="Chat with AI">
+  <span class="pulse"></span>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="position:relative;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+</button>
+<footer class="cust-foot">
+  <div class="cust-foot-inner">
+    <div>
+      <a href="index.html" class="cust-logo" style="margin-bottom:14px;">
+        <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-e1693969421521.png" alt="DHTC" style="background:#fff;padding:6px;">
+        <div><strong style="color:var(--cream);">DHTC</strong><span style="color:var(--gold);" data-vi>Đặc sản Việt Nam</span><span style="color:var(--gold);" data-en>Vietnamese specialty</span></div>
+      </a>
+      <p style="font-size:12.5px;line-height:1.6;color:rgba(245,239,224,0.6);max-width:300px;" data-vi>Sàn TMĐT đặc sản — 300 tiểu thương vùng miền kết nối khách trong và ngoài nước.</p>
+      <p style="font-size:12.5px;line-height:1.6;color:rgba(245,239,224,0.6);max-width:300px;" data-en>Specialty marketplace — 300 regional merchants connecting with domestic and global customers.</p>
+    </div>
+    <div>
+      <h5><span data-vi>Khám phá</span><span data-en>Explore</span></h5>
+      <ul>
+        <li><a href="shop.html"><span data-vi>Tất cả sản phẩm</span><span data-en>All products</span></a></li>
+        <li><a href="#"><span data-vi>Gian hàng</span><span data-en>Stores</span></a></li>
+        <li><a href="#"><span data-vi>Khuyến mãi</span><span data-en>Promotions</span></a></li>
+        <li><a href="#"><span data-vi>Cẩm nang</span><span data-en>Journal</span></a></li>
+      </ul>
+    </div>
+    <div>
+      <h5><span data-vi>Hỗ trợ</span><span data-en>Support</span></h5>
+      <ul>
+        <li><a href="#"><span data-vi>Trung tâm trợ giúp</span><span data-en>Help center</span></a></li>
+        <li><a href="tracking.html"><span data-vi>Theo dõi đơn</span><span data-en>Track order</span></a></li>
+        <li><a href="#"><span data-vi>Đổi trả 14 ngày</span><span data-en>14-day returns</span></a></li>
+        <li><a href="#"><span data-vi>Liên hệ</span><span data-en>Contact</span></a></li>
+      </ul>
+    </div>
+    <div>
+      <h5><span data-vi>Đối tác</span><span data-en>Partners</span></h5>
+      <ul><li>Vietcombank · VietQR</li><li>DHL Express</li><li>Meta Messenger</li><li>Zalo OA</li></ul>
+      <div style="margin-top:14px;">
+        <div style="font-size:11px;color:var(--gold);font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;"><span data-vi>Liên hệ</span><span data-en>Contact</span></div>
+        <div style="font-size:12px;color:rgba(245,239,224,0.7);">975 Ngô Quyền, An Hải Tây, Sơn Trà, Đà Nẵng</div>
+        <div style="font-size:12px;color:rgba(245,239,224,0.7);">contact@dhtcdanang.com</div>
+        <div class="mono" style="font-size:12px;color:rgba(245,239,224,0.7);">+84 947 046 556</div>
+      </div>
+    </div>
+  </div>
+  <div class="cust-foot-bottom">
+    <span>© 2026 · DHTC ĐÀ NẴNG JOINT STOCK COMPANY · MST 0123456789</span>
+    <span>DEMO MOCKUP v0.2 · ALL DATA SHOWN IS MOCK</span>
+  </div>
+</footer>
+<script src="../assets/data.js"></script>
+<script>
+function setLang(lang, btn) {
+  document.body.classList.toggle('en', lang === 'en');
+  document.querySelectorAll('.lang-pill button').forEach(b => b.classList.remove('active'));
+  btn && btn.classList.add('active');
+  localStorage.setItem('dhtc-lang', lang);
+  if (window.onLangChange) window.onLangChange(lang);
+}
+if (localStorage.getItem('dhtc-lang') === 'en') {
+  document.body.classList.add('en');
+  document.querySelectorAll('.lang-pill button').forEach((b,i) => b.classList.toggle('active', i === 1));
+}
+window.t = (vi, en) => document.body.classList.contains('en') ? en : vi;
+</script>
+<script>
+const cartItems = [
+  { id: 'P003', qty: 1, mid: 'M008' },
+  { id: 'P008', qty: 1, mid: 'M008' },
+  { id: 'P004', qty: 2, mid: 'M101' }
+];
+
+function renderCartItem(ci) {
+  const p = DHTC.products.find(x => x.id === ci.id);
+  return `
+  <div style="display:flex;gap:14px;padding:14px 0;border-bottom:1px dashed var(--line);">
+    <a href="product.html?slug=${p.slug}" class="prod-img-wrap" style="width:88px;height:88px;border-radius:10px;flex-shrink:0;border:1px solid var(--line);"><img src="${p.img}" alt="${p.vi}"></a>
+    <div style="flex:1;min-width:0;">
+      <div style="display:flex;gap:6px;margin-bottom:4px;">
+        ${p.ocop ? '<span class="tag" style="background:var(--vermillion);color:#fff;font-size:9px;">★ OCOP</span>' : ''}
+        ${p.organic ? '<span class="tag" style="background:var(--green);color:var(--gold);font-size:9px;">ORGANIC</span>' : ''}
+      </div>
+      <a href="product.html?slug=${p.slug}" style="text-decoration:none;color:inherit;"><h4 style="font-family:'Fraunces',serif;font-size:15px;font-weight:500;margin-bottom:2px;line-height:1.2;">${t(p.vi, p.en)}</h4></a>
+      <div style="font-size:11px;color:var(--ink-mute);margin-bottom:8px;">${p.weight}g · ${p.dim}cm · ${p.origin}</div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <div style="display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:8px;background:#fff;">
+          <button style="width:28px;height:30px;border:0;background:transparent;cursor:pointer;font-weight:700;color:var(--green);">−</button>
+          <span style="padding:0 12px;font-size:13px;font-weight:600;">${ci.qty}</span>
+          <button style="width:28px;height:30px;border:0;background:transparent;cursor:pointer;font-weight:700;color:var(--green);">+</button>
+        </div>
+        <button style="background:transparent;border:0;color:var(--vermillion);cursor:pointer;font-size:12px;text-decoration:underline;"><span data-vi>Xóa</span><span data-en>Remove</span></button>
+      </div>
+    </div>
+    <div style="text-align:right;flex-shrink:0;">
+      <div style="font-family:'Fraunces',serif;font-size:18px;color:var(--green);font-weight:600;">${fmt.vnd(p.price * ci.qty)}</div>
+      <div style="font-size:11px;color:var(--ink-mute);" class="mono">≈ $${(p.priceUsd * ci.qty).toFixed(2)}</div>
+    </div>
+  </div>`;
+}
+
+function render() {
+  document.getElementById('cart-m008').innerHTML = cartItems.filter(c => c.mid === 'M008').map(renderCartItem).join('');
+  document.getElementById('cart-m101').innerHTML = cartItems.filter(c => c.mid === 'M101').map(renderCartItem).join('');
+}
+render();
+window.onLangChange = render;
+</script>
+</body>
+</html>

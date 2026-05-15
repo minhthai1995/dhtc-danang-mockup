@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cà phê hữu cơ rang xay · DHTC Marketplace</title>
+<link rel="icon" href="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-270x270.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,800&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+.cust-nav { background: var(--cream); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px); }
+.cust-nav-top { max-width: 1320px; margin: 0 auto; padding: 14px 28px; display: flex; align-items: center; gap: 24px; }
+.cust-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+.cust-logo img { width: 42px; height: 42px; object-fit: contain; }
+.cust-logo strong { display: block; font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; color: var(--green); }
+.cust-logo span { display: block; font-size: 10px; color: var(--gold-deep); letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; }
+.cust-menu { display: flex; gap: 4px; }
+.cust-menu a { padding: 8px 14px; border-radius: 8px; color: var(--ink-soft); text-decoration: none; font-weight: 500; font-size: 13.5px; transition: all .15s; }
+.cust-menu a:hover { background: var(--cream-dark); color: var(--ink); }
+.cust-menu a.active { color: var(--green); font-weight: 600; }
+.cust-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+.cust-search { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 7px 16px; display: flex; align-items: center; gap: 8px; min-width: 220px; }
+.cust-search input { flex: 1; border: 0; outline: 0; font: inherit; background: transparent; font-size: 13px; min-width: 0; }
+.cust-search svg { width: 15px; height: 15px; color: var(--ink-mute); }
+.cust-icon-btn { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; color: var(--ink); text-decoration: none; position: relative; transition: background .15s; }
+.cust-icon-btn:hover { background: var(--cream-dark); }
+.cust-icon-btn svg { width: 19px; height: 19px; }
+.cart-badge { position: absolute; top: 4px; right: 4px; background: var(--vermillion); color: #fff; font-size: 9.5px; padding: 1px 5px; border-radius: 999px; font-weight: 700; min-width: 16px; text-align: center; }
+.cust-cats { max-width: 1320px; margin: 0 auto; padding: 0 28px; display: flex; gap: 4px; overflow-x: auto; border-top: 1px solid var(--line-soft); }
+.cust-cats::-webkit-scrollbar { display: none; }
+.cust-cats a { padding: 12px 16px; font-size: 12.5px; font-weight: 500; color: var(--ink-soft); text-decoration: none; white-space: nowrap; border-bottom: 2px solid transparent; transition: all .15s; }
+.cust-cats a:hover { color: var(--green); }
+.cust-cats a.active { color: var(--green); border-bottom-color: var(--gold); font-weight: 600; }
+
+.cust-main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 32px; }
+
+.cust-foot { background: var(--green); color: var(--cream); padding: 56px 28px 24px; margin-top: 64px; }
+.cust-foot-inner { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; }
+.cust-foot-inner h5 { font-family: 'Fraunces', serif; font-size: 13px; margin-bottom: 14px; color: var(--gold); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.cust-foot-inner ul { list-style: none; }
+.cust-foot-inner ul li { padding: 5px 0; font-size: 12.5px; color: rgba(245,239,224,0.7); }
+.cust-foot-inner ul li a { color: inherit; }
+.cust-foot-inner ul li a:hover { color: var(--gold); }
+.cust-foot-bottom { max-width: 1320px; margin: 36px auto 0; padding-top: 22px; border-top: 1px solid rgba(201,169,97,0.2); display: flex; justify-content: space-between; gap: 16px; font-size: 11.5px; color: rgba(245,239,224,0.5); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; flex-wrap: wrap; }
+
+.chatbot-fab { position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; border-radius: 50%; background: var(--green); color: var(--cream); border: 0; cursor: pointer; display: grid; place-items: center; box-shadow: 0 18px 36px -10px rgba(27,59,47,0.4); z-index: 500; }
+.chatbot-fab svg { width: 24px; height: 24px; }
+.chatbot-fab .pulse { position: absolute; inset: 0; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.5); opacity: 0; } }
+
+.prod-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: all .25s; text-decoration: none; color: inherit; }
+.prod-card:hover { transform: translateY(-3px); border-color: var(--green); box-shadow: 0 18px 36px -12px rgba(27,59,47,0.15); }
+.prod-card .prod-img-wrap { height: 200px; }
+.prod-card-body { padding: 14px; display: flex; flex-direction: column; flex: 1; }
+.prod-card-cat { font-size: 10px; color: var(--gold-deep); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+.prod-card-name { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 500; line-height: 1.25; margin-bottom: 3px; min-height: 36px; }
+.prod-card-merchant { font-size: 11px; color: var(--ink-mute); margin-bottom: 8px; }
+.prod-card-rating { display: flex; align-items: center; gap: 4px; font-size: 11.5px; color: var(--gold-deep); margin-bottom: 8px; }
+.prod-card-rating .sold { color: var(--ink-mute); margin-left: 6px; font-size: 10.5px; }
+.prod-card-price-row { display: flex; align-items: baseline; justify-content: space-between; margin-top: auto; }
+.prod-card-price { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; color: var(--green); letter-spacing: -0.02em; }
+.prod-card-price small { font-size: 10.5px; color: var(--ink-mute); font-weight: 400; margin-left: 3px; }
+.prod-card-usd { font-size: 10px; color: var(--ink-mute); font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+
+.add-cart-btn { margin-top: 10px; width: 100%; background: var(--cream); color: var(--green); border: 1px solid var(--green); padding: 8px; border-radius: 9px; font: inherit; font-weight: 500; font-size: 12.5px; cursor: pointer; transition: all .15s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.add-cart-btn:hover { background: var(--green); color: var(--cream); }
+
+.prod-badges { position: absolute; top: 10px; left: 10px; display: flex; gap: 4px; z-index: 2; }
+.prod-badge { padding: 2px 8px; border-radius: 4px; font-size: 9.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+.prod-badge.ocop { background: var(--vermillion); color: #fff; }
+.prod-badge.organic { background: var(--green); color: var(--gold); }
+
+@media (max-width: 900px) {
+  .cust-menu, .cust-search { display: none; }
+  .cust-foot-inner { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+<header class="cust-nav">
+  <div class="cust-nav-top">
+    <a href="index.html" class="cust-logo">
+      <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-e1693969421521.png" alt="DHTC">
+      <div>
+        <strong>DHTC</strong>
+        <span data-vi>Đặc sản Việt Nam</span>
+        <span data-en>Vietnamese specialty</span>
+      </div>
+    </a>
+    <nav class="cust-menu">
+      <a href="index.html" class=""><span data-vi>Trang chủ</span><span data-en>Home</span></a><a href="shop.html" class="active"><span data-vi>Mua sắm</span><span data-en>Shop</span></a><a href="#" class=""><span data-vi>Gian hàng</span><span data-en>Stores</span></a><a href="#" class=""><span data-vi>Cẩm nang</span><span data-en>Journal</span></a><a href="#" class=""><span data-vi>Liên hệ</span><span data-en>Contact</span></a>
+    </nav>
+    <div class="cust-actions">
+      <div class="cust-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input placeholder="Tìm sản phẩm...">
+      </div>
+      <div class="lang-pill">
+        <button class="active" onclick="setLang('vi', this)">VI</button>
+        <button onclick="setLang('en', this)">EN</button>
+      </div>
+      <a href="account.html" class="cust-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0 1 14 0v1"/></svg></a>
+      <a href="cart.html" class="cust-icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l3 12h11l2-8H6"/></svg>
+        <span class="cart-badge">3</span>
+      </a>
+    </div>
+  </div>
+  <nav class="cust-cats">
+    <a href="shop.html" class="active"><span data-vi>Tất cả</span><span data-en>All</span></a>
+    <a href="shop.html?cat=dried-fruits"><span data-vi>Trái cây sấy</span><span data-en>Dried fruits</span></a>
+    <a href="shop.html?cat=nut-seeds"><span data-vi>Hạt & ngũ cốc</span><span data-en>Nuts & seeds</span></a>
+    <a href="shop.html?cat=spices"><span data-vi>Gia vị & trà</span><span data-en>Spices & tea</span></a>
+    <a href="shop.html?cat=cake-cracker"><span data-vi>Bánh & kẹo</span><span data-en>Cakes</span></a>
+    <a href="shop.html?cat=frozen"><span data-vi>Đông lạnh</span><span data-en>Frozen</span></a>
+    <a href="shop.html?ocop=1">★ OCOP</a>
+    <a href="shop.html?organic=1">ORGANIC</a>
+  </nav>
+</header>
+<main class="cust-main">
+
+<div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-mute);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:18px;">
+  <a href="index.html" style="color:var(--ink-mute);"><span data-vi>Trang chủ</span><span data-en>Home</span></a>
+  <span style="margin:0 6px;color:var(--line);">›</span>
+  <a href="shop.html" style="color:var(--ink-mute);"><span data-vi>Mua sắm</span><span data-en>Shop</span></a>
+  <span style="margin:0 6px;color:var(--line);">›</span>
+  <a href="shop.html?cat=nut-seeds" style="color:var(--ink-mute);"><span data-vi>Hạt & ngũ cốc</span><span data-en>Nuts & seeds</span></a>
+  <span style="margin:0 6px;color:var(--line);">›</span>
+  <span style="color:var(--ink);"><span data-vi>Cà phê hữu cơ rang xay</span><span data-en>Organic Coffee · Roasted</span></span>
+</div>
+
+<div style="display:grid;grid-template-columns:1.1fr 1fr;gap:36px;margin-bottom:48px;">
+  <div>
+    <div style="background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;height:520px;display:grid;place-items:center;padding:32px;">
+      <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/34-300x300.png" alt="Organic Coffee" style="max-width:100%;max-height:100%;object-fit:contain;">
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px;">
+      <div class="prod-img-wrap" style="height:84px;border-radius:10px;border:2px solid var(--green);cursor:pointer;"><img src="https://dhtcdanang.com/wp-content/uploads/2023/07/34-300x300.png"></div>
+      <div class="prod-img-wrap" style="height:84px;border-radius:10px;border:1px solid var(--line);cursor:pointer;background:var(--cream);"><img src="https://dhtcdanang.com/wp-content/uploads/2023/07/24-300x300.png"></div>
+      <div class="prod-img-wrap" style="height:84px;border-radius:10px;border:1px solid var(--line);cursor:pointer;background:var(--cream);"><img src="https://dhtcdanang.com/wp-content/uploads/2023/07/2-300x300.png"></div>
+      <div class="prod-img-wrap" style="height:84px;border-radius:10px;border:1px solid var(--line);cursor:pointer;background:var(--cream);"><img src="https://dhtcdanang.com/wp-content/uploads/2023/07/39-300x300.png"></div>
+    </div>
+  </div>
+
+  <div>
+    <div style="display:flex;gap:6px;margin-bottom:10px;">
+      <span class="tag" style="background:var(--vermillion);color:#fff;font-size:10px;">★ OCOP 4★</span>
+      <span class="tag" style="background:var(--green);color:var(--gold);font-size:10px;">USDA ORGANIC</span>
+    </div>
+    <div style="font-size:10.5px;color:var(--gold-deep);letter-spacing:0.18em;text-transform:uppercase;font-weight:700;margin-bottom:6px;font-family:'JetBrains Mono',monospace;"><span data-vi>HẠT & NGŨ CỐC · DHTC-NS-002</span><span data-en>NUTS & SEEDS · DHTC-NS-002</span></div>
+    <h1 style="font-family:'Fraunces',serif;font-size:42px;font-weight:500;line-height:1.1;letter-spacing:-0.02em;margin-bottom:12px;">
+      <span data-vi>Cà phê hữu cơ rang xay</span>
+      <span data-en>Organic Coffee · Roasted</span>
+    </h1>
+
+    <a href="merchant.html?id=M008" style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--cream);border-radius:10px;text-decoration:none;color:inherit;margin-bottom:16px;">
+      <div style="width:36px;height:36px;border-radius:50%;background:var(--green);color:var(--gold);display:grid;place-items:center;font-weight:700;font-family:'Fraunces',serif;">Đ</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:600;">Đắk Lắk Coffee Co-op</div>
+        <div style="font-size:11px;color:var(--ink-mute);"><span data-vi>Tây Nguyên · Gold tier · 4.85★</span><span data-en>Central Highlands · Gold tier · 4.85★</span></div>
+      </div>
+      <span style="color:var(--green);font-size:12px;font-weight:600;"><span data-vi>Xem gian hàng →</span><span data-en>View store →</span></span>
+    </a>
+
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">
+      <div style="font-size:18px;color:var(--gold-deep);font-weight:600;">★★★★★</div>
+      <div style="font-size:14px;font-weight:600;">4.9</div>
+      <a href="#reviews" style="font-size:12px;color:var(--ink-mute);text-decoration:underline;">284 <span data-vi>đánh giá</span><span data-en>reviews</span></a>
+      <span style="color:var(--line);">·</span>
+      <span style="font-size:12px;color:var(--ink-mute);"><span data-vi>3,128 đã bán</span><span data-en>3,128 sold</span></span>
+    </div>
+
+    <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:20px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+      <div style="font-family:'Fraunces',serif;font-size:42px;font-weight:600;color:var(--green);letter-spacing:-0.02em;">₫285,000</div>
+      <div style="font-size:14px;color:var(--ink-mute);font-family:'JetBrains Mono',monospace;">≈ $11.40 USD</div>
+      <div style="margin-left:auto;text-align:right;">
+        <div style="font-size:11px;color:var(--ink-mute);"><span data-vi>Khối lượng</span><span data-en>Weight</span></div>
+        <div style="font-weight:600;font-size:14px;">500g</div>
+      </div>
+    </div>
+
+    <p style="font-size:14px;line-height:1.6;color:var(--ink-soft);margin-bottom:20px;">
+      <span data-vi>Cà phê Arabica hữu cơ rang vừa, hương vị đậm đà đặc trưng Tây Nguyên. Trồng tại độ cao 600-800m, thu hoạch chín tay, lên men ướt và phơi 21 ngày. Rang trong vòng 24h trước khi đóng gói để đảm bảo tươi mới.</span>
+      <span data-en>Organic medium-roast Arabica with rich Central Highlands character. Grown at 600-800m elevation, hand-picked when ripe, wet-fermented and sun-dried for 21 days. Roasted within 24 hours of packaging for ultimate freshness.</span>
+    </p>
+
+    <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;">
+      <span style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--cream);border-radius:8px;font-size:12px;font-weight:500;">📦 <span data-vi>Khối lượng:</span><span data-en>Weight:</span> 500g</span>
+      <span style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--cream);border-radius:8px;font-size:12px;font-weight:500;">📐 <span data-vi>Kích thước:</span><span data-en>Size:</span> 20×12×6cm</span>
+      <span style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--cream);border-radius:8px;font-size:12px;font-weight:500;">📍 Đắk Lắk</span>
+      <span style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--cream);border-radius:8px;font-size:12px;font-weight:500;"><span data-vi>Hạn dùng:</span><span data-en>Shelf:</span> 365 <span data-vi>ngày</span><span data-en>days</span></span>
+    </div>
+
+    <div style="display:flex;gap:12px;margin-bottom:14px;">
+      <div style="display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;background:#fff;">
+        <button style="width:38px;height:42px;border:0;background:transparent;cursor:pointer;font-weight:700;color:var(--green);font-size:16px;">−</button>
+        <span style="padding:0 14px;font-size:15px;font-weight:600;">1</span>
+        <button style="width:38px;height:42px;border:0;background:transparent;cursor:pointer;font-weight:700;color:var(--green);font-size:16px;">+</button>
+      </div>
+      <a href="cart.html" class="btn btn-primary" style="flex:1;justify-content:center;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        <span data-vi>Thêm vào giỏ</span><span data-en>Add to cart</span>
+      </a>
+      <a href="checkout.html" class="btn btn-secondary" style="justify-content:center;"><span data-vi>Mua ngay</span><span data-en>Buy now</span></a>
+    </div>
+
+    <div style="padding:14px;border:1px solid var(--line);border-radius:12px;background:#fff;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:12.5px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--green);"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <span><strong data-vi>Ship DHL Express → mọi quốc gia</strong><strong data-en>DHL Express to anywhere</strong> · <span data-vi>4-7 ngày</span><span data-en>4-7 days</span></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;font-size:12.5px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--green);"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg>
+        <span><strong>VietQR · </strong><span data-vi>Cross-border, thẻ Visa/Master</span><span data-en>Cross-border, Visa/Master</span></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;font-size:12.5px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--green);"><path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.5 0 2.91.37 4.15 1.02"/><path d="M21 5l-9 9-3-3"/></svg>
+        <span><strong data-vi>Đổi trả 14 ngày</strong><strong data-en>14-day returns</strong> · <span data-vi>Không lý do</span><span data-en>No questions asked</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;margin-bottom:48px;">
+  <div class="panel" style="margin-bottom:0;">
+    <div class="panel-head"><h2><span data-vi>Mô tả sản phẩm</span><span data-en>Product description</span></h2></div>
+
+    <div style="font-size:14px;line-height:1.7;color:var(--ink-soft);">
+      <p style="margin-bottom:14px;" data-vi>HTX Cà Phê Hữu Cơ Đắk Lắk được thành lập năm 2018 bởi cộng đồng 42 hộ trồng cà phê tại Buôn Ma Thuột — vùng nguyên liệu cà phê được UNESCO công nhận là di sản văn hóa phi vật thể. Toàn bộ quy trình tuân thủ tiêu chuẩn USDA Organic và đạt chứng nhận OCOP 4 sao của tỉnh Đắk Lắk.</p>
+      <p style="margin-bottom:14px;" data-en>Đắk Lắk Organic Coffee Co-op was founded in 2018 by 42 households in Buôn Ma Thuột — a coffee-growing region recognized by UNESCO as intangible cultural heritage. Every step follows USDA Organic standards and holds OCOP 4-star certification from Đắk Lắk Province.</p>
+
+      <h3 style="font-family:'Fraunces',serif;font-size:18px;margin:18px 0 10px;color:var(--green);"><span data-vi>Hương vị</span><span data-en>Tasting notes</span></h3>
+      <ul style="padding-left:20px;margin-bottom:14px;">
+        <li><strong data-vi>Mùi:</strong><strong data-en>Aroma:</strong> <span data-vi>chocolate đen, hạnh nhân rang, hoa nhài</span><span data-en>dark chocolate, roasted almond, jasmine</span></li>
+        <li><strong data-vi>Vị:</strong><strong data-en>Body:</strong> <span data-vi>đậm đà, hậu vị ngọt caramel</span><span data-en>full-bodied with caramel finish</span></li>
+        <li><strong data-vi>Độ chua:</strong><strong data-en>Acidity:</strong> <span data-vi>thấp, dịu</span><span data-en>low, gentle</span></li>
+      </ul>
+
+      <h3 style="font-family:'Fraunces',serif;font-size:18px;margin:18px 0 10px;color:var(--green);"><span data-vi>Hướng dẫn pha</span><span data-en>Brewing guide</span></h3>
+      <p data-vi>Cà phê phin: 25g cà phê + 80ml nước nóng 95°C, chờ 4-5 phút.<br>Cà phê espresso: 18-20g, 92°C, 25-30 giây extraction.<br>Cold brew: 60g cà phê + 1L nước lạnh, ngâm 12-18 giờ.</p>
+      <p data-en>Phin filter: 25g coffee + 80ml hot water at 95°C, wait 4-5 minutes.<br>Espresso: 18-20g, 92°C, 25-30 second extraction.<br>Cold brew: 60g coffee + 1L cold water, steep 12-18 hours.</p>
+    </div>
+
+    <div id="reviews" style="margin-top:28px;padding-top:24px;border-top:1px solid var(--line);">
+      <h2 style="font-family:'Fraunces',serif;font-size:22px;font-weight:500;margin-bottom:16px;"><span data-vi>Đánh giá khách hàng (284)</span><span data-en>Customer reviews (284)</span></h2>
+
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:24px;padding:18px;background:var(--cream);border-radius:12px;margin-bottom:18px;">
+        <div style="text-align:center;">
+          <div style="font-family:'Fraunces',serif;font-size:56px;color:var(--green);font-weight:600;line-height:1;">4.9</div>
+          <div style="color:var(--gold-deep);font-size:18px;">★★★★★</div>
+          <div style="font-size:11px;color:var(--ink-mute);margin-top:4px;">284 <span data-vi>đánh giá</span><span data-en>reviews</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+              <span style="width:60px;color:var(--gold-deep);">★★★★★</span>
+              <div style="flex:1;height:6px;background:#fff;border-radius:3px;overflow:hidden;"><div style="width:86%;height:100%;background:var(--gold);"></div></div>
+              <span style="width:32px;text-align:right;color:var(--ink-mute);">86%</span>
+            </div><div style="display:flex;align-items:center;gap:10px;">
+              <span style="width:60px;color:var(--gold-deep);">★★★★☆</span>
+              <div style="flex:1;height:6px;background:#fff;border-radius:3px;overflow:hidden;"><div style="width:11%;height:100%;background:var(--gold);"></div></div>
+              <span style="width:32px;text-align:right;color:var(--ink-mute);">11%</span>
+            </div><div style="display:flex;align-items:center;gap:10px;">
+              <span style="width:60px;color:var(--gold-deep);">★★★☆☆</span>
+              <div style="flex:1;height:6px;background:#fff;border-radius:3px;overflow:hidden;"><div style="width:2%;height:100%;background:var(--gold);"></div></div>
+              <span style="width:32px;text-align:right;color:var(--ink-mute);">2%</span>
+            </div><div style="display:flex;align-items:center;gap:10px;">
+              <span style="width:60px;color:var(--gold-deep);">★★☆☆☆</span>
+              <div style="flex:1;height:6px;background:#fff;border-radius:3px;overflow:hidden;"><div style="width:1%;height:100%;background:var(--gold);"></div></div>
+              <span style="width:32px;text-align:right;color:var(--ink-mute);">1%</span>
+            </div><div style="display:flex;align-items:center;gap:10px;">
+              <span style="width:60px;color:var(--gold-deep);">★☆☆☆☆</span>
+              <div style="flex:1;height:6px;background:#fff;border-radius:3px;overflow:hidden;"><div style="width:0%;height:100%;background:var(--gold);"></div></div>
+              <span style="width:32px;text-align:right;color:var(--ink-mute);">0%</span>
+            </div>
+        </div>
+      </div>
+
+      
+        <div style="padding:16px 0;border-bottom:1px dashed var(--line);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--green);color:var(--gold);display:grid;place-items:center;font-weight:700;font-size:13px;">T</div>
+            <div style="flex:1;"><strong style="font-size:13px;">Tanaka Yuki</strong> <span class="flag" style="margin-left:6px;">JP</span></div>
+            <div style="font-size:11px;color:var(--ink-mute);font-family:'JetBrains Mono',monospace;">2026-05-08</div>
+          </div>
+          <div style="color:var(--gold-deep);font-size:13px;margin-bottom:6px;">★★★★★</div>
+          <p style="font-size:13px;line-height:1.5;color:var(--ink-soft);" data-en>Best Vietnamese coffee I have tried! Rich aroma and clean finish. Shipping from Vietnam to Tokyo took 5 days with DHL — packaging arrived perfectly. Will order again.</p>
+          <p style="font-size:13px;line-height:1.5;color:var(--ink-soft);" data-vi>Cà phê Việt ngon nhất tôi từng thử! Hương vị đậm đà, hậu vị sạch. Ship từ Việt Nam đến Tokyo mất 5 ngày với DHL — bao bì còn nguyên. Sẽ đặt lại.</p>
+        </div>
+        <div style="padding:16px 0;border-bottom:1px dashed var(--line);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--green);color:var(--gold);display:grid;place-items:center;font-weight:700;font-size:13px;">N</div>
+            <div style="flex:1;"><strong style="font-size:13px;">Nguyễn Thu Hương</strong> <span class="flag" style="margin-left:6px;">VN</span></div>
+            <div style="font-size:11px;color:var(--ink-mute);font-family:'JetBrains Mono',monospace;">2026-05-06</div>
+          </div>
+          <div style="color:var(--gold-deep);font-size:13px;margin-bottom:6px;">★★★★★</div>
+          <p style="font-size:13px;line-height:1.5;color:var(--ink-soft);" data-en>Pha phin lên hương thơm cả nhà ngửi thấy. Vị đậm, không gắt như cà phê siêu thị. Đáng tiền.</p>
+          <p style="font-size:13px;line-height:1.5;color:var(--ink-soft);" data-vi>Pha phin lên hương thơm cả nhà ngửi thấy. Vị đậm, không gắt như cà phê siêu thị. Đáng tiền.</p>
+        </div>
+        <div style="padding:16px 0;border-bottom:1px dashed var(--line);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--green);color:var(--gold);display:grid;place-items:center;font-weight:700;font-size:13px;">S</div>
+            <div style="flex:1;"><strong style="font-size:13px;">Sarah Mitchell</strong> <span class="flag" style="margin-left:6px;">US</span></div>
+            <div style="font-size:11px;color:var(--ink-mute);font-family:'JetBrains Mono',monospace;">2026-05-04</div>
+          </div>
+          <div style="color:var(--gold-deep);font-size:13px;margin-bottom:6px;">★★★★★</div>
+          <p style="font-size:13px;line-height:1.5;color:var(--ink-soft);" data-en>Beautiful packaging, fresh roast date stamped on bag. Brewed as pour-over with great results. The chocolate notes are exactly as described.</p>
+          <p style="font-size:13px;line-height:1.5;color:var(--ink-soft);" data-vi>Beautiful packaging, fresh roast date stamped on bag. Brewed as pour-over with great results. The chocolate notes are exactly as described.</p>
+        </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="panel">
+      <div class="panel-head"><h2><span data-vi>Khối lượng & ship</span><span data-en>Weight & shipping</span></h2></div>
+      <div style="font-size:13px;line-height:1.7;">
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line);"><span><span data-vi>Khối lượng thực</span><span data-en>Actual weight</span></span><strong>500g</strong></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line);"><span><span data-vi>Khối lượng quy đổi</span><span data-en>Volumetric</span></span><strong>288g</strong></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line);"><span><span data-vi>Kích thước hộp</span><span data-en>Box size</span></span><strong>20×12×6 cm</strong></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;"><span><span data-vi>HS Code</span><span data-en>HS Code</span></span><span class="mono">0901.21.10</span></div>
+      </div>
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line);">
+        <div style="font-size:10.5px;color:var(--gold-deep);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:8px;"><span data-vi>Phí ship ước tính · 1 hộp</span><span data-en>Estimated shipping · 1 box</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12.5px;"><span>🇻🇳 <span data-vi>Trong nước</span><span data-en>Vietnam</span></span><span class="mono">₫25,000</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12.5px;"><span>🇯🇵 Japan</span><span class="mono">₫45,000</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12.5px;"><span>🇰🇷 Korea</span><span class="mono">₫52,000</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12.5px;"><span>🇺🇸 USA</span><span class="mono">₫78,000</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12.5px;"><span>🇪🇺 EU</span><span class="mono">₫92,000</span></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h2><span data-vi>Chứng nhận</span><span data-en>Certifications</span></h2></div>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:12.5px;">
+        <div style="display:flex;justify-content:space-between;padding:10px;background:var(--cream);border-radius:8px;"><div><strong>OCOP 4★</strong><div style="font-size:11px;color:var(--ink-mute);">Đắk Lắk Province 2024</div></div><span class="tag verified">✓</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px;background:var(--cream);border-radius:8px;"><div><strong>USDA Organic</strong><div style="font-size:11px;color:var(--ink-mute);">USDA-2024-VN-0428</div></div><span class="tag verified">✓</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px;background:var(--cream);border-radius:8px;"><div><strong>VietGAP</strong><div style="font-size:11px;color:var(--ink-mute);"><span data-vi>Gia hạn 03/2026</span><span data-en>Renewed 03/2026</span></div></div><span class="tag verified">✓</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section>
+  <h2 style="font-family:'Fraunces',serif;font-size:24px;font-weight:500;margin-bottom:18px;"><span data-vi>Cùng gian hàng</span><span data-en>More from this store</span></h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;" id="related"></div>
+</section>
+
+</main>
+<button class="chatbot-fab" title="Chat with AI">
+  <span class="pulse"></span>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="position:relative;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+</button>
+<footer class="cust-foot">
+  <div class="cust-foot-inner">
+    <div>
+      <a href="index.html" class="cust-logo" style="margin-bottom:14px;">
+        <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-e1693969421521.png" alt="DHTC" style="background:#fff;padding:6px;">
+        <div><strong style="color:var(--cream);">DHTC</strong><span style="color:var(--gold);" data-vi>Đặc sản Việt Nam</span><span style="color:var(--gold);" data-en>Vietnamese specialty</span></div>
+      </a>
+      <p style="font-size:12.5px;line-height:1.6;color:rgba(245,239,224,0.6);max-width:300px;" data-vi>Sàn TMĐT đặc sản — 300 tiểu thương vùng miền kết nối khách trong và ngoài nước.</p>
+      <p style="font-size:12.5px;line-height:1.6;color:rgba(245,239,224,0.6);max-width:300px;" data-en>Specialty marketplace — 300 regional merchants connecting with domestic and global customers.</p>
+    </div>
+    <div>
+      <h5><span data-vi>Khám phá</span><span data-en>Explore</span></h5>
+      <ul>
+        <li><a href="shop.html"><span data-vi>Tất cả sản phẩm</span><span data-en>All products</span></a></li>
+        <li><a href="#"><span data-vi>Gian hàng</span><span data-en>Stores</span></a></li>
+        <li><a href="#"><span data-vi>Khuyến mãi</span><span data-en>Promotions</span></a></li>
+        <li><a href="#"><span data-vi>Cẩm nang</span><span data-en>Journal</span></a></li>
+      </ul>
+    </div>
+    <div>
+      <h5><span data-vi>Hỗ trợ</span><span data-en>Support</span></h5>
+      <ul>
+        <li><a href="#"><span data-vi>Trung tâm trợ giúp</span><span data-en>Help center</span></a></li>
+        <li><a href="tracking.html"><span data-vi>Theo dõi đơn</span><span data-en>Track order</span></a></li>
+        <li><a href="#"><span data-vi>Đổi trả 14 ngày</span><span data-en>14-day returns</span></a></li>
+        <li><a href="#"><span data-vi>Liên hệ</span><span data-en>Contact</span></a></li>
+      </ul>
+    </div>
+    <div>
+      <h5><span data-vi>Đối tác</span><span data-en>Partners</span></h5>
+      <ul><li>Vietcombank · VietQR</li><li>DHL Express</li><li>Meta Messenger</li><li>Zalo OA</li></ul>
+      <div style="margin-top:14px;">
+        <div style="font-size:11px;color:var(--gold);font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;"><span data-vi>Liên hệ</span><span data-en>Contact</span></div>
+        <div style="font-size:12px;color:rgba(245,239,224,0.7);">975 Ngô Quyền, An Hải Tây, Sơn Trà, Đà Nẵng</div>
+        <div style="font-size:12px;color:rgba(245,239,224,0.7);">contact@dhtcdanang.com</div>
+        <div class="mono" style="font-size:12px;color:rgba(245,239,224,0.7);">+84 947 046 556</div>
+      </div>
+    </div>
+  </div>
+  <div class="cust-foot-bottom">
+    <span>© 2026 · DHTC ĐÀ NẴNG JOINT STOCK COMPANY · MST 0123456789</span>
+    <span>DEMO MOCKUP v0.2 · ALL DATA SHOWN IS MOCK</span>
+  </div>
+</footer>
+<script src="../assets/data.js"></script>
+<script>
+function setLang(lang, btn) {
+  document.body.classList.toggle('en', lang === 'en');
+  document.querySelectorAll('.lang-pill button').forEach(b => b.classList.remove('active'));
+  btn && btn.classList.add('active');
+  localStorage.setItem('dhtc-lang', lang);
+  if (window.onLangChange) window.onLangChange(lang);
+}
+if (localStorage.getItem('dhtc-lang') === 'en') {
+  document.body.classList.add('en');
+  document.querySelectorAll('.lang-pill button').forEach((b,i) => b.classList.toggle('active', i === 1));
+}
+window.t = (vi, en) => document.body.classList.contains('en') ? en : vi;
+</script>
+<script>
+function card(p) {
+  const m = DHTC.merchants.find(x => x.id === p.sellerId);
+  const cat = DHTC.categories.find(c => c.id === p.cat);
+  return `
+  <a href="product.html?slug=${p.slug}" class="prod-card">
+    <div class="prod-img-wrap">
+      <img src="${p.img}" alt="${p.vi}" loading="lazy">
+      <div class="prod-badges">
+        ${p.ocop ? '<span class="prod-badge ocop">★ OCOP</span>' : ''}
+        ${p.organic ? '<span class="prod-badge organic">Organic</span>' : ''}
+      </div>
+    </div>
+    <div class="prod-card-body">
+      <div class="prod-card-cat">${t(cat.vi, cat.en)}</div>
+      <h3 class="prod-card-name">${t(p.vi, p.en)}</h3>
+      <div class="prod-card-merchant">${t('từ ', 'by ')}<strong>${m.shortName}</strong></div>
+      <div class="prod-card-rating">★★★★★ <strong>${p.rating}</strong></div>
+      <div class="prod-card-price-row"><div class="prod-card-price">${fmt.vnd(p.price)}<small>/${p.weight}g</small></div></div>
+    </div>
+  </a>`;
+}
+function render() {
+  const related = DHTC.products.filter(p => p.sellerId === 'M008' && p.id !== 'P003').slice(0, 4);
+  document.getElementById('related').innerHTML = related.map(card).join('');
+}
+render();
+window.onLangChange = render;
+</script>
+</body>
+</html>

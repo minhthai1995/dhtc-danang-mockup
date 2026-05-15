@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DHTC Đà Nẵng · Nông sản Việt xuất khẩu</title>
+<link rel="icon" href="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-270x270.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+/* ── Nav ── */
+.cust-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(245,239,224,.92);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.cust-nav-inner {
+  max-width: 1320px;
+  margin: auto;
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 64px;
+}
+.cust-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; flex-shrink: 0; }
+.cust-logo img { height: 38px; border-radius: 8px; object-fit: contain; }
+.cust-logo-text { display: flex; flex-direction: column; }
+.cust-logo-text strong { font-family: 'Fraunces', serif; font-size: 16px; color: var(--green); font-weight: 600; line-height: 1.1; letter-spacing: -.01em; }
+.cust-logo-text span { font-size: 9px; color: var(--gold-deep); letter-spacing: .2em; text-transform: uppercase; font-weight: 700; }
+.cust-menu { display: flex; align-items: center; gap: 2px; margin-left: 20px; }
+.cust-menu a { padding: 7px 13px; border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--ink-soft); text-decoration: none; transition: all .15s; }
+.cust-menu a:hover { background: var(--cream-dark); color: var(--ink); }
+.cust-menu a.active { color: var(--green); font-weight: 600; }
+.nav-spacer { flex: 1; }
+.nav-right { display: flex; align-items: center; gap: 8px; }
+.cart-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 10px; background: #fff; border: 1px solid var(--line); cursor: pointer; text-decoration: none; transition: all .15s; }
+.cart-btn:hover { border-color: var(--green); }
+.cart-btn svg { width: 18px; height: 18px; color: var(--ink-soft); }
+.cart-count { position: absolute; top: -5px; right: -5px; background: var(--vermillion); color: #fff; font-size: 10px; font-weight: 700; min-width: 18px; height: 18px; border-radius: 999px; display: flex; align-items: center; justify-content: center; padding: 0 4px; border: 2px solid var(--cream); }
+.nav-account { padding: 8px 16px; border-radius: 10px; background: var(--green); color: var(--cream); font-size: 13px; font-weight: 600; text-decoration: none; transition: background .15s; }
+.nav-account:hover { background: var(--green-soft); }
+
+/* ── Hero ── */
+.hero-banner {
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-soft) 52%, var(--green-deep) 100%);
+  color: var(--cream);
+  padding: 96px 28px 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,169,97,.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-inner { position: relative; z-index: 1; max-width: 760px; margin: auto; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 14px; background: rgba(201,169,97,.2); border: 1px solid rgba(201,169,97,.35);
+  border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .14em;
+  color: var(--gold); margin-bottom: 24px;
+}
+.hero-banner h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(42px, 6vw, 78px);
+  font-weight: 400;
+  letter-spacing: -.035em;
+  line-height: 1.05;
+  color: var(--cream);
+  margin-bottom: 18px;
+}
+.hero-banner h1 em { color: var(--gold); font-style: normal; }
+.hero-subtitle { font-size: 17px; color: rgba(245,239,224,.8); max-width: 520px; margin: 0 auto 32px; line-height: 1.6; }
+.hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 52px; }
+.hero-stats { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; }
+.hero-stat { text-align: center; }
+.hero-stat-val { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 500; color: var(--gold); letter-spacing: -.02em; }
+.hero-stat-label { font-size: 11px; color: rgba(245,239,224,.6); text-transform: uppercase; letter-spacing: .1em; font-weight: 600; margin-top: 2px; }
+.hero-stat-sep { width: 1px; background: rgba(245,239,224,.15); margin: 4px 0; }
+.btn-cream { background: rgba(245,239,224,.15); color: var(--cream); border: 1px solid rgba(245,239,224,.35); }
+.btn-cream:hover { background: rgba(245,239,224,.25); color: var(--cream); }
+
+/* ── Section container ── */
+.section-container { max-width: 1320px; margin: auto; padding: 0 28px 60px; }
+.section-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 22px; }
+.section-head h2 { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 500; letter-spacing: -.02em; }
+.section-head a { font-size: 13px; color: var(--green); font-weight: 500; text-decoration: none; }
+.section-head a:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+/* ── Category pills ── */
+.cat-pills { display: flex; gap: 10px; flex-wrap: wrap; padding-top: 40px; }
+.cat-pill {
+  padding: 10px 20px; background: #fff; border: 1px solid var(--line);
+  border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer;
+  text-decoration: none; color: var(--ink-soft); transition: all .15s;
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.cat-pill:hover { border-color: var(--green); color: var(--green); background: rgba(27,59,47,.04); }
+.cat-pill.active { border-color: var(--green); color: var(--green); background: rgba(27,59,47,.06); font-weight: 600; }
+
+/* ── Product grid ── */
+.prod-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+@media (max-width: 1100px) { .prod-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 760px) { .prod-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.prod-card {
+  background: #fff; border: 1px solid var(--line); border-radius: 16px;
+  overflow: hidden; transition: transform .2s, box-shadow .2s, border-color .2s;
+  cursor: pointer; text-decoration: none; color: inherit; display: block;
+}
+.prod-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 36px -10px rgba(27,59,47,.16);
+  border-color: var(--green);
+}
+.prod-img { aspect-ratio: 1; overflow: hidden; background: var(--cream); position: relative; }
+.prod-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s; display: block; }
+.prod-card:hover .prod-img img { transform: scale(1.06); }
+.prod-img-badge { position: absolute; top: 10px; left: 10px; background: var(--gold); color: var(--green); font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 999px; letter-spacing: .05em; }
+.prod-body { padding: 14px 16px 16px; }
+.prod-origin { font-size: 10.5px; color: var(--ink-mute); text-transform: uppercase; letter-spacing: .1em; font-weight: 600; margin-bottom: 5px; }
+.prod-name { font-weight: 600; font-size: 14px; line-height: 1.3; margin-bottom: 4px; color: var(--ink); }
+.prod-price { font-family: 'Fraunces', serif; font-size: 22px; color: var(--green); font-weight: 500; letter-spacing: -.015em; }
+.prod-price-usd { font-size: 12px; color: var(--ink-mute); margin-left: 4px; font-family: 'IBM Plex Sans', sans-serif; }
+.cert-badges { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; }
+.cert {
+  display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 999px;
+  font-size: 10px; font-weight: 700; letter-spacing: .02em;
+  background: rgba(45,106,79,.1); color: var(--success);
+}
+.cert.ocop { background: rgba(27,59,47,.1); color: var(--green); }
+.prod-rating { font-size: 12px; color: var(--gold-deep); margin-top: 5px; font-weight: 600; }
+
+/* ── Merchant spotlight ── */
+.merchant-card {
+  background: var(--green); color: var(--cream); border-radius: 20px;
+  padding: 32px 36px; display: flex; gap: 32px; align-items: center;
+  flex-wrap: wrap; overflow: hidden; position: relative;
+}
+.merchant-card::before {
+  content: '';
+  position: absolute; top: -60px; right: -60px;
+  width: 240px; height: 240px;
+  border-radius: 50%;
+  background: rgba(201,169,97,.08);
+  pointer-events: none;
+}
+.merchant-logo { width: 84px; height: 84px; border-radius: 14px; border: 2px solid rgba(201,169,97,.4); object-fit: contain; background: var(--cream); padding: 8px; flex-shrink: 0; }
+.merchant-body { flex: 1; min-width: 200px; }
+.merchant-tier { display: inline-flex; align-items: center; gap: 5px; background: rgba(201,169,97,.2); color: var(--gold); border-radius: 999px; font-size: 10px; font-weight: 700; letter-spacing: .1em; padding: 3px 10px; margin-bottom: 8px; }
+.merchant-body h3 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 500; color: var(--cream); margin-bottom: 6px; }
+.merchant-stats { display: flex; gap: 20px; margin: 10px 0; }
+.merchant-stat { }
+.merchant-stat strong { display: block; font-family: 'Fraunces', serif; font-size: 20px; color: var(--gold); font-weight: 500; }
+.merchant-stat span { font-size: 10.5px; color: rgba(245,239,224,.6); text-transform: uppercase; letter-spacing: .08em; }
+.merchant-desc { font-size: 13px; color: rgba(245,239,224,.75); line-height: 1.55; max-width: 380px; }
+.merchant-prod-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.merchant-prod-mini { border-radius: 10px; overflow: hidden; background: rgba(245,239,224,.1); border: 1px solid rgba(201,169,97,.2); }
+.merchant-prod-mini img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+.merchant-prod-mini-name { font-size: 11px; font-weight: 500; padding: 5px 8px; color: rgba(245,239,224,.85); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── Trust bar ── */
+.trust-bar { background: var(--cream-dark); padding: 28px; }
+.trust-bar-inner { max-width: 1320px; margin: auto; padding: 0 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.trust-item { display: flex; align-items: center; gap: 14px; }
+.trust-icon { font-size: 26px; flex-shrink: 0; }
+.trust-text strong { display: block; font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.trust-text span { font-size: 12px; color: var(--ink-mute); }
+
+/* ── Footer ── */
+.cust-footer { background: var(--green); color: rgba(245,239,224,.75); padding: 40px 28px 28px; }
+.cust-footer-inner { max-width: 1320px; margin: auto; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 24px; }
+.footer-brand strong { font-family: 'Fraunces', serif; font-size: 18px; color: var(--cream); font-weight: 500; }
+.footer-brand p { font-size: 12px; color: rgba(245,239,224,.55); margin-top: 4px; max-width: 200px; line-height: 1.5; }
+.footer-links { display: flex; gap: 40px; flex-wrap: wrap; }
+.footer-col h4 { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.footer-col a { display: block; font-size: 12.5px; color: rgba(245,239,224,.65); text-decoration: none; margin-bottom: 6px; transition: color .15s; }
+.footer-col a:hover { color: var(--cream); }
+.footer-bottom { max-width: 1320px; margin: auto; padding: 18px 0 0; border-top: 1px solid rgba(201,169,97,.15); margin-top: 28px; display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; color: rgba(245,239,224,.45); flex-wrap: wrap; gap: 8px; }
+
+/* ── Page spacing ── */
+.section-pad-top { padding-top: 48px; }
+</style>
+</head>
+<body>
+
+<!-- ── STICKY NAV ── -->
+<header class="cust-nav">
+  <div class="cust-nav-inner">
+    <a class="cust-logo" href="index.html">
+      <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-e1693969421521.png" alt="DHTC">
+      <div class="cust-logo-text">
+        <strong>DHTC Đà Nẵng</strong>
+        <span><span data-vi>Nông sản xuất khẩu</span><span data-en>Export platform</span></span>
+      </div>
+    </a>
+    <nav class="cust-menu">
+      <a href="index.html" class="active"><span data-vi>Trang chủ</span><span data-en>Home</span></a>
+      <a href="shop.html"><span data-vi>Cửa hàng</span><span data-en>Shop</span></a>
+      <a href="merchant.html"><span data-vi>Gian hàng M008</span><span data-en>M008 Store</span></a>
+      <a href="../index.html"><span data-vi>Nền tảng</span><span data-en>Platform</span></a>
+    </nav>
+    <div class="nav-spacer"></div>
+    <div class="nav-right">
+      <!-- Search -->
+      <button class="cart-btn" title="Search" onclick="document.querySelector('.search-overlay')?.remove()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <!-- Cart -->
+      <a class="cart-btn" href="cart.html" aria-label="Cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l3 12h11l2-8H6"/></svg>
+        <span class="cart-count">2</span>
+      </a>
+      <!-- Lang -->
+      <div class="lang-pill">
+        <button onclick="setLang('vi',this)" class="active">VI</button>
+        <button onclick="setLang('en',this)">EN</button>
+      </div>
+      <!-- Account -->
+      <a href="account.html" class="nav-account"><span data-vi>Tài khoản</span><span data-en>Account</span></a>
+    </div>
+  </div>
+</header>
+
+<!-- ── HERO BANNER ── -->
+<section class="hero-banner">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">🌿 <span data-vi>OCOP CHỨNG NHẬN · NỀN TẢNG DHTC</span><span data-en>OCOP CERTIFIED · DHTC PLATFORM</span></div>
+    <h1>
+      <span data-vi>Nông sản Việt<br><em>Xuất khẩu toàn cầu</em></span>
+      <span data-en>Vietnam's Finest<br><em>Shipped Worldwide</em></span>
+    </h1>
+    <p class="hero-subtitle">
+      <span data-vi>Kết nối 300 tiểu thương với thị trường Nhật, Hàn, Singapore và hơn 40 quốc gia — trực tiếp từ vùng trồng.</span>
+      <span data-en>Connecting 300 artisan merchants to Japan, Korea, Singapore and 40+ countries — direct from the source.</span>
+    </p>
+    <div class="hero-cta">
+      <a href="shop.html" class="btn btn-secondary btn-lg"><span data-vi>Mua ngay</span><span data-en>Shop Now</span></a>
+      <a href="merchant.html" class="btn btn-cream btn-lg"><span data-vi>Xem tiểu thương</span><span data-en>Browse Sellers</span></a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val">300+</div>
+        <div class="hero-stat-label"><span data-vi>Tiểu thương</span><span data-en>Merchants</span></div>
+      </div>
+      <div class="hero-stat-sep"></div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">15k+</div>
+        <div class="hero-stat-label"><span data-vi>Sản phẩm</span><span data-en>Products</span></div>
+      </div>
+      <div class="hero-stat-sep"></div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">40+</div>
+        <div class="hero-stat-label"><span data-vi>Quốc gia</span><span data-en>Countries</span></div>
+      </div>
+      <div class="hero-stat-sep"></div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">4.87★</div>
+        <div class="hero-stat-label"><span data-vi>Đánh giá TB</span><span data-en>Avg rating</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CATEGORIES ── -->
+<div class="section-container">
+  <div class="cat-pills section-pad-top">
+    <a href="shop.html" class="cat-pill active">🛒 <span data-vi>Tất cả</span><span data-en>All</span></a>
+    <a href="shop.html" class="cat-pill">🌶️ <span data-vi>Gia vị</span><span data-en>Spices</span></a>
+    <a href="shop.html" class="cat-pill">🍎 <span data-vi>Trái cây tươi</span><span data-en>Fresh fruit</span></a>
+    <a href="shop.html" class="cat-pill">🥭 <span data-vi>Trái cây sấy</span><span data-en>Dried fruit</span></a>
+    <a href="shop.html" class="cat-pill">🥬 <span data-vi>Rau củ</span><span data-en>Vegetables</span></a>
+    <a href="shop.html" class="cat-pill">🥜 <span data-vi>Hạt &amp; ngũ cốc</span><span data-en>Nuts &amp; Grains</span></a>
+    <a href="shop.html" class="cat-pill">❄️ <span data-vi>Đông lạnh</span><span data-en>Frozen</span></a>
+    <a href="shop.html" class="cat-pill">🍪 <span data-vi>Bánh &amp; kẹo</span><span data-en>Bakery &amp; Sweets</span></a>
+  </div>
+</div>
+
+<!-- ── FEATURED PRODUCTS ── -->
+<div class="section-container">
+  <div class="section-head">
+    <h2><span data-vi>Sản phẩm nổi bật</span><span data-en>Featured products</span></h2>
+    <a href="shop.html"><span data-vi>Xem tất cả →</span><span data-en>View all →</span></a>
+  </div>
+  <div class="prod-grid">
+    <!-- Card 1 -->
+    <a href="product.html" class="prod-card">
+      <div class="prod-img">
+        <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/34-300x300.png" alt="Cà phê hữu cơ">
+        <span class="prod-img-badge" data-vi>★ Nổi bật</span><span class="prod-img-badge" data-en>★ Featured</span>
+      </div>
+      <div class="prod-body">
+        <div class="prod-origin">Buôn Ma Thuột · M008</div>
+        <div class="prod-name"><span data-vi>Cà phê hữu cơ rang xay 250g</span><span data-en>Organic roasted coffee 250g</span></div>
+        <div style="margin-top:8px">
+          <span class="prod-price">₫285,000</span>
+          <span class="prod-price-usd">/ $11.40</span>
+        </div>
+        <div class="cert-badges">
+          <span class="cert ocop">OCOP ★4</span>
+          <span class="cert">Organic</span>
+        </div>
+        <div class="prod-rating">4.9★ <span style="font-size:11px;color:var(--ink-mute);font-weight:400">(312 <span data-vi>đánh giá</span><span data-en>reviews</span>)</span></div>
+      </div>
+    </a>
+    <!-- Card 2 -->
+    <a href="product.html" class="prod-card">
+      <div class="prod-img">
+        <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/12-300x300.png" alt="Mít sấy">
+      </div>
+      <div class="prod-body">
+        <div class="prod-origin">Đồng Nai · M044</div>
+        <div class="prod-name"><span data-vi>Mít sấy dẻo nguyên múi 200g</span><span data-en>Soft dried jackfruit 200g</span></div>
+        <div style="margin-top:8px">
+          <span class="prod-price">₫198,000</span>
+          <span class="prod-price-usd">/ $7.90</span>
+        </div>
+        <div class="cert-badges">
+          <span class="cert ocop">OCOP ★4</span>
+        </div>
+        <div class="prod-rating">4.7★ <span style="font-size:11px;color:var(--ink-mute);font-weight:400">(188 <span data-vi>đánh giá</span><span data-en>reviews</span>)</span></div>
+      </div>
+    </a>
+    <!-- Card 3 -->
+    <a href="product.html" class="prod-card">
+      <div class="prod-img">
+        <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/10-300x300.png" alt="Xoài sấy">
+        <span class="prod-img-badge" data-vi>🔥 Bán chạy</span><span class="prod-img-badge" data-en>🔥 Best seller</span>
+      </div>
+      <div class="prod-body">
+        <div class="prod-origin">Tiền Giang · M017</div>
+        <div class="prod-name"><span data-vi>Xoài sấy Cát Hòa Lộc 300g</span><span data-en>Cat Hoa Loc dried mango 300g</span></div>
+        <div style="margin-top:8px">
+          <span class="prod-price">₫168,000</span>
+          <span class="prod-price-usd">/ $6.70</span>
+        </div>
+        <div class="cert-badges">
+          <span class="cert ocop">OCOP ★4</span>
+        </div>
+        <div class="prod-rating">5.0★ <span style="font-size:11px;color:var(--ink-mute);font-weight:400">(540 <span data-vi>đánh giá</span><span data-en>reviews</span>)</span></div>
+      </div>
+    </a>
+    <!-- Card 4 -->
+    <a href="product.html" class="prod-card">
+      <div class="prod-img">
+        <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/2-300x300.png" alt="Mắc-ca">
+      </div>
+      <div class="prod-body">
+        <div class="prod-origin">Lâm Đồng · M042</div>
+        <div class="prod-name"><span data-vi>Mắc-ca sấy lạnh nguyên hạt 200g</span><span data-en>Freeze-dried macadamia 200g</span></div>
+        <div style="margin-top:8px">
+          <span class="prod-price">₫420,000</span>
+          <span class="prod-price-usd">/ $16.80</span>
+        </div>
+        <div class="cert-badges">
+          <span class="cert ocop">OCOP ★4</span>
+          <span class="cert">Organic</span>
+        </div>
+        <div class="prod-rating">4.8★ <span style="font-size:11px;color:var(--ink-mute);font-weight:400">(96 <span data-vi>đánh giá</span><span data-en>reviews</span>)</span></div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- ── MERCHANT SPOTLIGHT ── -->
+<div class="section-container">
+  <div class="section-head">
+    <h2><span data-vi>Gian hàng tiêu biểu</span><span data-en>Merchant spotlight</span></h2>
+    <a href="merchant.html"><span data-vi>Xem tất cả gian hàng →</span><span data-en>Browse all stores →</span></a>
+  </div>
+  <div class="merchant-card">
+    <img class="merchant-logo" src="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-e1693969421521.png" alt="HTX Cà Phê">
+    <div class="merchant-body">
+      <div class="merchant-tier">★ GOLD TIER</div>
+      <h3>HTX Cà Phê Hữu Cơ Đắk Lắk</h3>
+      <div class="merchant-stats">
+        <div class="merchant-stat">
+          <strong>8</strong>
+          <span><span data-vi>Sản phẩm</span><span data-en>Products</span></span>
+        </div>
+        <div class="merchant-stat">
+          <strong>4.85★</strong>
+          <span><span data-vi>Đánh giá</span><span data-en>Rating</span></span>
+        </div>
+        <div class="merchant-stat">
+          <strong>3,128</strong>
+          <span><span data-vi>Đơn hàng</span><span data-en>Orders</span></span>
+        </div>
+      </div>
+      <p class="merchant-desc">
+        <span data-vi>42 hộ trồng cà phê hữu cơ tại Buôn Ma Thuột, Đắk Lắk. Chứng nhận OCOP ★4, xuất khẩu sang Nhật Bản, Hàn Quốc và Singapore.</span>
+        <span data-en>42 organic coffee-growing households in Buon Ma Thuot, Dak Lak. OCOP ★4 certified, exported to Japan, South Korea, and Singapore.</span>
+      </p>
+      <a href="merchant.html" class="btn btn-secondary btn-sm" style="margin-top:16px;display:inline-flex">
+        <span data-vi>Thăm gian hàng</span><span data-en>Visit store</span> →
+      </a>
+    </div>
+    <div class="merchant-prod-grid">
+      <div class="merchant-prod-mini">
+        <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/34-300x300.png" alt="Cà phê hữu cơ">
+        <div class="merchant-prod-mini-name"><span data-vi>Cà phê hữu cơ</span><span data-en>Organic coffee</span></div>
+      </div>
+      <div class="merchant-prod-mini">
+        <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/24-300x300.png" alt="Bột cacao">
+        <div class="merchant-prod-mini-name"><span data-vi>Bột cacao</span><span data-en>Cacao powder</span></div>
+      </div>
+      <div class="merchant-prod-mini">
+        <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/2-300x300.png" alt="Hạt điều">
+        <div class="merchant-prod-mini-name"><span data-vi>Hạt điều rang</span><span data-en>Roasted cashews</span></div>
+      </div>
+      <div class="merchant-prod-mini">
+        <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/2-300x300.png" alt="Mắc-ca">
+        <div class="merchant-prod-mini-name"><span data-vi>Mắc-ca sấy lạnh</span><span data-en>Freeze-dried mac.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── NEW ARRIVALS ── -->
+<div class="section-container">
+  <div class="section-head">
+    <h2><span data-vi>Mới nhất</span><span data-en>New arrivals</span></h2>
+    <a href="shop.html"><span data-vi>Xem tất cả →</span><span data-en>View all →</span></a>
+  </div>
+  <div class="prod-grid">
+    <!-- New 1 -->
+    <a href="product.html" class="prod-card">
+      <div class="prod-img">
+        <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/12-300x300.png" alt="Bánh dừa nướng">
+        <span class="prod-img-badge">🆕 New</span>
+      </div>
+      <div class="prod-body">
+        <div class="prod-origin">Quảng Nam · M101</div>
+        <div class="prod-name"><span data-vi>Bánh dừa nướng truyền thống 200g</span><span data-en>Traditional baked coconut cake 200g</span></div>
+        <div style="margin-top:8px">
+          <span class="prod-price">₫145,000</span>
+          <span class="prod-price-usd">/ $5.80</span>
+        </div>
+        <div class="cert-badges">
+          <span class="cert ocop">OCOP ★3</span>
+        </div>
+      </div>
+    </a>
+    <!-- New 2 -->
+    <a href="product.html" class="prod-card">
+      <div class="prod-img">
+        <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/10-300x300.png" alt="Trà sấy">
+        <span class="prod-img-badge">🆕 New</span>
+      </div>
+      <div class="prod-body">
+        <div class="prod-origin">Bảo Lộc · M063</div>
+        <div class="prod-name"><span data-vi>Trà sấy thăng hoa hỗn hợp 50g</span><span data-en>Freeze-dried herbal tea blend 50g</span></div>
+        <div style="margin-top:8px">
+          <span class="prod-price">₫210,000</span>
+          <span class="prod-price-usd">/ $8.40</span>
+        </div>
+        <div class="cert-badges">
+          <span class="cert ocop">OCOP ★4</span>
+          <span class="cert">Organic</span>
+        </div>
+      </div>
+    </a>
+    <!-- New 3 -->
+    <a href="product.html" class="prod-card">
+      <div class="prod-img">
+        <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/2-300x300.png" alt="Hạt điều Bình Phước">
+        <span class="prod-img-badge">🆕 New</span>
+      </div>
+      <div class="prod-body">
+        <div class="prod-origin">Bình Phước · M088</div>
+        <div class="prod-name"><span data-vi>Hạt điều rang muối Bình Phước 300g</span><span data-en>Binh Phuoc salted cashews 300g</span></div>
+        <div style="margin-top:8px">
+          <span class="prod-price">₫195,000</span>
+          <span class="prod-price-usd">/ $7.80</span>
+        </div>
+        <div class="cert-badges">
+          <span class="cert ocop">OCOP ★4</span>
+        </div>
+      </div>
+    </a>
+    <!-- New 4 -->
+    <a href="product.html" class="prod-card">
+      <div class="prod-img">
+        <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/24-300x300.png" alt="Bánh cay Đà Nẵng">
+        <span class="prod-img-badge">🆕 New</span>
+      </div>
+      <div class="prod-body">
+        <div class="prod-origin">Đà Nẵng · M155</div>
+        <div class="prod-name"><span data-vi>Bánh cay Đà Nẵng đặc sản 150g</span><span data-en>Da Nang spicy crackers 150g</span></div>
+        <div style="margin-top:8px">
+          <span class="prod-price">₫82,000</span>
+          <span class="prod-price-usd">/ $3.30</span>
+        </div>
+        <div class="cert-badges">
+          <span class="cert ocop">OCOP ★3</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- ── TRUST BAR ── -->
+<div class="trust-bar">
+  <div class="trust-bar-inner">
+    <div class="trust-item">
+      <div class="trust-icon">🚚</div>
+      <div class="trust-text">
+        <strong><span data-vi>Vận chuyển DHL Express</span><span data-en>DHL Express Shipping</span></strong>
+        <span><span data-vi>Toàn cầu, 2–5 ngày</span><span data-en>Worldwide, 2–5 days</span></span>
+      </div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">🔒</div>
+      <div class="trust-text">
+        <strong><span data-vi>Thanh toán VietQR</span><span data-en>VietQR Payment</span></strong>
+        <span><span data-vi>Bảo mật 256-bit SSL</span><span data-en>256-bit SSL secured</span></span>
+      </div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">✅</div>
+      <div class="trust-text">
+        <strong><span data-vi>Hàng OCOP Chứng nhận</span><span data-en>OCOP Certified goods</span></strong>
+        <span><span data-vi>Kiểm định chất lượng quốc gia</span><span data-en>National quality verified</span></span>
+      </div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">💬</div>
+      <div class="trust-text">
+        <strong><span data-vi>Hỗ trợ Zalo &amp; Messenger</span><span data-en>Zalo &amp; Messenger Support</span></strong>
+        <span><span data-vi>Phản hồi trong 15 phút</span><span data-en>Response within 15 min</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="cust-footer">
+  <div class="cust-footer-inner">
+    <div class="footer-brand">
+      <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-e1693969421521.png" alt="DHTC" style="width:48px;border-radius:10px;background:rgba(245,239,224,.1);padding:6px;margin-bottom:10px">
+      <strong>DHTC Đà Nẵng</strong>
+      <p><span data-vi>Nền tảng thương mại điện tử nông sản Việt Nam xuất khẩu.</span><span data-en>Vietnam's agricultural e-commerce export platform.</span></p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4><span data-vi>Mua sắm</span><span data-en>Shopping</span></h4>
+        <a href="shop.html"><span data-vi>Cửa hàng</span><span data-en>Shop</span></a>
+        <a href="shop.html"><span data-vi>Danh mục sản phẩm</span><span data-en>Categories</span></a>
+        <a href="merchant.html"><span data-vi>Gian hàng</span><span data-en>Merchants</span></a>
+        <a href="cart.html"><span data-vi>Giỏ hàng</span><span data-en>Cart</span></a>
+      </div>
+      <div class="footer-col">
+        <h4><span data-vi>Hỗ trợ</span><span data-en>Support</span></h4>
+        <a href="account.html"><span data-vi>Tài khoản</span><span data-en>Account</span></a>
+        <a href="tracking.html"><span data-vi>Theo dõi đơn hàng</span><span data-en>Order tracking</span></a>
+        <a href="#"><span data-vi>Chính sách hoàn hàng</span><span data-en>Return policy</span></a>
+        <a href="#"><span data-vi>Liên hệ</span><span data-en>Contact us</span></a>
+      </div>
+      <div class="footer-col">
+        <h4><span data-vi>Bán hàng</span><span data-en>Selling</span></h4>
+        <a href="../seller/index.html"><span data-vi>Seller Studio</span><span data-en>Seller Studio</span></a>
+        <a href="../admin/index.html">Admin Console</a>
+        <a href="#"><span data-vi>Đăng ký tiểu thương</span><span data-en>Become a seller</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="cust-footer-inner">
+    <div class="footer-bottom" style="width:100%;padding-top:18px;border-top:1px solid rgba(201,169,97,.15);margin-top:0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:11.5px;color:rgba(245,239,224,.4)">
+      <span>© 2026 DHTC Đà Nẵng — <span data-vi>Nông sản Việt xuất khẩu</span><span data-en>Vietnam Agricultural Exports</span></span>
+      <span><span data-vi>Đà Nẵng, Việt Nam · DHL Partner · VietQR Certified</span><span data-en>Da Nang, Vietnam · DHL Partner · VietQR Certified</span></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Lang ── */
+function setLang(lang, btn) {
+  document.body.classList.toggle('en', lang === 'en');
+  document.querySelectorAll('.lang-pill button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  localStorage.setItem('dhtc-lang', lang);
+}
+if (localStorage.getItem('dhtc-lang') === 'en') {
+  document.body.classList.add('en');
+  document.querySelectorAll('.lang-pill button').forEach((b,i) => b.classList.toggle('active', i === 1));
+}
+
+/* ── Category pill active state ── */
+document.querySelectorAll('.cat-pill').forEach(pill => {
+  pill.addEventListener('click', function(e) {
+    document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

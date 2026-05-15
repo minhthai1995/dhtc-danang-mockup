@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DHTC Platform · Demo Mockup v2</title>
+<link rel="icon" href="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-270x270.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,800&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+body { overflow-x: hidden; }
+.bg-decor {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 800px 400px at 10% 0%, rgba(201,169,97,0.12), transparent),
+    radial-gradient(ellipse 600px 600px at 100% 100%, rgba(27,59,47,0.08), transparent);
+}
+.wrap { position: relative; z-index: 2; max-width: 1240px; margin: 0 auto; padding: 36px 32px 48px; }
+
+header.top { display: flex; justify-content: space-between; align-items: center; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+.logo-row { display: flex; align-items: center; gap: 14px; }
+.logo-row img { width: 56px; height: 56px; border-radius: 12px; object-fit: contain; background: #fff; padding: 6px; border: 1px solid var(--line); }
+.logo-row .meta { display: flex; flex-direction: column; }
+.logo-row .meta strong { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 600; letter-spacing: -0.01em; }
+.logo-row .meta span { font-size: 10.5px; color: var(--ink-mute); letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; }
+
+.hero { padding: 64px 0 40px; max-width: 920px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--green);
+  letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 22px; font-weight: 600;
+}
+.eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--green); }
+
+.hero h1 {
+  font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(44px, 6.5vw, 80px);
+  line-height: 1.02; letter-spacing: -0.035em; margin-bottom: 22px;
+}
+.hero h1 em { font-style: italic; color: var(--vermillion); font-weight: 300; }
+.hero h1 .gold { color: var(--gold); font-weight: 600; }
+
+.hero p { font-size: 18px; line-height: 1.55; color: var(--ink-soft); max-width: 640px; }
+
+.section-label { margin-top: 64px; margin-bottom: 24px; display: flex; align-items: baseline; gap: 14px; }
+.section-label span:first-child { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--gold-deep); font-weight: 600; letter-spacing: 0.08em; }
+.section-label span:nth-child(2) { font-family: 'Fraunces', serif; font-size: 22px; letter-spacing: -0.01em; }
+
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.role-card {
+  position: relative; background: #fff; border: 1px solid var(--line); border-radius: 18px;
+  padding: 28px 26px; transition: all .25s cubic-bezier(.2,.8,.2,1); cursor: pointer;
+  text-decoration: none; color: inherit; display: flex; flex-direction: column;
+  min-height: 380px; overflow: hidden;
+}
+.role-card:hover {
+  transform: translateY(-3px); border-color: var(--green);
+  box-shadow: 0 20px 40px -16px rgba(27,59,47,0.16);
+}
+.role-card:hover .card-arrow { transform: translate(3px, -3px); color: var(--green); }
+
+.card-num { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--ink-mute); margin-bottom: 14px; letter-spacing: 0.08em; }
+.card-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; margin-bottom: 22px; }
+.card-icon svg { width: 24px; height: 24px; }
+.role-card[data-role="admin"] .card-icon { background: rgba(139,38,53,0.1); color: var(--vermillion); }
+.role-card[data-role="seller"] .card-icon { background: rgba(201,169,97,0.18); color: var(--gold-deep); }
+.role-card[data-role="customer"] .card-icon { background: rgba(27,59,47,0.1); color: var(--green); }
+
+.role-card h3 { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 6px; line-height: 1.1; }
+.role-card p { font-size: 13.5px; line-height: 1.5; color: var(--ink-soft); flex: 1; margin-bottom: 18px; }
+.role-card ul { list-style: none; font-size: 12px; color: var(--ink-soft); margin-bottom: 22px; }
+.role-card ul li { padding: 5px 0; border-top: 1px dashed var(--line); }
+.role-card ul li::before { content: '· '; color: var(--gold); font-weight: 700; }
+
+.card-arrow {
+  position: absolute; top: 24px; right: 24px;
+  width: 34px; height: 34px; border-radius: 50%; background: var(--cream);
+  display: grid; place-items: center; color: var(--ink-mute);
+  transition: all .25s cubic-bezier(.2,.8,.2,1);
+}
+
+.pages-count {
+  display: inline-flex; gap: 5px; align-items: center;
+  font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--gold-deep);
+  letter-spacing: 0.08em; font-weight: 600; text-transform: uppercase;
+  padding: 4px 10px; background: var(--cream); border-radius: 999px; border: 1px solid var(--line);
+}
+
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 56px; }
+.stat { padding: 22px; border-left: 2px solid var(--gold); }
+.stat-num { font-family: 'Fraunces', serif; font-size: 40px; font-weight: 400; letter-spacing: -0.03em; line-height: 1; color: var(--green); }
+.stat-num small { font-size: 16px; color: var(--gold); }
+.stat-label { font-size: 11.5px; color: var(--ink-mute); margin-top: 8px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
+
+.architecture { margin-top: 64px; padding: 36px; background: var(--green); color: var(--cream); border-radius: 24px; position: relative; overflow: hidden; }
+.architecture::before { content: ''; position: absolute; top: -100px; right: -100px; width: 280px; height: 280px; border-radius: 50%; background: radial-gradient(circle, rgba(201,169,97,0.2), transparent 70%); }
+.architecture .sub { color: var(--gold); font-size: 11.5px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 28px; position: relative; font-weight: 600; }
+.architecture h2 { font-family: 'Fraunces', serif; font-weight: 400; font-size: 32px; letter-spacing: -0.02em; margin-bottom: 8px; position: relative; color: var(--cream); }
+.arch-flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; align-items: center; position: relative; margin-top: 24px; }
+.arch-node { background: rgba(245,239,224,0.06); border: 1px solid rgba(201,169,97,0.3); padding: 14px 12px; border-radius: 11px; text-align: center; font-size: 11.5px; }
+.arch-node strong { display: block; color: var(--gold); margin-bottom: 4px; font-size: 10.5px; letter-spacing: 0.1em; }
+.arch-node em { font-style: normal; font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: rgba(245,239,224,0.6); }
+
+footer.foot { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; font-size: 11.5px; color: var(--ink-mute); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; }
+
+@media (max-width: 900px) {
+  .cards, .stats, .arch-flow { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 520px) {
+  .cards, .stats { grid-template-columns: 1fr; }
+  .arch-flow { grid-template-columns: 1fr; }
+  .wrap { padding: 24px 18px 32px; }
+}
+</style>
+</head>
+<body>
+<div class="bg-decor"></div>
+
+<div class="wrap">
+  <header class="top">
+    <div class="logo-row">
+      <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-e1693969421521.png" alt="DHTC logo"/>
+      <div class="meta">
+        <strong>DHTC Đà Nẵng</strong>
+        <span>Platform Mockup · v0.2</span>
+      </div>
+    </div>
+    <div class="lang-pill">
+      <button class="active" onclick="setLang('vi', this)">VI</button>
+      <button onclick="setLang('en', this)">EN</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow">
+      <span data-vi>Hệ sinh thái thương mại nông sản</span>
+      <span data-en>Agricultural commerce ecosystem</span>
+    </div>
+    <h1>
+      <span data-vi>Một nền tảng. <em>Ba vai trò.</em><br>Ba trăm <span class="gold">tiểu thương</span>.</span>
+      <span data-en>One platform. <em>Three roles.</em><br>Three hundred <span class="gold">merchants</span>.</span>
+    </h1>
+    <p>
+      <span data-vi>Mockup tương tác đầy đủ — chọn vai trò để khám phá <strong>27 trang</strong> giao diện thiết kế cho DHTC Đà Nẵng. Tích hợp Vietcombank VietQR, DHL Express, Messenger + Zalo, và AI Chatbot.</span>
+      <span data-en>Full interactive mockup — pick a role to explore <strong>27 pages</strong> of UI designed for DHTC Đà Nẵng. Integrated with Vietcombank VietQR, DHL Express, Messenger + Zalo, and AI Chatbot.</span>
+    </p>
+  </section>
+
+  <div class="section-label">
+    <span>01 / 03</span>
+    <span data-vi>Chọn vai trò để xem demo</span>
+    <span data-en>Pick a role to view demo</span>
+  </div>
+
+  <div class="cards">
+    <a class="role-card" data-role="admin" href="admin/index.html">
+      <div class="card-num">SYSTEM 01 <span class="pages-count" style="margin-left: 10px;">9 trang</span></div>
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg>
+      </div>
+      <h3 data-vi>Admin Console</h3>
+      <h3 data-en>Admin Console</h3>
+      <p data-vi>Cấp quyền, giám sát doanh thu, quản lý 300 gian hàng và phê duyệt sản phẩm.</p>
+      <p data-en>Provision sellers, monitor revenue, manage 300 stalls and approve listings.</p>
+      <ul data-vi>
+        <li>Dashboard · Tiểu thương · Sản phẩm</li>
+        <li>Phê duyệt · Đơn hàng · Báo cáo</li>
+        <li>Tích hợp API · Cài đặt hệ thống</li>
+      </ul>
+      <ul data-en>
+        <li>Dashboard · Merchants · Products</li>
+        <li>Approvals · Orders · Reports</li>
+        <li>API integrations · System settings</li>
+      </ul>
+      <div class="card-arrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg>
+      </div>
+    </a>
+
+    <a class="role-card" data-role="seller" href="seller/index.html">
+      <div class="card-num">SYSTEM 02 <span class="pages-count" style="margin-left: 10px;">9 trang</span></div>
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h18l-2 13H5L3 7Z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg>
+      </div>
+      <h3 data-vi>Seller Studio</h3>
+      <h3 data-en>Seller Studio</h3>
+      <p data-vi>Tiểu thương đăng SKU, định giá theo khối lượng, in vận đơn và quản lý tài chính.</p>
+      <p data-en>Merchants list SKUs, price by weight, print waybills and manage finances.</p>
+      <ul data-vi>
+        <li>Sản phẩm · Đơn hàng · DHL Waybill</li>
+        <li>Ví & rút tiền · Khuyến mãi</li>
+        <li>Hồ sơ gian hàng · Phân tích</li>
+      </ul>
+      <ul data-en>
+        <li>Products · Orders · DHL Waybill</li>
+        <li>Wallet & payout · Promotions</li>
+        <li>Store profile · Analytics</li>
+      </ul>
+      <div class="card-arrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg>
+      </div>
+    </a>
+
+    <a class="role-card" data-role="customer" href="customer/index.html">
+      <div class="card-num">SYSTEM 03 <span class="pages-count" style="margin-left: 10px;">8 trang</span></div>
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l3 12h11l2-8H6"/></svg>
+      </div>
+      <h3 data-vi>Marketplace</h3>
+      <h3 data-en>Marketplace</h3>
+      <p data-vi>Khách hàng duyệt sản phẩm, mua sắm với VietQR và theo dõi đơn hàng DHL.</p>
+      <p data-en>Customers browse, checkout with VietQR and track DHL deliveries.</p>
+      <ul data-vi>
+        <li>Trang chủ · Shop · Sản phẩm</li>
+        <li>Gian hàng · Giỏ · Thanh toán</li>
+        <li>Theo dõi đơn · Tài khoản</li>
+      </ul>
+      <ul data-en>
+        <li>Home · Shop · Product detail</li>
+        <li>Store · Cart · Checkout</li>
+        <li>Order tracking · Account</li>
+      </ul>
+      <div class="card-arrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg>
+      </div>
+    </a>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">300<small>+</small></div>
+      <div class="stat-label" data-vi>Tiểu thương mục tiêu</div>
+      <div class="stat-label" data-en>Target merchants</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">27</div>
+      <div class="stat-label" data-vi>Trang mockup tương tác</div>
+      <div class="stat-label" data-en>Interactive mockup pages</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">1<small>k DAU</small></div>
+      <div class="stat-label" data-vi>Mục tiêu khách/ngày Y1</div>
+      <div class="stat-label" data-en>Daily user target Y1</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">$50<small>M</small></div>
+      <div class="stat-label" data-vi>GMV mục tiêu 5 năm</div>
+      <div class="stat-label" data-en>5-year GMV target</div>
+    </div>
+  </div>
+
+  <section class="architecture">
+    <div class="sub" data-vi>Luồng dữ liệu cốt lõi</div>
+    <div class="sub" data-en>Core data flow</div>
+    <h2 data-vi>Từ QR fanpage đến vận đơn DHL</h2>
+    <h2 data-en>From fanpage QR to DHL waybill</h2>
+    <div class="arch-flow">
+      <div class="arch-node"><strong>① QR SCAN</strong><em>Messenger</em></div>
+      <div class="arch-node"><strong>② AI BOT</strong><em>Claude / GPT</em></div>
+      <div class="arch-node"><strong>③ CART</strong><em>Marketplace</em></div>
+      <div class="arch-node"><strong>④ VIETQR</strong><em>Vietcombank</em></div>
+      <div class="arch-node"><strong>⑤ DHL</strong><em>Waybill API</em></div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>DHTC × DEMO MOCKUP</span>
+    <span>v0.2 · 2026 · 27 PAGES</span>
+  </footer>
+</div>
+
+<script>
+function setLang(lang, btn) {
+  document.body.classList.toggle('en', lang === 'en');
+  document.querySelectorAll('.lang-pill button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  localStorage.setItem('dhtc-lang', lang);
+}
+if (localStorage.getItem('dhtc-lang') === 'en') {
+  document.body.classList.add('en');
+  document.querySelectorAll('.lang-pill button').forEach((b,i) => b.classList.toggle('active', i === 1));
+}
+</script>
+</body>
+</html>

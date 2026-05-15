@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thanh toán · DHTC Marketplace</title>
+<link rel="icon" href="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-270x270.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,800&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+.cust-nav { background: var(--cream); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px); }
+.cust-nav-top { max-width: 1320px; margin: 0 auto; padding: 14px 28px; display: flex; align-items: center; gap: 24px; }
+.cust-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+.cust-logo img { width: 42px; height: 42px; object-fit: contain; }
+.cust-logo strong { display: block; font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; color: var(--green); }
+.cust-logo span { display: block; font-size: 10px; color: var(--gold-deep); letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; }
+.cust-menu { display: flex; gap: 4px; }
+.cust-menu a { padding: 8px 14px; border-radius: 8px; color: var(--ink-soft); text-decoration: none; font-weight: 500; font-size: 13.5px; transition: all .15s; }
+.cust-menu a:hover { background: var(--cream-dark); color: var(--ink); }
+.cust-menu a.active { color: var(--green); font-weight: 600; }
+.cust-actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+.cust-search { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 7px 16px; display: flex; align-items: center; gap: 8px; min-width: 220px; }
+.cust-search input { flex: 1; border: 0; outline: 0; font: inherit; background: transparent; font-size: 13px; min-width: 0; }
+.cust-search svg { width: 15px; height: 15px; color: var(--ink-mute); }
+.cust-icon-btn { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; color: var(--ink); text-decoration: none; position: relative; transition: background .15s; }
+.cust-icon-btn:hover { background: var(--cream-dark); }
+.cust-icon-btn svg { width: 19px; height: 19px; }
+.cart-badge { position: absolute; top: 4px; right: 4px; background: var(--vermillion); color: #fff; font-size: 9.5px; padding: 1px 5px; border-radius: 999px; font-weight: 700; min-width: 16px; text-align: center; }
+.cust-cats { max-width: 1320px; margin: 0 auto; padding: 0 28px; display: flex; gap: 4px; overflow-x: auto; border-top: 1px solid var(--line-soft); }
+.cust-cats::-webkit-scrollbar { display: none; }
+.cust-cats a { padding: 12px 16px; font-size: 12.5px; font-weight: 500; color: var(--ink-soft); text-decoration: none; white-space: nowrap; border-bottom: 2px solid transparent; transition: all .15s; }
+.cust-cats a:hover { color: var(--green); }
+.cust-cats a.active { color: var(--green); border-bottom-color: var(--gold); font-weight: 600; }
+
+.cust-main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 32px; }
+
+.cust-foot { background: var(--green); color: var(--cream); padding: 56px 28px 24px; margin-top: 64px; }
+.cust-foot-inner { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; }
+.cust-foot-inner h5 { font-family: 'Fraunces', serif; font-size: 13px; margin-bottom: 14px; color: var(--gold); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.cust-foot-inner ul { list-style: none; }
+.cust-foot-inner ul li { padding: 5px 0; font-size: 12.5px; color: rgba(245,239,224,0.7); }
+.cust-foot-inner ul li a { color: inherit; }
+.cust-foot-inner ul li a:hover { color: var(--gold); }
+.cust-foot-bottom { max-width: 1320px; margin: 36px auto 0; padding-top: 22px; border-top: 1px solid rgba(201,169,97,0.2); display: flex; justify-content: space-between; gap: 16px; font-size: 11.5px; color: rgba(245,239,224,0.5); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; flex-wrap: wrap; }
+
+.chatbot-fab { position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; border-radius: 50%; background: var(--green); color: var(--cream); border: 0; cursor: pointer; display: grid; place-items: center; box-shadow: 0 18px 36px -10px rgba(27,59,47,0.4); z-index: 500; }
+.chatbot-fab svg { width: 24px; height: 24px; }
+.chatbot-fab .pulse { position: absolute; inset: 0; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.5); opacity: 0; } }
+
+.prod-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: all .25s; text-decoration: none; color: inherit; }
+.prod-card:hover { transform: translateY(-3px); border-color: var(--green); box-shadow: 0 18px 36px -12px rgba(27,59,47,0.15); }
+.prod-card .prod-img-wrap { height: 200px; }
+.prod-card-body { padding: 14px; display: flex; flex-direction: column; flex: 1; }
+.prod-card-cat { font-size: 10px; color: var(--gold-deep); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+.prod-card-name { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 500; line-height: 1.25; margin-bottom: 3px; min-height: 36px; }
+.prod-card-merchant { font-size: 11px; color: var(--ink-mute); margin-bottom: 8px; }
+.prod-card-rating { display: flex; align-items: center; gap: 4px; font-size: 11.5px; color: var(--gold-deep); margin-bottom: 8px; }
+.prod-card-rating .sold { color: var(--ink-mute); margin-left: 6px; font-size: 10.5px; }
+.prod-card-price-row { display: flex; align-items: baseline; justify-content: space-between; margin-top: auto; }
+.prod-card-price { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; color: var(--green); letter-spacing: -0.02em; }
+.prod-card-price small { font-size: 10.5px; color: var(--ink-mute); font-weight: 400; margin-left: 3px; }
+.prod-card-usd { font-size: 10px; color: var(--ink-mute); font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+
+.add-cart-btn { margin-top: 10px; width: 100%; background: var(--cream); color: var(--green); border: 1px solid var(--green); padding: 8px; border-radius: 9px; font: inherit; font-weight: 500; font-size: 12.5px; cursor: pointer; transition: all .15s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.add-cart-btn:hover { background: var(--green); color: var(--cream); }
+
+.prod-badges { position: absolute; top: 10px; left: 10px; display: flex; gap: 4px; z-index: 2; }
+.prod-badge { padding: 2px 8px; border-radius: 4px; font-size: 9.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+.prod-badge.ocop { background: var(--vermillion); color: #fff; }
+.prod-badge.organic { background: var(--green); color: var(--gold); }
+
+@media (max-width: 900px) {
+  .cust-menu, .cust-search { display: none; }
+  .cust-foot-inner { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+<header class="cust-nav">
+  <div class="cust-nav-top">
+    <a href="index.html" class="cust-logo">
+      <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-e1693969421521.png" alt="DHTC">
+      <div>
+        <strong>DHTC</strong>
+        <span data-vi>Đặc sản Việt Nam</span>
+        <span data-en>Vietnamese specialty</span>
+      </div>
+    </a>
+    <nav class="cust-menu">
+      <a href="index.html" class=""><span data-vi>Trang chủ</span><span data-en>Home</span></a><a href="shop.html" class=""><span data-vi>Mua sắm</span><span data-en>Shop</span></a><a href="#" class=""><span data-vi>Gian hàng</span><span data-en>Stores</span></a><a href="#" class=""><span data-vi>Cẩm nang</span><span data-en>Journal</span></a><a href="#" class=""><span data-vi>Liên hệ</span><span data-en>Contact</span></a>
+    </nav>
+    <div class="cust-actions">
+      <div class="cust-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input placeholder="Tìm sản phẩm...">
+      </div>
+      <div class="lang-pill">
+        <button class="active" onclick="setLang('vi', this)">VI</button>
+        <button onclick="setLang('en', this)">EN</button>
+      </div>
+      <a href="account.html" class="cust-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0 1 14 0v1"/></svg></a>
+      <a href="cart.html" class="cust-icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l3 12h11l2-8H6"/></svg>
+        <span class="cart-badge">3</span>
+      </a>
+    </div>
+  </div>
+  <nav class="cust-cats">
+    <a href="shop.html" class=""><span data-vi>Tất cả</span><span data-en>All</span></a>
+    <a href="shop.html?cat=dried-fruits"><span data-vi>Trái cây sấy</span><span data-en>Dried fruits</span></a>
+    <a href="shop.html?cat=nut-seeds"><span data-vi>Hạt & ngũ cốc</span><span data-en>Nuts & seeds</span></a>
+    <a href="shop.html?cat=spices"><span data-vi>Gia vị & trà</span><span data-en>Spices & tea</span></a>
+    <a href="shop.html?cat=cake-cracker"><span data-vi>Bánh & kẹo</span><span data-en>Cakes</span></a>
+    <a href="shop.html?cat=frozen"><span data-vi>Đông lạnh</span><span data-en>Frozen</span></a>
+    <a href="shop.html?ocop=1">★ OCOP</a>
+    <a href="shop.html?organic=1">ORGANIC</a>
+  </nav>
+</header>
+<main class="cust-main">
+
+<h1 style="font-family:'Fraunces',serif;font-size:32px;font-weight:500;letter-spacing:-0.02em;margin-bottom:8px;"><span data-vi>Thanh toán</span><span data-en>Checkout</span></h1>
+<p style="color:var(--ink-mute);margin-bottom:28px;"><span data-vi>Bước 2 trong 3 · Địa chỉ và thanh toán</span><span data-en>Step 2 of 3 · Address & payment</span></p>
+
+<div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;font-size:12px;color:var(--ink-mute);">
+  <div style="display:flex;align-items:center;gap:6px;color:var(--success);font-weight:600;">
+    <div style="width:24px;height:24px;border-radius:50%;background:var(--success);color:#fff;display:grid;place-items:center;font-size:11px;">✓</div>
+    <span data-vi>Giỏ hàng</span><span data-en>Cart</span>
+  </div>
+  <div style="flex:1;height:1px;background:var(--success);"></div>
+  <div style="display:flex;align-items:center;gap:6px;color:var(--green);font-weight:700;">
+    <div style="width:24px;height:24px;border-radius:50%;background:var(--green);color:var(--gold);display:grid;place-items:center;font-size:11px;font-weight:700;">2</div>
+    <span data-vi>Thanh toán</span><span data-en>Payment</span>
+  </div>
+  <div style="flex:1;height:1px;background:var(--line);"></div>
+  <div style="display:flex;align-items:center;gap:6px;">
+    <div style="width:24px;height:24px;border-radius:50%;background:var(--line);color:var(--ink-mute);display:grid;place-items:center;font-size:11px;">3</div>
+    <span data-vi>Hoàn tất</span><span data-en>Complete</span>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1.6fr 1fr;gap:24px;">
+  <div>
+    <div class="panel">
+      <div class="panel-head"><h2><span data-vi>Địa chỉ giao hàng</span><span data-en>Shipping address</span></h2>
+        <a href="account.html" class="panel-action"><span data-vi>Đổi địa chỉ</span><span data-en>Change</span></a>
+      </div>
+      <div style="padding:14px;border:2px solid var(--green);background:rgba(27,59,47,0.04);border-radius:12px;display:flex;gap:12px;">
+        <div style="width:18px;height:18px;border-radius:50%;border:5px solid var(--green);flex-shrink:0;margin-top:2px;"></div>
+        <div style="flex:1;">
+          <strong style="font-size:14px;">Nguyễn Thu Hà <span style="font-weight:400;color:var(--ink-mute);">· +84 909 123 456</span></strong>
+          <div style="font-size:13px;color:var(--ink-soft);margin-top:4px;">124 Lê Lợi, Phường Bến Nghé, Quận 1, TP.HCM, Việt Nam</div>
+          <div style="font-size:11px;color:var(--gold-deep);margin-top:6px;font-weight:600;"><span data-vi>★ Mặc định</span><span data-en>★ Default</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h2><span data-vi>Phương thức vận chuyển</span><span data-en>Shipping method</span></h2></div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <label style="padding:14px;border:2px solid var(--green);background:rgba(27,59,47,0.04);border-radius:12px;display:flex;gap:12px;align-items:center;cursor:pointer;">
+          <input type="radio" name="ship" checked style="accent-color:var(--green);">
+          <div style="flex:1;">
+            <strong style="font-size:14px;">DHL Express Worldwide</strong>
+            <div style="font-size:12px;color:var(--ink-mute);"><span data-vi>4-7 ngày · Theo dõi real-time · Bảo hiểm</span><span data-en>4-7 days · Real-time tracking · Insured</span></div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--green);">₫135,000</div>
+            <div style="font-size:11px;color:var(--ink-mute);" class="mono">~$5.40</div>
+          </div>
+        </label>
+        <label style="padding:14px;border:1px solid var(--line);border-radius:12px;display:flex;gap:12px;align-items:center;cursor:pointer;">
+          <input type="radio" name="ship" style="accent-color:var(--green);">
+          <div style="flex:1;">
+            <strong style="font-size:14px;">DHL eCommerce</strong>
+            <div style="font-size:12px;color:var(--ink-mute);"><span data-vi>7-12 ngày · Tiết kiệm hơn</span><span data-en>7-12 days · Economy</span></div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:600;color:var(--green);">₫68,000</div>
+            <div style="font-size:11px;color:var(--ink-mute);" class="mono">~$2.72</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h2><span data-vi>Phương thức thanh toán</span><span data-en>Payment method</span></h2></div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <label style="padding:16px;border:2px solid var(--green);background:rgba(27,59,47,0.04);border-radius:12px;display:flex;gap:14px;align-items:center;cursor:pointer;">
+          <input type="radio" name="pay" checked style="accent-color:var(--green);">
+          <div style="width:42px;height:42px;border-radius:10px;background:var(--green);color:var(--gold);display:grid;place-items:center;font-weight:700;font-family:'Fraunces',serif;flex-shrink:0;">QR</div>
+          <div style="flex:1;">
+            <strong style="font-size:14px;">VietQR · Vietcombank</strong>
+            <div style="font-size:12px;color:var(--ink-mute);"><span data-vi>Quét QR bằng app ngân hàng VN bất kỳ · Miễn phí · Xác nhận trong 200ms</span><span data-en>Scan QR with any VN bank app · Free · Confirmed in 200ms</span></div>
+          </div>
+          <span class="tag verified">RECOMMENDED</span>
+        </label>
+        <label style="padding:16px;border:1px solid var(--line);border-radius:12px;display:flex;gap:14px;align-items:center;cursor:pointer;">
+          <input type="radio" name="pay" style="accent-color:var(--green);">
+          <div style="width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,#1A1F71,#0066B2);color:#fff;display:grid;place-items:center;font-weight:700;font-size:11px;flex-shrink:0;font-family:'JetBrains Mono';">VISA</div>
+          <div style="flex:1;">
+            <strong style="font-size:14px;">Visa / Mastercard / JCB</strong>
+            <div style="font-size:12px;color:var(--ink-mute);"><span data-vi>Cross-border qua Stripe · Phí 1.5% áp dụng</span><span data-en>Cross-border via Stripe · 1.5% fee applies</span></div>
+          </div>
+        </label>
+        <label style="padding:16px;border:1px solid var(--line);border-radius:12px;display:flex;gap:14px;align-items:center;cursor:pointer;">
+          <input type="radio" name="pay" style="accent-color:var(--green);">
+          <div style="width:42px;height:42px;border-radius:10px;background:var(--gold-deep);color:var(--cream);display:grid;place-items:center;font-weight:700;font-family:'Fraunces',serif;flex-shrink:0;">M</div>
+          <div style="flex:1;">
+            <strong style="font-size:14px;"><span data-vi>Momo · ZaloPay · VNPay</span><span data-en>Momo · ZaloPay · VNPay</span></strong>
+            <div style="font-size:12px;color:var(--ink-mute);"><span data-vi>Ví điện tử Việt Nam · Phí 0</span><span data-en>Vietnamese e-wallets · No fee</span></div>
+          </div>
+        </label>
+        <label style="padding:16px;border:1px solid var(--line);border-radius:12px;display:flex;gap:14px;align-items:center;cursor:pointer;">
+          <input type="radio" name="pay" style="accent-color:var(--green);">
+          <div style="width:42px;height:42px;border-radius:10px;background:var(--cream-dark);color:var(--ink);display:grid;place-items:center;font-weight:700;font-family:'Fraunces',serif;flex-shrink:0;">$</div>
+          <div style="flex:1;">
+            <strong style="font-size:14px;"><span data-vi>Chuyển khoản ngân hàng</span><span data-en>Bank transfer</span></strong>
+            <div style="font-size:12px;color:var(--ink-mute);"><span data-vi>VCB · TCB · ACB · BIDV · Xác nhận trong 1-2 giờ</span><span data-en>VCB · TCB · ACB · BIDV · 1-2 hour confirmation</span></div>
+          </div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="panel" style="position:sticky;top:120px;">
+      <div class="panel-head"><h2><span data-vi>VietQR · Quét để trả</span><span data-en>VietQR · Scan to pay</span></h2></div>
+
+      <div style="background:linear-gradient(135deg,var(--green),var(--green-soft));border-radius:14px;padding:24px;text-align:center;color:var(--cream);">
+        <div style="background:#fff;padding:14px;border-radius:10px;display:inline-block;margin-bottom:14px;">
+          <svg width="220" height="220" viewBox="0 0 220 220" style="display:block;">
+            <rect width="220" height="220" fill="#fff"/>
+            <g fill="#1B3B2F">
+              <!-- Position markers -->
+              <rect x="10" y="10" width="60" height="60"/><rect x="20" y="20" width="40" height="40" fill="#fff"/><rect x="30" y="30" width="20" height="20"/>
+              <rect x="150" y="10" width="60" height="60"/><rect x="160" y="20" width="40" height="40" fill="#fff"/><rect x="170" y="30" width="20" height="20"/>
+              <rect x="10" y="150" width="60" height="60"/><rect x="20" y="160" width="40" height="40" fill="#fff"/><rect x="30" y="170" width="20" height="20"/>
+              <!-- Random data dots -->
+              <rect x="104" y="80" width="6" height="6"/><rect x="120" y="80" width="6" height="6"/><rect x="136" y="80" width="6" height="6"/><rect x="160" y="80" width="6" height="6"/><rect x="176" y="80" width="6" height="6"/><rect x="184" y="80" width="6" height="6"/><rect x="80" y="88" width="6" height="6"/><rect x="96" y="88" width="6" height="6"/><rect x="112" y="88" width="6" height="6"/><rect x="128" y="88" width="6" height="6"/><rect x="136" y="88" width="6" height="6"/><rect x="160" y="88" width="6" height="6"/><rect x="96" y="96" width="6" height="6"/><rect x="120" y="96" width="6" height="6"/><rect x="128" y="96" width="6" height="6"/><rect x="176" y="96" width="6" height="6"/><rect x="80" y="104" width="6" height="6"/><rect x="104" y="104" width="6" height="6"/><rect x="128" y="104" width="6" height="6"/><rect x="136" y="104" width="6" height="6"/><rect x="144" y="104" width="6" height="6"/><rect x="192" y="104" width="6" height="6"/><rect x="80" y="112" width="6" height="6"/><rect x="88" y="112" width="6" height="6"/><rect x="112" y="112" width="6" height="6"/><rect x="144" y="112" width="6" height="6"/><rect x="168" y="112" width="6" height="6"/><rect x="184" y="112" width="6" height="6"/><rect x="192" y="112" width="6" height="6"/><rect x="88" y="120" width="6" height="6"/><rect x="96" y="120" width="6" height="6"/><rect x="104" y="120" width="6" height="6"/><rect x="112" y="120" width="6" height="6"/><rect x="136" y="120" width="6" height="6"/><rect x="144" y="120" width="6" height="6"/><rect x="168" y="120" width="6" height="6"/><rect x="80" y="128" width="6" height="6"/><rect x="104" y="128" width="6" height="6"/><rect x="120" y="128" width="6" height="6"/><rect x="136" y="128" width="6" height="6"/><rect x="152" y="128" width="6" height="6"/><rect x="160" y="128" width="6" height="6"/><rect x="168" y="128" width="6" height="6"/><rect x="80" y="136" width="6" height="6"/><rect x="120" y="136" width="6" height="6"/><rect x="128" y="136" width="6" height="6"/><rect x="160" y="136" width="6" height="6"/><rect x="176" y="136" width="6" height="6"/><rect x="184" y="136" width="6" height="6"/><rect x="80" y="10" width="6" height="6"/><rect x="96" y="10" width="6" height="6"/><rect x="104" y="10" width="6" height="6"/><rect x="112" y="10" width="6" height="6"/><rect x="120" y="10" width="6" height="6"/><rect x="104" y="18" width="6" height="6"/><rect x="120" y="18" width="6" height="6"/><rect x="128" y="18" width="6" height="6"/><rect x="136" y="18" width="6" height="6"/><rect x="80" y="26" width="6" height="6"/><rect x="128" y="26" width="6" height="6"/><rect x="136" y="26" width="6" height="6"/><rect x="120" y="34" width="6" height="6"/><rect x="128" y="34" width="6" height="6"/><rect x="144" y="34" width="6" height="6"/><rect x="96" y="42" width="6" height="6"/><rect x="112" y="42" width="6" height="6"/><rect x="128" y="42" width="6" height="6"/><rect x="88" y="50" width="6" height="6"/><rect x="104" y="50" width="6" height="6"/><rect x="112" y="50" width="6" height="6"/><rect x="120" y="50" width="6" height="6"/><rect x="128" y="50" width="6" height="6"/><rect x="136" y="50" width="6" height="6"/><rect x="144" y="50" width="6" height="6"/><rect x="104" y="58" width="6" height="6"/><rect x="144" y="58" width="6" height="6"/><rect x="80" y="66" width="6" height="6"/><rect x="88" y="66" width="6" height="6"/><rect x="88" y="74" width="6" height="6"/><rect x="104" y="74" width="6" height="6"/><rect x="112" y="74" width="6" height="6"/><rect x="120" y="74" width="6" height="6"/><rect x="128" y="74" width="6" height="6"/><rect x="88" y="82" width="6" height="6"/><rect x="96" y="82" width="6" height="6"/><rect x="104" y="82" width="6" height="6"/><rect x="144" y="82" width="6" height="6"/><rect x="80" y="90" width="6" height="6"/><rect x="88" y="90" width="6" height="6"/><rect x="96" y="90" width="6" height="6"/><rect x="112" y="90" width="6" height="6"/><rect x="120" y="90" width="6" height="6"/><rect x="144" y="90" width="6" height="6"/><rect x="80" y="98" width="6" height="6"/><rect x="88" y="98" width="6" height="6"/><rect x="96" y="98" width="6" height="6"/><rect x="112" y="98" width="6" height="6"/><rect x="144" y="98" width="6" height="6"/><rect x="80" y="106" width="6" height="6"/><rect x="88" y="106" width="6" height="6"/><rect x="112" y="106" width="6" height="6"/><rect x="120" y="106" width="6" height="6"/><rect x="136" y="106" width="6" height="6"/><rect x="144" y="106" width="6" height="6"/><rect x="80" y="114" width="6" height="6"/><rect x="96" y="114" width="6" height="6"/><rect x="104" y="114" width="6" height="6"/><rect x="120" y="114" width="6" height="6"/><rect x="128" y="114" width="6" height="6"/><rect x="128" y="122" width="6" height="6"/><rect x="136" y="122" width="6" height="6"/><rect x="80" y="130" width="6" height="6"/><rect x="120" y="130" width="6" height="6"/><rect x="128" y="130" width="6" height="6"/><rect x="136" y="130" width="6" height="6"/><rect x="144" y="130" width="6" height="6"/><rect x="80" y="138" width="6" height="6"/><rect x="88" y="138" width="6" height="6"/><rect x="104" y="138" width="6" height="6"/><rect x="112" y="138" width="6" height="6"/><rect x="120" y="138" width="6" height="6"/><rect x="128" y="138" width="6" height="6"/><rect x="136" y="138" width="6" height="6"/><rect x="18" y="80" width="6" height="6"/><rect x="42" y="80" width="6" height="6"/><rect x="66" y="80" width="6" height="6"/><rect x="74" y="80" width="6" height="6"/><rect x="82" y="80" width="6" height="6"/><rect x="98" y="80" width="6" height="6"/><rect x="106" y="80" width="6" height="6"/><rect x="114" y="80" width="6" height="6"/><rect x="138" y="80" width="6" height="6"/><rect x="146" y="80" width="6" height="6"/><rect x="162" y="80" width="6" height="6"/><rect x="170" y="80" width="6" height="6"/><rect x="178" y="80" width="6" height="6"/><rect x="194" y="80" width="6" height="6"/><rect x="210" y="80" width="6" height="6"/><rect x="218" y="80" width="6" height="6"/><rect x="58" y="88" width="6" height="6"/><rect x="82" y="88" width="6" height="6"/><rect x="90" y="88" width="6" height="6"/><rect x="98" y="88" width="6" height="6"/><rect x="122" y="88" width="6" height="6"/><rect x="154" y="88" width="6" height="6"/><rect x="178" y="88" width="6" height="6"/><rect x="186" y="88" width="6" height="6"/><rect x="202" y="88" width="6" height="6"/><rect x="18" y="96" width="6" height="6"/><rect x="34" y="96" width="6" height="6"/><rect x="50" y="96" width="6" height="6"/><rect x="58" y="96" width="6" height="6"/><rect x="66" y="96" width="6" height="6"/><rect x="106" y="96" width="6" height="6"/><rect x="114" y="96" width="6" height="6"/><rect x="122" y="96" width="6" height="6"/><rect x="138" y="96" width="6" height="6"/><rect x="154" y="96" width="6" height="6"/><rect x="162" y="96" width="6" height="6"/><rect x="170" y="96" width="6" height="6"/><rect x="218" y="96" width="6" height="6"/><rect x="18" y="104" width="6" height="6"/><rect x="26" y="104" width="6" height="6"/><rect x="82" y="104" width="6" height="6"/><rect x="98" y="104" width="6" height="6"/><rect x="122" y="104" width="6" height="6"/><rect x="138" y="104" width="6" height="6"/><rect x="154" y="104" width="6" height="6"/><rect x="162" y="104" width="6" height="6"/><rect x="186" y="104" width="6" height="6"/><rect x="202" y="104" width="6" height="6"/><rect x="218" y="104" width="6" height="6"/><rect x="34" y="112" width="6" height="6"/><rect x="106" y="112" width="6" height="6"/><rect x="122" y="112" width="6" height="6"/><rect x="130" y="112" width="6" height="6"/><rect x="146" y="112" width="6" height="6"/><rect x="178" y="112" width="6" height="6"/><rect x="194" y="112" width="6" height="6"/><rect x="218" y="112" width="6" height="6"/><rect x="18" y="120" width="6" height="6"/><rect x="42" y="120" width="6" height="6"/><rect x="50" y="120" width="6" height="6"/><rect x="58" y="120" width="6" height="6"/><rect x="66" y="120" width="6" height="6"/><rect x="90" y="120" width="6" height="6"/><rect x="98" y="120" width="6" height="6"/><rect x="122" y="120" width="6" height="6"/><rect x="130" y="120" width="6" height="6"/><rect x="138" y="120" width="6" height="6"/><rect x="146" y="120" width="6" height="6"/><rect x="178" y="120" width="6" height="6"/><rect x="186" y="120" width="6" height="6"/><rect x="194" y="120" width="6" height="6"/><rect x="202" y="120" width="6" height="6"/><rect x="210" y="120" width="6" height="6"/><rect x="218" y="120" width="6" height="6"/><rect x="10" y="128" width="6" height="6"/><rect x="26" y="128" width="6" height="6"/><rect x="34" y="128" width="6" height="6"/><rect x="82" y="128" width="6" height="6"/><rect x="106" y="128" width="6" height="6"/><rect x="114" y="128" width="6" height="6"/><rect x="122" y="128" width="6" height="6"/><rect x="138" y="128" width="6" height="6"/><rect x="146" y="128" width="6" height="6"/><rect x="186" y="128" width="6" height="6"/><rect x="202" y="128" width="6" height="6"/><rect x="210" y="128" width="6" height="6"/><rect x="18" y="136" width="6" height="6"/><rect x="34" y="136" width="6" height="6"/><rect x="42" y="136" width="6" height="6"/><rect x="82" y="136" width="6" height="6"/><rect x="98" y="136" width="6" height="6"/><rect x="122" y="136" width="6" height="6"/><rect x="130" y="136" width="6" height="6"/><rect x="138" y="136" width="6" height="6"/><rect x="186" y="136" width="6" height="6"/><rect x="194" y="136" width="6" height="6"/><rect x="210" y="136" width="6" height="6"/><rect x="26" y="144" width="6" height="6"/><rect x="34" y="144" width="6" height="6"/><rect x="42" y="144" width="6" height="6"/><rect x="50" y="144" width="6" height="6"/><rect x="66" y="144" width="6" height="6"/><rect x="74" y="144" width="6" height="6"/><rect x="90" y="144" width="6" height="6"/><rect x="122" y="144" width="6" height="6"/><rect x="154" y="144" width="6" height="6"/><rect x="170" y="144" width="6" height="6"/><rect x="186" y="144" width="6" height="6"/><rect x="18" y="152" width="6" height="6"/><rect x="26" y="152" width="6" height="6"/><rect x="50" y="152" width="6" height="6"/><rect x="58" y="152" width="6" height="6"/><rect x="66" y="152" width="6" height="6"/><rect x="82" y="152" width="6" height="6"/><rect x="90" y="152" width="6" height="6"/><rect x="138" y="152" width="6" height="6"/><rect x="178" y="152" width="6" height="6"/><rect x="202" y="152" width="6" height="6"/><rect x="210" y="152" width="6" height="6"/><rect x="10" y="160" width="6" height="6"/><rect x="26" y="160" width="6" height="6"/><rect x="34" y="160" width="6" height="6"/><rect x="42" y="160" width="6" height="6"/><rect x="50" y="160" width="6" height="6"/><rect x="90" y="160" width="6" height="6"/><rect x="114" y="160" width="6" height="6"/><rect x="122" y="160" width="6" height="6"/><rect x="130" y="160" width="6" height="6"/><rect x="146" y="160" width="6" height="6"/><rect x="170" y="160" width="6" height="6"/><rect x="210" y="160" width="6" height="6"/><rect x="18" y="168" width="6" height="6"/><rect x="26" y="168" width="6" height="6"/><rect x="34" y="168" width="6" height="6"/><rect x="42" y="168" width="6" height="6"/><rect x="58" y="168" width="6" height="6"/><rect x="74" y="168" width="6" height="6"/><rect x="90" y="168" width="6" height="6"/><rect x="98" y="168" width="6" height="6"/><rect x="106" y="168" width="6" height="6"/><rect x="138" y="168" width="6" height="6"/><rect x="146" y="168" width="6" height="6"/><rect x="170" y="168" width="6" height="6"/><rect x="186" y="168" width="6" height="6"/><rect x="18" y="176" width="6" height="6"/><rect x="50" y="176" width="6" height="6"/><rect x="66" y="176" width="6" height="6"/><rect x="74" y="176" width="6" height="6"/><rect x="98" y="176" width="6" height="6"/><rect x="114" y="176" width="6" height="6"/><rect x="122" y="176" width="6" height="6"/><rect x="130" y="176" width="6" height="6"/><rect x="138" y="176" width="6" height="6"/><rect x="146" y="176" width="6" height="6"/><rect x="178" y="176" width="6" height="6"/><rect x="186" y="176" width="6" height="6"/><rect x="194" y="176" width="6" height="6"/><rect x="202" y="176" width="6" height="6"/><rect x="210" y="176" width="6" height="6"/><rect x="18" y="184" width="6" height="6"/><rect x="34" y="184" width="6" height="6"/><rect x="42" y="184" width="6" height="6"/><rect x="82" y="184" width="6" height="6"/><rect x="90" y="184" width="6" height="6"/><rect x="98" y="184" width="6" height="6"/><rect x="106" y="184" width="6" height="6"/><rect x="114" y="184" width="6" height="6"/><rect x="122" y="184" width="6" height="6"/><rect x="130" y="184" width="6" height="6"/><rect x="146" y="184" width="6" height="6"/><rect x="186" y="184" width="6" height="6"/><rect x="194" y="184" width="6" height="6"/><rect x="10" y="192" width="6" height="6"/><rect x="18" y="192" width="6" height="6"/><rect x="50" y="192" width="6" height="6"/><rect x="58" y="192" width="6" height="6"/><rect x="82" y="192" width="6" height="6"/><rect x="90" y="192" width="6" height="6"/><rect x="130" y="192" width="6" height="6"/><rect x="138" y="192" width="6" height="6"/><rect x="146" y="192" width="6" height="6"/><rect x="162" y="192" width="6" height="6"/><rect x="186" y="192" width="6" height="6"/><rect x="194" y="192" width="6" height="6"/><rect x="202" y="192" width="6" height="6"/><rect x="26" y="200" width="6" height="6"/><rect x="34" y="200" width="6" height="6"/><rect x="42" y="200" width="6" height="6"/><rect x="58" y="200" width="6" height="6"/><rect x="98" y="200" width="6" height="6"/><rect x="114" y="200" width="6" height="6"/><rect x="130" y="200" width="6" height="6"/><rect x="154" y="200" width="6" height="6"/><rect x="186" y="200" width="6" height="6"/><rect x="194" y="200" width="6" height="6"/><rect x="210" y="200" width="6" height="6"/><rect x="26" y="208" width="6" height="6"/><rect x="42" y="208" width="6" height="6"/><rect x="90" y="208" width="6" height="6"/><rect x="106" y="208" width="6" height="6"/><rect x="138" y="208" width="6" height="6"/><rect x="154" y="208" width="6" height="6"/><rect x="186" y="208" width="6" height="6"/><rect x="194" y="208" width="6" height="6"/><rect x="202" y="208" width="6" height="6"/><rect x="50" y="216" width="6" height="6"/><rect x="58" y="216" width="6" height="6"/><rect x="122" y="216" width="6" height="6"/><rect x="130" y="216" width="6" height="6"/><rect x="154" y="216" width="6" height="6"/><rect x="162" y="216" width="6" height="6"/><rect x="210" y="216" width="6" height="6"/>
+              <!-- Center logo placeholder -->
+              <rect x="92" y="92" width="36" height="36" fill="#fff" stroke="#1B3B2F" stroke-width="2"/>
+              <text x="110" y="113" font-family="Fraunces" font-size="14" font-weight="700" fill="#1B3B2F" text-anchor="middle">QR</text>
+            </g>
+          </svg>
+        </div>
+        <div style="font-family:'Fraunces',serif;font-size:36px;font-weight:600;color:var(--gold);letter-spacing:-0.02em;">₫793,650</div>
+        <div style="font-size:12px;opacity:0.8;margin-top:2px;" class="mono">VCB · QR có hiệu lực 15 phút</div>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(201,169,97,0.3);font-size:11.5px;text-align:left;line-height:1.5;">
+          <div style="font-size:10px;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;font-weight:700;margin-bottom:6px;"><span data-vi>Thông tin chuyển khoản</span><span data-en>Transfer details</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="opacity:0.7;"><span data-vi>Người nhận</span><span data-en>Beneficiary</span></span><span style="font-weight:600;">DHTC ĐN JSC</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="opacity:0.7;">STK</span><span class="mono" style="font-weight:600;">001 1234 5678</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="opacity:0.7;"><span data-vi>Ngân hàng</span><span data-en>Bank</span></span><span style="font-weight:600;">Vietcombank</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="opacity:0.7;"><span data-vi>Nội dung</span><span data-en>Note</span></span><span class="mono" style="font-weight:600;font-size:10.5px;">DHTC O20260513-XXXX</span></div>
+        </div>
+      </div>
+
+      <div class="notice info" style="margin-top:14px;font-size:12px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><circle cx="12" cy="16" r="0.5" fill="currentColor"/></svg>
+        <span><span data-vi>Đơn hàng sẽ tự động xác nhận trong 200ms sau khi VCB gửi callback. Bạn có thể đóng tab này.</span><span data-en>Order auto-confirms in 200ms after VCB callback. You can close this tab.</span></span>
+      </div>
+
+      <div style="margin-top:14px;font-size:13px;">
+        <div style="display:flex;justify-content:space-between;padding:5px 0;"><span><span data-vi>Tạm tính</span><span data-en>Subtotal</span></span><span class="mono">₫690,000</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;"><span><span data-vi>Phí ship</span><span data-en>Shipping</span></span><span class="mono">₫135,000</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;color:var(--success);"><span>FRESH15</span><span class="mono">−₫103,500</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;"><span>VAT</span><span class="mono">₫72,150</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 0 5px;border-top:1px dashed var(--line);margin-top:6px;font-weight:600;font-size:16px;color:var(--green);"><span><span data-vi>Tổng</span><span data-en>Total</span></span><span class="mono">₫793,650</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+<button class="chatbot-fab" title="Chat with AI">
+  <span class="pulse"></span>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="position:relative;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+</button>
+<footer class="cust-foot">
+  <div class="cust-foot-inner">
+    <div>
+      <a href="index.html" class="cust-logo" style="margin-bottom:14px;">
+        <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-e1693969421521.png" alt="DHTC" style="background:#fff;padding:6px;">
+        <div><strong style="color:var(--cream);">DHTC</strong><span style="color:var(--gold);" data-vi>Đặc sản Việt Nam</span><span style="color:var(--gold);" data-en>Vietnamese specialty</span></div>
+      </a>
+      <p style="font-size:12.5px;line-height:1.6;color:rgba(245,239,224,0.6);max-width:300px;" data-vi>Sàn TMĐT đặc sản — 300 tiểu thương vùng miền kết nối khách trong và ngoài nước.</p>
+      <p style="font-size:12.5px;line-height:1.6;color:rgba(245,239,224,0.6);max-width:300px;" data-en>Specialty marketplace — 300 regional merchants connecting with domestic and global customers.</p>
+    </div>
+    <div>
+      <h5><span data-vi>Khám phá</span><span data-en>Explore</span></h5>
+      <ul>
+        <li><a href="shop.html"><span data-vi>Tất cả sản phẩm</span><span data-en>All products</span></a></li>
+        <li><a href="#"><span data-vi>Gian hàng</span><span data-en>Stores</span></a></li>
+        <li><a href="#"><span data-vi>Khuyến mãi</span><span data-en>Promotions</span></a></li>
+        <li><a href="#"><span data-vi>Cẩm nang</span><span data-en>Journal</span></a></li>
+      </ul>
+    </div>
+    <div>
+      <h5><span data-vi>Hỗ trợ</span><span data-en>Support</span></h5>
+      <ul>
+        <li><a href="#"><span data-vi>Trung tâm trợ giúp</span><span data-en>Help center</span></a></li>
+        <li><a href="tracking.html"><span data-vi>Theo dõi đơn</span><span data-en>Track order</span></a></li>
+        <li><a href="#"><span data-vi>Đổi trả 14 ngày</span><span data-en>14-day returns</span></a></li>
+        <li><a href="#"><span data-vi>Liên hệ</span><span data-en>Contact</span></a></li>
+      </ul>
+    </div>
+    <div>
+      <h5><span data-vi>Đối tác</span><span data-en>Partners</span></h5>
+      <ul><li>Vietcombank · VietQR</li><li>DHL Express</li><li>Meta Messenger</li><li>Zalo OA</li></ul>
+      <div style="margin-top:14px;">
+        <div style="font-size:11px;color:var(--gold);font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;"><span data-vi>Liên hệ</span><span data-en>Contact</span></div>
+        <div style="font-size:12px;color:rgba(245,239,224,0.7);">975 Ngô Quyền, An Hải Tây, Sơn Trà, Đà Nẵng</div>
+        <div style="font-size:12px;color:rgba(245,239,224,0.7);">contact@dhtcdanang.com</div>
+        <div class="mono" style="font-size:12px;color:rgba(245,239,224,0.7);">+84 947 046 556</div>
+      </div>
+    </div>
+  </div>
+  <div class="cust-foot-bottom">
+    <span>© 2026 · DHTC ĐÀ NẴNG JOINT STOCK COMPANY · MST 0123456789</span>
+    <span>DEMO MOCKUP v0.2 · ALL DATA SHOWN IS MOCK</span>
+  </div>
+</footer>
+<script src="../assets/data.js"></script>
+<script>
+function setLang(lang, btn) {
+  document.body.classList.toggle('en', lang === 'en');
+  document.querySelectorAll('.lang-pill button').forEach(b => b.classList.remove('active'));
+  btn && btn.classList.add('active');
+  localStorage.setItem('dhtc-lang', lang);
+  if (window.onLangChange) window.onLangChange(lang);
+}
+if (localStorage.getItem('dhtc-lang') === 'en') {
+  document.body.classList.add('en');
+  document.querySelectorAll('.lang-pill button').forEach((b,i) => b.classList.toggle('active', i === 1));
+}
+window.t = (vi, en) => document.body.classList.contains('en') ? en : vi;
+</script>
+
+</body>
+</html>

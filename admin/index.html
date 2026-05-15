@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard · DHTC Admin</title>
+<link rel="icon" href="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-270x270.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+  /* ── Chart ── */
+  .chart-wrap { margin-top: 8px; overflow-x: auto; }
+  .bar-chart { display: flex; align-items: flex-end; gap: 7px; height: 140px; padding: 0 4px; }
+  .bar-col { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+  .bar { width: 100%; border-radius: 5px 5px 0 0; transition: opacity .15s; cursor: default; }
+  .bar:hover { opacity: .82; }
+  .bar-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--ink-mute); white-space: nowrap; }
+  .bar-val { font-size: 9px; color: var(--ink-mute); }
+  .chart-legend { display: flex; gap: 16px; margin-top: 10px; font-size: 11px; color: var(--ink-mute); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: 4px; vertical-align: middle; }
+
+  /* ── Stats list ── */
+  .region-list { display: flex; flex-direction: column; gap: 10px; }
+  .region-item { display: flex; align-items: center; gap: 10px; }
+  .region-name { font-size: 12.5px; font-weight: 500; flex: 1; }
+  .region-bar-bg { flex: 2; height: 6px; background: var(--cream-dark); border-radius: 999px; overflow: hidden; }
+  .region-bar-fill { height: 100%; background: var(--green); border-radius: 999px; }
+  .region-val { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-soft); min-width: 60px; text-align: right; }
+
+  /* ── Pending approvals mini ── */
+  .approval-mini { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line-soft); }
+  .approval-item { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+  .approval-item .name { flex: 1; font-weight: 500; }
+  .approval-item .cat { color: var(--ink-mute); font-size: 11px; }
+  .approval-actions { display: flex; gap: 5px; }
+
+  /* ── Integration health ── */
+  .int-list { display: flex; flex-direction: column; gap: 10px; }
+  .int-item { display: flex; align-items: center; gap: 10px; font-size: 12.5px; }
+  .int-name { flex: 1; font-weight: 500; }
+  .int-uptime { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-mute); }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .status-dot.ok { background: var(--success); }
+  .status-dot.warn { background: var(--warning); }
+
+  /* ── Merchant rank ── */
+  .merch-list { display: flex; flex-direction: column; gap: 8px; }
+  .merch-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--cream); border-radius: 10px; text-decoration: none; color: inherit; transition: background .15s; }
+  .merch-row:hover { background: var(--cream-dark); }
+  .merch-rank { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 500; color: var(--line); width: 22px; text-align: center; }
+  .merch-info { flex: 1; }
+  .merch-info strong { display: block; font-size: 12.5px; font-weight: 600; }
+  .merch-info span { font-size: 11px; color: var(--ink-mute); }
+  .merch-gmv { text-align: right; }
+  .merch-gmv strong { display: block; font-family: 'Fraunces', serif; font-size: 15px; color: var(--green); }
+  .merch-gmv span { font-size: 10.5px; color: var(--ink-mute); }
+
+  /* ── Country flag in table ── */
+  .flag-emoji { font-size: 16px; line-height: 1; }
+  .order-action a { font-size: 12px; color: var(--green); text-decoration: underline; text-underline-offset: 2px; }
+</style>
+</head>
+<body class="app">
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="brand">
+    <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-e1693969421521.png" alt="DHTC">
+    <div class="brand-text"><strong>DHTC</strong><span>Admin Console</span></div>
+  </div>
+  <nav class="menu">
+    <div class="menu-group" data-vi>Tổng quan</div><div class="menu-group" data-en>Overview</div>
+    <a class="active" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg><span data-vi>Dashboard</span><span data-en>Dashboard</span></a>
+    <a href="reports.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg><span data-vi>Báo cáo doanh thu</span><span data-en>Revenue reports</span></a>
+    <div class="menu-group" data-vi>Quản lý</div><div class="menu-group" data-en>Management</div>
+    <a href="merchants.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg><span data-vi>Tiểu thương</span><span data-en>Merchants</span><span class="pill">287</span></a>
+    <a href="products.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg><span data-vi>Sản phẩm</span><span data-en>Products</span><span class="pill">15k</span></a>
+    <a href="approvals.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span data-vi>Phê duyệt</span><span data-en>Approvals</span><span class="pill">8</span></a>
+    <a href="orders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l3 12h11l2-8H6"/></svg><span data-vi>Đơn hàng</span><span data-en>Orders</span></a>
+    <div class="menu-group" data-vi>Vận hành</div><div class="menu-group" data-en>Operations</div>
+    <a href="integrations.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33"/></svg><span data-vi>Tích hợp API</span><span data-en>API integrations</span></a>
+    <a href="settings.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33"/></svg><span data-vi>Quyền &amp; cài đặt</span><span data-en>Permissions</span></a>
+  </nav>
+  <div class="user-card">
+    <div class="avatar">N</div>
+    <div class="user-info"><strong>Nguyễn Anh Tú</strong><span>Super Admin · DHTC</span></div>
+  </div>
+  <a class="back-link" href="../index.html">← <span data-vi>Trang chính</span><span data-en>Home</span></a>
+</aside>
+
+<!-- ── MAIN ── -->
+<main>
+  <div class="breadcrumb">
+    <a href="../index.html">DHTC</a><span>›</span>
+    <a href="index.html"><span data-vi>Admin</span><span data-en>Admin</span></a><span>›</span>
+    <span data-vi>Dashboard</span><span data-en>Dashboard</span>
+  </div>
+
+  <div class="topbar">
+    <h1>
+      <span data-vi>Dashboard tổng hợp</span><span data-en>System Dashboard</span>
+      <small><span data-vi>Cập nhật lúc 14:32 · Hôm nay 15/05/2026</span><span data-en>Last updated 14:32 · Today 15/05/2026</span></small>
+    </h1>
+    <div class="topbar-right">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" placeholder="Tìm kiếm / Search…">
+      </div>
+      <div class="lang-pill">
+        <button onclick="setLang('vi',this)" class="active">VI</button>
+        <button onclick="setLang('en',this)">EN</button>
+      </div>
+      <button class="icon-btn" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="dot"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- KPI Grid -->
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label"><span data-vi>GMV tháng 5</span><span data-en>May GMV</span></div>
+      <div class="kpi-value">₫2.84<small> tỷ</small></div>
+      <div class="kpi-delta up">▲ 8.4% <span data-vi>so tháng trước</span><span data-en>vs last month</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><span data-vi>Đơn hàng hôm nay</span><span data-en>Orders today</span></div>
+      <div class="kpi-value">1,284</div>
+      <div class="kpi-delta up">▲ 6.2% <span data-vi>so hôm qua</span><span data-en>vs yesterday</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><span data-vi>Tiểu thương hoạt động</span><span data-en>Active merchants</span></div>
+      <div class="kpi-value">287<small>/300</small></div>
+      <div class="kpi-delta up">▲ <span data-vi>3 mới tuần này</span><span data-en>3 new this week</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><span data-vi>Chờ phê duyệt</span><span data-en>Pending approvals</span></div>
+      <div class="kpi-value" style="color:var(--warning)">8</div>
+      <div class="kpi-delta warn">⚠ <span data-vi>Xử lý trước 17:00</span><span data-en>Process before 17:00</span></div>
+    </div>
+  </div>
+
+  <!-- Revenue chart + Quick stats -->
+  <div class="row" style="grid-template-columns:2fr 1fr">
+    <!-- Left: Revenue Bar Chart -->
+    <div class="panel">
+      <div class="panel-head">
+        <h2><span data-vi>Doanh thu 12 tháng</span><span data-en>Monthly Revenue</span></h2>
+        <a href="reports.html" class="panel-action"><span data-vi>Xem báo cáo →</span><span data-en>View report →</span></a>
+      </div>
+      <div class="chart-wrap">
+        <div class="bar-chart" id="revenueChart" title="Monthly revenue in million VND"></div>
+      </div>
+      <div class="chart-legend">
+        <span><span class="legend-dot" style="background:var(--green)"></span><span data-vi>Thực tế</span><span data-en>Actual</span></span>
+        <span><span class="legend-dot" style="background:rgba(201,169,97,0.45)"></span><span data-vi>Dự báo</span><span data-en>Projected</span></span>
+      </div>
+    </div>
+
+    <!-- Right: Today stats + Pending approvals -->
+    <div class="panel">
+      <div class="panel-head">
+        <h2><span data-vi>Hôm nay</span><span data-en>Today</span></h2>
+        <span class="tag processing" data-vi>Trực tiếp</span><span class="tag processing" data-en>Live</span>
+      </div>
+      <div class="region-list">
+        <div class="region-item">
+          <span class="region-name">Tây Nguyên</span>
+          <div class="region-bar-bg"><div class="region-bar-fill" style="width:100%"></div></div>
+          <span class="region-val">₫48.2M</span>
+        </div>
+        <div class="region-item">
+          <span class="region-name">Đồng Bằng SCL</span>
+          <div class="region-bar-bg"><div class="region-bar-fill" style="width:65%"></div></div>
+          <span class="region-val">₫31.4M</span>
+        </div>
+        <div class="region-item">
+          <span class="region-name">Khánh Hòa</span>
+          <div class="region-bar-bg"><div class="region-bar-fill" style="width:39%"></div></div>
+          <span class="region-val">₫18.7M</span>
+        </div>
+        <div class="region-item">
+          <span class="region-name">Miền Trung</span>
+          <div class="region-bar-bg"><div class="region-bar-fill" style="width:25%"></div></div>
+          <span class="region-val">₫12.1M</span>
+        </div>
+      </div>
+
+      <div class="approval-mini">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:2px"><span data-vi>Phê duyệt chờ xử lý</span><span data-en>Pending approvals</span></div>
+        <div class="approval-item">
+          <div class="name">HTX Thanh Long Bình Thuận<br><span class="cat" data-vi>Trái cây tươi · M198</span><span class="cat" data-en>Fresh fruit · M198</span></div>
+          <div class="approval-actions">
+            <button class="btn btn-primary btn-sm" onclick="approveItem(this)" data-vi>Duyệt</button>
+            <button class="btn btn-ghost btn-sm" data-vi>Từ chối</button>
+          </div>
+        </div>
+        <div class="approval-item">
+          <div class="name">HTX Tiêu Đen Phú Quốc<br><span class="cat" data-vi>Gia vị · M203</span><span class="cat" data-en>Spices · M203</span></div>
+          <div class="approval-actions">
+            <button class="btn btn-primary btn-sm" onclick="approveItem(this)" data-vi>Duyệt</button>
+            <button class="btn btn-ghost btn-sm" data-vi>Từ chối</button>
+          </div>
+        </div>
+        <div class="approval-item">
+          <div class="name">Cty TNHH Rau Đà Lạt Xanh<br><span class="cat" data-vi>Rau củ · M211</span><span class="cat" data-en>Vegetables · M211</span></div>
+          <div class="approval-actions">
+            <button class="btn btn-primary btn-sm" onclick="approveItem(this)" data-vi>Duyệt</button>
+            <button class="btn btn-ghost btn-sm" data-vi>Từ chối</button>
+          </div>
+        </div>
+        <a href="approvals.html" class="panel-action" style="font-size:11.5px;margin-top:6px">
+          <span data-vi>Xem 5 hồ sơ còn lại →</span><span data-en>See 5 more →</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Orders -->
+  <div class="panel">
+    <div class="panel-head">
+      <h2><span data-vi>Đơn hàng gần đây</span><span data-en>Recent orders</span></h2>
+      <a href="orders.html" class="panel-action"><span data-vi>Xem tất cả →</span><span data-en>View all →</span></a>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th><span data-vi>Mã đơn</span><span data-en>Order ID</span></th>
+            <th><span data-vi>Khách hàng</span><span data-en>Customer</span></th>
+            <th><span data-vi>Sản phẩm</span><span data-en>Product</span></th>
+            <th><span data-vi>Giá</span><span data-en>Amount</span></th>
+            <th><span data-vi>Quốc gia</span><span data-en>Country</span></th>
+            <th><span data-vi>Trạng thái</span><span data-en>Status</span></th>
+            <th><span data-vi>Thời gian</span><span data-en>Time</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono">DHTC-24051234</td>
+            <td>Nguyễn Văn A</td>
+            <td><span data-vi>Cà phê hữu cơ 250g</span><span data-en>Organic coffee 250g</span></td>
+            <td style="font-family:'Fraunces',serif;font-size:15px">₫570,000</td>
+            <td><span class="flag-emoji">🇻🇳</span> <span class="flag">VN</span></td>
+            <td><span class="tag processing" data-vi>Đang xử lý</span><span class="tag processing" data-en>Processing</span></td>
+            <td class="mono" style="color:var(--ink-mute)">14:28</td>
+          </tr>
+          <tr>
+            <td class="mono">DHTC-24051235</td>
+            <td>Yuki Tanaka</td>
+            <td><span data-vi>Bột cacao hữu cơ 200g</span><span data-en>Organic cacao powder 200g</span></td>
+            <td style="font-family:'Fraunces',serif;font-size:15px">₫220,000</td>
+            <td><span class="flag-emoji">🇯🇵</span> <span class="flag">JP</span></td>
+            <td><span class="tag shipped" data-vi>Đang vận chuyển</span><span class="tag shipped" data-en>Shipped</span></td>
+            <td class="mono" style="color:var(--ink-mute)">13:55</td>
+          </tr>
+          <tr>
+            <td class="mono">DHTC-24051236</td>
+            <td>Park Ji Ho</td>
+            <td><span data-vi>Hạt điều rang muối 300g</span><span data-en>Salted roasted cashews 300g</span></td>
+            <td style="font-family:'Fraunces',serif;font-size:15px">₫390,000</td>
+            <td><span class="flag-emoji">🇰🇷</span> <span class="flag">KR</span></td>
+            <td><span class="tag verified" data-vi>Đã giao</span><span class="tag verified" data-en>Delivered</span></td>
+            <td class="mono" style="color:var(--ink-mute)">12:40</td>
+          </tr>
+          <tr>
+            <td class="mono">DHTC-24051237</td>
+            <td>Wei Chen</td>
+            <td><span data-vi>Mắc-ca sấy lạnh 200g</span><span data-en>Freeze-dried macadamia 200g</span></td>
+            <td style="font-family:'Fraunces',serif;font-size:15px">₫420,000</td>
+            <td><span class="flag-emoji">🇸🇬</span> <span class="flag">SG</span></td>
+            <td><span class="tag pending" data-vi>Chờ xác nhận</span><span class="tag pending" data-en>Pending</span></td>
+            <td class="mono" style="color:var(--ink-mute)">12:10</td>
+          </tr>
+          <tr>
+            <td class="mono">DHTC-24051238</td>
+            <td>Lê Thị Hoa</td>
+            <td><span data-vi>Cà phê Cold Brew 500ml ×3</span><span data-en>Cold Brew Coffee 500ml ×3</span></td>
+            <td style="font-family:'Fraunces',serif;font-size:15px">₫495,000</td>
+            <td><span class="flag-emoji">🇻🇳</span> <span class="flag">VN</span></td>
+            <td><span class="tag verified" data-vi>Đã giao</span><span class="tag verified" data-en>Delivered</span></td>
+            <td class="mono" style="color:var(--ink-mute)">11:34</td>
+          </tr>
+          <tr>
+            <td class="mono">DHTC-24051239</td>
+            <td>Kenji Yamamoto</td>
+            <td><span data-vi>Cacao Nibs hữu cơ 200g</span><span data-en>Organic Cacao Nibs 200g</span></td>
+            <td style="font-family:'Fraunces',serif;font-size:15px">₫280,000</td>
+            <td><span class="flag-emoji">🇯🇵</span> <span class="flag">JP</span></td>
+            <td><span class="tag shipped" data-vi>Đang vận chuyển</span><span class="tag shipped" data-en>Shipped</span></td>
+            <td class="mono" style="color:var(--ink-mute)">11:08</td>
+          </tr>
+          <tr>
+            <td class="mono">DHTC-24051240</td>
+            <td>Sarah Kim</td>
+            <td><span data-vi>Hạt điều rang muối ×2</span><span data-en>Roasted cashews ×2</span></td>
+            <td style="font-family:'Fraunces',serif;font-size:15px">₫390,000</td>
+            <td><span class="flag-emoji">🇺🇸</span> <span class="flag">US</span></td>
+            <td><span class="tag processing" data-vi>Đang xử lý</span><span class="tag processing" data-en>Processing</span></td>
+            <td class="mono" style="color:var(--ink-mute)">10:52</td>
+          </tr>
+          <tr>
+            <td class="mono">DHTC-24051241</td>
+            <td>Trần Minh Khoa</td>
+            <td><span data-vi>Cà phê Espresso Blend 500g</span><span data-en>Espresso Blend 500g</span></td>
+            <td style="font-family:'Fraunces',serif;font-size:15px">₫320,000</td>
+            <td><span class="flag-emoji">🇻🇳</span> <span class="flag">VN</span></td>
+            <td><span class="tag verified" data-vi>Đã giao</span><span class="tag verified" data-en>Delivered</span></td>
+            <td class="mono" style="color:var(--ink-mute)">10:14</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Top merchants + System health -->
+  <div class="row eq">
+    <!-- Left: Top merchants -->
+    <div class="panel">
+      <div class="panel-head">
+        <h2><span data-vi>Top tiểu thương tháng 5</span><span data-en>Top merchants – May</span></h2>
+        <a href="merchants.html" class="panel-action"><span data-vi>Xem tất cả →</span><span data-en>View all →</span></a>
+      </div>
+      <div class="merch-list">
+        <a href="merchant-detail.html" class="merch-row">
+          <div class="merch-rank">1</div>
+          <div class="merch-info">
+            <strong>M008 Đắk Lắk Coffee HTX</strong>
+            <span>312 <span data-vi>đơn</span><span data-en>orders</span></span>
+          </div>
+          <div class="merch-gmv">
+            <strong>₫92.4M</strong>
+            <span><span class="tag gold">GOLD</span></span>
+          </div>
+        </a>
+        <a href="merchant-detail.html" class="merch-row">
+          <div class="merch-rank">2</div>
+          <div class="merch-info">
+            <strong>M017 Đà Lạt Freeze Dry</strong>
+            <span>245 <span data-vi>đơn</span><span data-en>orders</span></span>
+          </div>
+          <div class="merch-gmv">
+            <strong>₫68.2M</strong>
+            <span><span class="tag gold">GOLD</span></span>
+          </div>
+        </a>
+        <a href="merchant-detail.html" class="merch-row">
+          <div class="merch-rank">3</div>
+          <div class="merch-info">
+            <strong>M042 HTX Khánh Sơn Nut</strong>
+            <span>198 <span data-vi>đơn</span><span data-en>orders</span></span>
+          </div>
+          <div class="merch-gmv">
+            <strong>₫54.8M</strong>
+            <span><span class="tag silver">SILVER</span></span>
+          </div>
+        </a>
+        <a href="merchant-detail.html" class="merch-row">
+          <div class="merch-rank">4</div>
+          <div class="merch-info">
+            <strong>M063 Phú Hộ Tea &amp; Herbs</strong>
+            <span>156 <span data-vi>đơn</span><span data-en>orders</span></span>
+          </div>
+          <div class="merch-gmv">
+            <strong>₫38.6M</strong>
+            <span><span class="tag silver">SILVER</span></span>
+          </div>
+        </a>
+        <a href="merchant-detail.html" class="merch-row">
+          <div class="merch-rank">5</div>
+          <div class="merch-info">
+            <strong>M101 Quảng Nam Artisan Cake</strong>
+            <span>412 <span data-vi>đơn</span><span data-en>orders</span></span>
+          </div>
+          <div class="merch-gmv">
+            <strong>₫42.1M</strong>
+            <span><span class="tag silver">SILVER</span></span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Right: System integrations -->
+    <div class="panel">
+      <div class="panel-head">
+        <h2><span data-vi>Hệ thống tích hợp</span><span data-en>Integration health</span></h2>
+        <a href="integrations.html" class="panel-action"><span data-vi>Quản lý →</span><span data-en>Manage →</span></a>
+      </div>
+      <div class="int-list">
+        <div class="int-item">
+          <span class="status-dot ok"></span>
+          <span class="int-name">VCB VietQR</span>
+          <span class="tag verified">Online</span>
+          <span class="int-uptime">99.8%</span>
+        </div>
+        <div class="int-item">
+          <span class="status-dot ok"></span>
+          <span class="int-name">DHL Express</span>
+          <span class="tag verified">Online</span>
+          <span class="int-uptime">100%</span>
+        </div>
+        <div class="int-item">
+          <span class="status-dot warn"></span>
+          <span class="int-name">Meta Messenger</span>
+          <span class="tag pending">Degraded</span>
+          <span class="int-uptime">94.2%</span>
+        </div>
+        <div class="int-item">
+          <span class="status-dot ok"></span>
+          <span class="int-name">Zalo OA</span>
+          <span class="tag verified">Online</span>
+          <span class="int-uptime">98.1%</span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div style="font-size:12px;color:var(--ink-mute);margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:.07em">
+        <span data-vi>Hoạt động hệ thống hôm nay</span><span data-en>Today's system activity</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <div style="display:flex;justify-content:space-between;font-size:12.5px">
+          <span data-vi>Giao dịch VietQR thành công</span><span data-en>VietQR transactions OK</span>
+          <span class="mono" style="color:var(--success)">1,247</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12.5px">
+          <span data-vi>Waybill DHL phát sinh</span><span data-en>DHL waybills created</span>
+          <span class="mono">384</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12.5px">
+          <span data-vi>Tin nhắn Zalo gửi đi</span><span data-en>Zalo messages sent</span>
+          <span class="mono">2,891</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12.5px">
+          <span data-vi>Lỗi API (24h)</span><span data-en>API errors (24h)</span>
+          <span class="mono" style="color:var(--warning)">3</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+/* ── Lang toggle ── */
+function setLang(lang, btn) {
+  document.body.classList.toggle('en', lang === 'en');
+  document.querySelectorAll('.lang-pill button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  localStorage.setItem('dhtc-lang', lang);
+}
+if (localStorage.getItem('dhtc-lang') === 'en') {
+  document.body.classList.add('en');
+  document.querySelectorAll('.lang-pill button').forEach((b,i) => b.classList.toggle('active', i === 1));
+}
+
+/* ── Bar Chart ── */
+(function buildChart() {
+  const container = document.getElementById('revenueChart');
+  const months = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'];
+  const enMonths = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const values = [142, 168, 195, 218, 241, 220, 235, 248, 262, 275, 290, 310];
+  const actualCount = 5; // Jan–May actual, rest projected
+  const maxVal = Math.max(...values);
+  const chartH = 120;
+
+  months.forEach((m, i) => {
+    const col = document.createElement('div');
+    col.className = 'bar-col';
+
+    const barH = Math.round((values[i] / maxVal) * chartH);
+    const isActual = i < actualCount;
+
+    const valEl = document.createElement('div');
+    valEl.className = 'bar-val';
+    valEl.textContent = values[i] + 'M';
+    valEl.style.fontSize = '8px';
+
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.height = barH + 'px';
+    bar.style.background = isActual ? 'var(--green)' : 'rgba(201,169,97,0.42)';
+    bar.title = (isActual ? 'Thực tế' : 'Dự báo') + ': ' + values[i] + 'M VND';
+
+    const labelVi = document.createElement('span');
+    labelVi.className = 'bar-label';
+    labelVi.setAttribute('data-vi','');
+    labelVi.textContent = m;
+
+    const labelEn = document.createElement('span');
+    labelEn.className = 'bar-label';
+    labelEn.setAttribute('data-en','');
+    labelEn.textContent = enMonths[i];
+
+    col.appendChild(valEl);
+    col.appendChild(bar);
+    col.appendChild(labelVi);
+    col.appendChild(labelEn);
+    container.appendChild(col);
+  });
+})();
+
+/* ── Approve quick action ── */
+function approveItem(btn) {
+  const item = btn.closest('.approval-item');
+  item.style.opacity = '0.4';
+  item.style.pointerEvents = 'none';
+  btn.textContent = '✓';
+  btn.style.background = 'var(--success)';
+}
+</script>
+</body>
+</html>

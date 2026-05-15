@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bảng điều khiển · DHTC Seller</title>
+<link rel="icon" href="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-270x270.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+  /* ── Shipping Calculator ── */
+  .calc-form { display: flex; flex-direction: column; gap: 12px; }
+  .dim-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .calc-result {
+    background: linear-gradient(135deg, var(--green) 0%, var(--green-soft) 100%);
+    color: var(--cream);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 4px;
+    display: none;
+    animation: slideDown .25s ease;
+  }
+  .calc-result.visible { display: block; }
+  @keyframes slideDown { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+  .calc-price { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 500; letter-spacing: -0.02em; }
+  .calc-price small { font-size: 14px; opacity: .7; margin-left: 4px; }
+  .calc-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 10px; }
+  .calc-meta-item { background: rgba(245,239,224,.1); border-radius: 8px; padding: 8px 10px; }
+  .calc-meta-label { font-size: 9.5px; opacity: .65; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
+  .calc-meta-val { font-size: 13px; font-weight: 600; margin-top: 2px; }
+
+  /* ── Pending orders mini ── */
+  .pending-list { display: flex; flex-direction: column; gap: 8px; }
+  .pending-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 10px;
+    background: var(--cream); font-size: 12.5px;
+  }
+  .pending-item .flag-emoji { font-size: 18px; flex-shrink: 0; }
+  .pending-info { flex: 1; min-width: 0; }
+  .pending-info strong { display: block; font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pending-info span { font-size: 11px; color: var(--ink-mute); }
+  .pending-amount { font-family: 'Fraunces', serif; font-size: 14px; color: var(--green); flex-shrink: 0; margin-right: 4px; }
+
+  /* ── Mini bar chart ── */
+  .mini-chart { display: flex; align-items: flex-end; gap: 8px; height: 80px; }
+  .mini-bar-col { display: flex; flex-direction: column; align-items: center; gap: 3px; flex: 1; }
+  .mini-bar { width: 100%; border-radius: 4px 4px 0 0; background: var(--green); }
+  .mini-bar-label { font-size: 9px; font-family: 'JetBrains Mono', monospace; color: var(--ink-mute); }
+  .mini-bar-val { font-size: 8.5px; color: var(--ink-mute); }
+
+  /* ── Top products ── */
+  .top-prod-list { display: flex; flex-direction: column; gap: 12px; }
+  .top-prod-item { display: flex; align-items: center; gap: 10px; }
+  .top-prod-img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; background: var(--cream); flex-shrink: 0; }
+  .top-prod-info { flex: 1; min-width: 0; }
+  .top-prod-info strong { font-size: 12.5px; font-weight: 600; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .top-prod-info span { font-size: 11px; color: var(--ink-mute); }
+  .top-prod-bar-wrap { flex: 1; height: 5px; background: var(--cream-dark); border-radius: 999px; overflow: hidden; }
+  .top-prod-bar { height: 100%; background: var(--green); border-radius: 999px; }
+  .top-prod-count { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-mute); min-width: 52px; text-align: right; }
+</style>
+</head>
+<body class="app">
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar light">
+  <div class="brand">
+    <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-e1693969421521.png" alt="DHTC">
+    <div class="brand-text"><strong>DHTC</strong><span>Seller Studio</span></div>
+  </div>
+  <div class="store-card">
+    <span class="store-badge">★ GOLD TIER</span>
+    <h3>HTX Cà Phê Hữu Cơ Đắk Lắk</h3>
+    <div class="store-meta">M008 · Tây Nguyên · <span data-vi>Đã xác minh</span><span data-en>Verified</span></div>
+    <div class="store-stats">
+      <div><span data-vi>SKU</span><span data-en>SKUs</span><strong>8</strong></div>
+      <div><span data-vi>Đánh giá</span><span data-en>Rating</span><strong>4.85★</strong></div>
+    </div>
+  </div>
+  <nav class="menu">
+    <div class="menu-group" data-vi>Bán hàng</div><div class="menu-group" data-en>Selling</div>
+    <a class="active" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg><span data-vi>Bảng điều khiển</span><span data-en>Dashboard</span></a>
+    <a href="products.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg><span data-vi>Sản phẩm của tôi</span><span data-en>My products</span><span class="pill">8</span></a>
+    <a href="orders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l3 12h11l2-8H6"/></svg><span data-vi>Đơn hàng</span><span data-en>Orders</span><span class="pill">14</span></a>
+    <a href="promotions.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 3h5v5"/><path d="M21 3 9 15"/></svg><span data-vi>Khuyến mãi</span><span data-en>Promotions</span></a>
+    <div class="menu-group" data-vi>Tài chính</div><div class="menu-group" data-en>Finance</div>
+    <a href="wallet.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg><span data-vi>Ví &amp; rút tiền</span><span data-en>Wallet &amp; payout</span></a>
+    <div class="menu-group" data-vi>Vận chuyển</div><div class="menu-group" data-en>Shipping</div>
+    <a href="shipping.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><span data-vi>DHL Waybill</span><span data-en>DHL Waybill</span></a>
+    <div class="menu-group" data-vi>Cài đặt</div><div class="menu-group" data-en>Settings</div>
+    <a href="profile.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span data-vi>Hồ sơ gian hàng</span><span data-en>Store profile</span></a>
+  </nav>
+  <a class="back-link" href="../index.html">← <span data-vi>Trang chính</span><span data-en>Home</span></a>
+</aside>
+
+<!-- ── MAIN ── -->
+<main>
+  <div class="breadcrumb">
+    <a href="../index.html">DHTC</a><span>›</span>
+    <a href="index.html"><span data-vi>Seller Studio</span><span data-en>Seller Studio</span></a><span>›</span>
+    <span data-vi>Bảng điều khiển</span><span data-en>Dashboard</span>
+  </div>
+
+  <div class="topbar">
+    <h1>
+      <span data-vi>Xin chào, Y Thol 👋</span><span data-en>Welcome, Y Thol 👋</span>
+      <small>HTX Cà Phê Hữu Cơ Đắk Lắk · M008</small>
+    </h1>
+    <div class="topbar-right">
+      <div class="lang-pill">
+        <button onclick="setLang('vi',this)" class="active">VI</button>
+        <button onclick="setLang('en',this)">EN</button>
+      </div>
+      <button class="icon-btn" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="dot"></span>
+      </button>
+      <a href="product-edit.html" class="btn btn-primary btn-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span data-vi>Thêm sản phẩm</span><span data-en>Add product</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label"><span data-vi>Doanh thu tháng 5</span><span data-en>May revenue</span></div>
+      <div class="kpi-value" style="font-size:26px">₫92.4M</div>
+      <div class="kpi-delta up">▲ 12.4% <span data-vi>so tháng trước</span><span data-en>vs last month</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><span data-vi>Đơn hàng tháng</span><span data-en>Monthly orders</span></div>
+      <div class="kpi-value">312</div>
+      <div class="kpi-delta up">▲ 8.1%</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><span data-vi>Chờ xử lý</span><span data-en>Pending</span></div>
+      <div class="kpi-value" style="color:var(--warning)">14</div>
+      <div class="kpi-delta warn">⚠ <span data-vi>Cần xác nhận</span><span data-en>Needs confirmation</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><span data-vi>Đánh giá TB</span><span data-en>Avg rating</span></div>
+      <div class="kpi-value" style="color:var(--gold-deep)">4.85<small>★</small></div>
+      <div class="kpi-delta up">▲ 0.02 <span data-vi>tháng này</span><span data-en>this month</span></div>
+    </div>
+  </div>
+
+  <!-- Shipping Calc + Pending Orders -->
+  <div class="row" style="grid-template-columns:1.5fr 1fr">
+    <!-- Left: Shipping Calculator -->
+    <div class="panel">
+      <div class="panel-head">
+        <h2><span data-vi>Tính phí vận chuyển DHL</span><span data-en>DHL Rate Calculator</span></h2>
+        <span class="tag shipped">DHL Express</span>
+      </div>
+      <div class="calc-form">
+        <div class="form-row">
+          <div class="field">
+            <label><span data-vi>Cân nặng (kg)</span><span data-en>Weight (kg)</span></label>
+            <input type="number" id="calcWeight" min="0.1" max="30" step="0.1" value="0.5">
+          </div>
+          <div class="field">
+            <label><span data-vi>Điểm đến</span><span data-en>Destination</span></label>
+            <select id="calcDest">
+              <option value="VN">🇻🇳 Việt Nam (VN)</option>
+              <option value="JP" selected>🇯🇵 Nhật Bản (JP)</option>
+              <option value="KR">🇰🇷 Hàn Quốc (KR)</option>
+              <option value="SG">🇸🇬 Singapore (SG)</option>
+              <option value="AU">🇦🇺 Úc (AU)</option>
+              <option value="US">🇺🇸 Mỹ (US)</option>
+              <option value="DE">🇩🇪 EU – Đức (DE)</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label><span data-vi>Kích thước (cm) — Dài × Rộng × Cao</span><span data-en>Dimensions (cm) — L × W × H</span></label>
+          <div class="dim-row">
+            <input type="number" id="calcL" min="1" max="120" value="20" placeholder="Dài / L">
+            <input type="number" id="calcW" min="1" max="120" value="15" placeholder="Rộng / W">
+            <input type="number" id="calcH" min="1" max="120" value="10" placeholder="Cao / H">
+          </div>
+        </div>
+        <div class="field">
+          <label><span data-vi>Dịch vụ</span><span data-en>Service</span></label>
+          <select id="calcService">
+            <option value="express" selected>DHL Express (2–3 <span data-vi>ngày</span><span data-en>days</span>)</option>
+            <option value="economy">DHL Economy Select (5–7 <span data-vi>ngày</span><span data-en>days</span>)</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" onclick="calculateRate()" style="align-self:flex-start">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="11" y2="14"/></svg>
+          <span data-vi>Tính phí</span><span data-en>Calculate</span>
+        </button>
+
+        <div class="calc-result" id="calcResult">
+          <div style="font-size:11px;opacity:.65;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:4px">
+            <span data-vi>Chi phí ước tính</span><span data-en>Estimated cost</span>
+          </div>
+          <div class="calc-price" id="resultVnd">₫–</div>
+          <div style="font-size:12px;opacity:.7;margin-top:2px" id="resultUsd">≈ $–</div>
+          <div class="calc-meta">
+            <div class="calc-meta-item">
+              <div class="calc-meta-label"><span data-vi>Thời gian</span><span data-en>Transit time</span></div>
+              <div class="calc-meta-val" id="resultDays">–</div>
+            </div>
+            <div class="calc-meta-item">
+              <div class="calc-meta-label"><span data-vi>Trọng lượng tính phí</span><span data-en>Chargeable weight</span></div>
+              <div class="calc-meta-val" id="resultChargeWeight">–</div>
+            </div>
+            <div class="calc-meta-item" style="grid-column:1/-1">
+              <div class="calc-meta-label"><span data-vi>Gợi ý đóng gói</span><span data-en>Packaging tip</span></div>
+              <div class="calc-meta-val" id="resultPackaging" style="font-size:11px;font-weight:400;line-height:1.4">–</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Pending orders -->
+    <div class="panel">
+      <div class="panel-head">
+        <h2><span data-vi>Đơn cần xử lý</span><span data-en>Pending orders</span></h2>
+        <a href="orders.html" class="panel-action"><span data-vi>Xem tất cả →</span><span data-en>View all →</span></a>
+      </div>
+      <div class="pending-list">
+        <div class="pending-item">
+          <span class="flag-emoji">🇻🇳</span>
+          <div class="pending-info">
+            <strong>Nguyễn Văn A</strong>
+            <span data-vi>Cà phê hữu cơ ×2</span><span data-en>Organic coffee ×2</span>
+          </div>
+          <span class="pending-amount">₫570K</span>
+          <button class="btn btn-primary btn-sm" onclick="confirmOrder(this)" data-vi>Xác nhận</button>
+        </div>
+        <div class="pending-item">
+          <span class="flag-emoji">🇸🇬</span>
+          <div class="pending-info">
+            <strong>Wei Chen</strong>
+            <span data-vi>Mắc-ca sấy lạnh ×1</span><span data-en>Freeze-dried macadamia ×1</span>
+          </div>
+          <span class="pending-amount">₫420K</span>
+          <button class="btn btn-primary btn-sm" onclick="confirmOrder(this)" data-vi>Xác nhận</button>
+        </div>
+        <div class="pending-item">
+          <span class="flag-emoji">🇺🇸</span>
+          <div class="pending-info">
+            <strong>Sarah Kim</strong>
+            <span data-vi>Hạt điều rang ×2</span><span data-en>Roasted cashews ×2</span>
+          </div>
+          <span class="pending-amount">₫390K</span>
+          <button class="btn btn-primary btn-sm" onclick="confirmOrder(this)" data-vi>Xác nhận</button>
+        </div>
+        <div class="pending-item">
+          <span class="flag-emoji">🇦🇺</span>
+          <div class="pending-info">
+            <strong>Laura Nguyen</strong>
+            <span data-vi>Bột cacao hữu cơ ×3</span><span data-en>Organic cacao powder ×3</span>
+          </div>
+          <span class="pending-amount">₫660K</span>
+          <button class="btn btn-primary btn-sm" onclick="confirmOrder(this)" data-vi>Xác nhận</button>
+        </div>
+        <div class="pending-item">
+          <span class="flag-emoji">🇩🇪</span>
+          <div class="pending-info">
+            <strong>Klaus Weber</strong>
+            <span data-vi>Espresso Blend 500g ×2</span><span data-en>Espresso Blend 500g ×2</span>
+          </div>
+          <span class="pending-amount">₫640K</span>
+          <button class="btn btn-primary btn-sm" onclick="confirmOrder(this)" data-vi>Xác nhận</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7-day chart + Top products -->
+  <div class="row eq">
+    <!-- Left: 7-day mini chart -->
+    <div class="panel">
+      <div class="panel-head">
+        <h2><span data-vi>Doanh thu 7 ngày gần nhất</span><span data-en>Revenue – last 7 days</span></h2>
+        <a href="reports.html" class="panel-action"><span data-vi>Chi tiết →</span><span data-en>Details →</span></a>
+      </div>
+      <div id="miniChart" class="mini-chart"></div>
+      <div style="margin-top:12px;display:flex;justify-content:space-between;font-size:12px;color:var(--ink-mute);padding-top:8px;border-top:1px solid var(--line-soft)">
+        <span><span data-vi>Cao nhất:</span><span data-en>Peak:</span> <strong style="color:var(--green)">₫6.4M</strong> <span data-vi>(T8)</span><span data-en>(Sun)</span></span>
+        <span><span data-vi>Tổng 7 ngày:</span><span data-en>7-day total:</span> <strong>₫27.8M</strong></span>
+      </div>
+    </div>
+
+    <!-- Right: Top products -->
+    <div class="panel">
+      <div class="panel-head">
+        <h2><span data-vi>Sản phẩm bán chạy</span><span data-en>Top products</span></h2>
+        <a href="products.html" class="panel-action"><span data-vi>Xem tất cả →</span><span data-en>View all →</span></a>
+      </div>
+      <div class="top-prod-list">
+        <div class="top-prod-item">
+          <img class="top-prod-img" src="https://dhtcdanang.com/wp-content/uploads/2023/07/34-300x300.png" alt="Cà phê hữu cơ">
+          <div class="top-prod-info">
+            <strong><span data-vi>Cà phê hữu cơ rang xay</span><span data-en>Organic roasted coffee</span></strong>
+            <span>₫285,000 · DHTC-NS-002</span>
+          </div>
+          <div class="top-prod-bar-wrap"><div class="top-prod-bar" style="width:100%"></div></div>
+          <span class="top-prod-count">3,128</span>
+        </div>
+        <div class="top-prod-item">
+          <img class="top-prod-img" src="https://dhtcdanang.com/wp-content/uploads/2023/07/2-300x300.png" alt="Hạt điều">
+          <div class="top-prod-info">
+            <strong><span data-vi>Hạt điều rang muối</span><span data-en>Salted roasted cashews</span></strong>
+            <span>₫195,000 · DHTC-NS-004</span>
+          </div>
+          <div class="top-prod-bar-wrap"><div class="top-prod-bar" style="width:91%"></div></div>
+          <span class="top-prod-count">2,856</span>
+        </div>
+        <div class="top-prod-item">
+          <img class="top-prod-img" src="https://dhtcdanang.com/wp-content/uploads/2023/07/24-300x300.png" alt="Bột cacao">
+          <div class="top-prod-info">
+            <strong><span data-vi>Bột cacao hữu cơ</span><span data-en>Organic cacao powder</span></strong>
+            <span>₫220,000 · DHTC-NS-001</span>
+          </div>
+          <div class="top-prod-bar-wrap"><div class="top-prod-bar" style="width:63%"></div></div>
+          <span class="top-prod-count">1,976</span>
+        </div>
+        <div class="top-prod-item">
+          <img class="top-prod-img" src="https://dhtcdanang.com/wp-content/uploads/2023/07/2-300x300.png" alt="Mắc-ca">
+          <div class="top-prod-info">
+            <strong><span data-vi>Mắc-ca sấy lạnh</span><span data-en>Freeze-dried macadamia</span></strong>
+            <span>₫420,000 · DHTC-NS-003</span>
+          </div>
+          <div class="top-prod-bar-wrap"><div class="top-prod-bar" style="width:25%"></div></div>
+          <span class="top-prod-count">768</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+/* ── Lang ── */
+function setLang(lang, btn) {
+  document.body.classList.toggle('en', lang === 'en');
+  document.querySelectorAll('.lang-pill button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  localStorage.setItem('dhtc-lang', lang);
+}
+if (localStorage.getItem('dhtc-lang') === 'en') {
+  document.body.classList.add('en');
+  document.querySelectorAll('.lang-pill button').forEach((b,i) => b.classList.toggle('active', i === 1));
+}
+
+/* ── Mini 7-day chart ── */
+(function buildMini() {
+  const chart = document.getElementById('miniChart');
+  const isEn = document.body.classList.contains('en');
+  const labelsVi = ['T2','T3','T4','T5','T6','T7','T8'];
+  const labelsEn = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const vals = [2.1, 3.4, 2.8, 4.2, 5.1, 3.8, 6.4];
+  const maxV = Math.max(...vals);
+  const chartH = 70;
+  vals.forEach((v, i) => {
+    const col = document.createElement('div');
+    col.className = 'mini-bar-col';
+    const bh = Math.round((v / maxV) * chartH);
+    const valEl = document.createElement('div');
+    valEl.className = 'mini-bar-val';
+    valEl.textContent = v + 'M';
+    const bar = document.createElement('div');
+    bar.className = 'mini-bar';
+    bar.style.height = bh + 'px';
+    bar.style.opacity = v === maxV ? '1' : '0.65';
+    if (v === maxV) bar.style.background = 'var(--gold-deep)';
+    const labelVi = document.createElement('div');
+    labelVi.className = 'mini-bar-label';
+    labelVi.setAttribute('data-vi','');
+    labelVi.textContent = labelsVi[i];
+    const labelEn = document.createElement('div');
+    labelEn.className = 'mini-bar-label';
+    labelEn.setAttribute('data-en','');
+    labelEn.textContent = labelsEn[i];
+    col.appendChild(valEl);
+    col.appendChild(bar);
+    col.appendChild(labelVi);
+    col.appendChild(labelEn);
+    chart.appendChild(col);
+  });
+})();
+
+/* ── Shipping Calculator ── */
+const baseRates = { VN:30000, JP:280000, KR:250000, SG:220000, AU:380000, US:420000, DE:350000 };
+const transitDays = {
+  VN: { express:'1–2 ngày / 1–2 days', economy:'3–4 ngày / 3–4 days' },
+  JP: { express:'2–3 ngày / 2–3 days', economy:'5–7 ngày / 5–7 days' },
+  KR: { express:'2–3 ngày / 2–3 days', economy:'5–7 ngày / 5–7 days' },
+  SG: { express:'1–2 ngày / 1–2 days', economy:'4–5 ngày / 4–5 days' },
+  AU: { express:'3–4 ngày / 3–4 days', economy:'7–10 ngày / 7–10 days' },
+  US: { express:'3–5 ngày / 3–5 days', economy:'7–12 ngày / 7–12 days' },
+  DE: { express:'3–4 ngày / 3–4 days', economy:'7–10 ngày / 7–10 days' },
+};
+
+function calculateRate() {
+  const weight = parseFloat(document.getElementById('calcWeight').value) || 0.5;
+  const dest = document.getElementById('calcDest').value;
+  const L = parseFloat(document.getElementById('calcL').value) || 20;
+  const W = parseFloat(document.getElementById('calcW').value) || 15;
+  const H = parseFloat(document.getElementById('calcH').value) || 10;
+  const service = document.getElementById('calcService').value;
+
+  // Dimensional weight: L×W×H / 5000
+  const dimWeight = (L * W * H) / 5000;
+  const chargeWeight = Math.max(weight, dimWeight);
+
+  const baseRate = baseRates[dest] || 280000;
+  const ratePerKg = service === 'express' ? 45000 : 28000;
+  const extraKg = Math.max(0, chargeWeight - 0.5);
+  const total = Math.round(baseRate + extraKg * ratePerKg);
+  const usd = (total / 25000).toFixed(2);
+
+  const packagingTips = {
+    VN: 'Túi zip thường đủ yêu cầu.',
+    JP: 'Hộp carton 3 lớp, giấy lót bubble wrap.',
+    KR: 'Hộp carton 3 lớp, dán niêm phong 4 cạnh.',
+    SG: 'Hộp carton, seal kín chống ẩm.',
+    AU: 'Double-wall carton, seal chống ẩm + MSDS.',
+    US: 'Double-wall carton + khai báo hải quan đầy đủ.',
+    DE: 'Carton cứng + nhãn CE nếu có thực phẩm đóng gói.',
+  };
+
+  document.getElementById('resultVnd').textContent = '₫' + total.toLocaleString('vi-VN');
+  document.getElementById('resultUsd').textContent = '≈ $' + usd + ' USD';
+  document.getElementById('resultDays').textContent = transitDays[dest][service];
+  document.getElementById('resultChargeWeight').textContent = chargeWeight.toFixed(2) + ' kg';
+  document.getElementById('resultPackaging').textContent = packagingTips[dest] || 'Đóng gói cẩn thận.';
+
+  const result = document.getElementById('calcResult');
+  result.classList.remove('visible');
+  void result.offsetWidth; // reflow for animation
+  result.classList.add('visible');
+}
+
+/* ── Confirm order ── */
+function confirmOrder(btn) {
+  const item = btn.closest('.pending-item');
+  btn.textContent = '✓ OK';
+  btn.style.background = 'var(--success)';
+  btn.style.borderColor = 'var(--success)';
+  btn.disabled = true;
+  item.style.opacity = '.5';
+}
+</script>
+</body>
+</html>

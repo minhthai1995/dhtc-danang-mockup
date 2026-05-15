@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đơn hàng · DHTC Seller</title>
+<link rel="icon" href="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-270x270.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+  /* ── Tab bar ── */
+  .tab-bar { display: flex; gap: 2px; background: var(--cream-dark); padding: 4px; border-radius: 12px; margin-bottom: 16px; width: fit-content; flex-wrap: wrap; }
+  .tab-btn {
+    border: 0; background: transparent; padding: 8px 16px; border-radius: 9px;
+    font-size: 12.5px; font-weight: 500; color: var(--ink-soft); cursor: pointer; transition: all .15s; white-space: nowrap;
+  }
+  .tab-btn.active { background: #fff; color: var(--green); font-weight: 600; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
+  .tab-btn .count { margin-left: 5px; background: var(--cream-darker); padding: 1px 6px; border-radius: 999px; font-size: 11px; }
+  .tab-btn.active .count { background: rgba(27,59,47,.1); }
+
+  /* ── Search / filter row ── */
+  .filter-row { display: flex; gap: 10px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+  .filter-row input[type="date"] { padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; font: inherit; font-size: 12.5px; color: var(--ink); background: #fff; }
+  .filter-row select { padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; font: inherit; font-size: 12.5px; color: var(--ink); background: #fff; }
+
+  /* ── Table extras ── */
+  .flag-emoji { font-size: 17px; line-height: 1; vertical-align: middle; }
+  .order-id-cell { display: flex; flex-direction: column; gap: 2px; }
+  .order-id-cell .date-sub { font-size: 10px; color: var(--ink-mute); font-family: 'JetBrains Mono', monospace; }
+  .action-link { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 500; color: var(--green); text-decoration: none; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--line); background: #fff; cursor: pointer; transition: background .12s; white-space: nowrap; }
+  .action-link:hover { background: var(--cream); }
+  .action-delivered { font-size: 13px; color: var(--success); font-weight: 700; }
+  .action-cancelled { font-size: 12px; color: var(--ink-mute); }
+
+  /* ── Empty state ── */
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--ink-mute); }
+  .empty-state p { font-size: 13px; margin-top: 6px; }
+
+  /* ── Pagination ── */
+  .pagination { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; font-size: 12.5px; color: var(--ink-mute); border-top: 1px solid var(--line-soft); }
+  .page-btns { display: flex; gap: 4px; }
+  .page-btn { border: 1px solid var(--line); background: #fff; padding: 5px 12px; border-radius: 7px; cursor: pointer; font-size: 12px; font-weight: 500; color: var(--ink-soft); transition: all .12s; }
+  .page-btn.active { background: var(--green); color: #fff; border-color: var(--green); }
+  .page-btn:disabled { opacity: .35; cursor: default; }
+</style>
+</head>
+<body class="app">
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar light">
+  <div class="brand">
+    <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-e1693969421521.png" alt="DHTC">
+    <div class="brand-text"><strong>DHTC</strong><span>Seller Studio</span></div>
+  </div>
+  <div class="store-card">
+    <span class="store-badge">★ GOLD TIER</span>
+    <h3>HTX Cà Phê Hữu Cơ Đắk Lắk</h3>
+    <div class="store-meta">M008 · Tây Nguyên · <span data-vi>Đã xác minh</span><span data-en>Verified</span></div>
+    <div class="store-stats">
+      <div><span data-vi>SKU</span><span data-en>SKUs</span><strong>8</strong></div>
+      <div><span data-vi>Đánh giá</span><span data-en>Rating</span><strong>4.85★</strong></div>
+    </div>
+  </div>
+  <nav class="menu">
+    <div class="menu-group" data-vi>Bán hàng</div><div class="menu-group" data-en>Selling</div>
+    <a href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg><span data-vi>Bảng điều khiển</span><span data-en>Dashboard</span></a>
+    <a href="products.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg><span data-vi>Sản phẩm của tôi</span><span data-en>My products</span><span class="pill">8</span></a>
+    <a class="active" href="orders.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l3 12h11l2-8H6"/></svg><span data-vi>Đơn hàng</span><span data-en>Orders</span><span class="pill">14</span></a>
+    <a href="promotions.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 3h5v5"/><path d="M21 3 9 15"/></svg><span data-vi>Khuyến mãi</span><span data-en>Promotions</span></a>
+    <div class="menu-group" data-vi>Tài chính</div><div class="menu-group" data-en>Finance</div>
+    <a href="wallet.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg><span data-vi>Ví &amp; rút tiền</span><span data-en>Wallet &amp; payout</span></a>
+    <div class="menu-group" data-vi>Vận chuyển</div><div class="menu-group" data-en>Shipping</div>
+    <a href="shipping.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><span data-vi>DHL Waybill</span><span data-en>DHL Waybill</span></a>
+    <div class="menu-group" data-vi>Cài đặt</div><div class="menu-group" data-en>Settings</div>
+    <a href="profile.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span data-vi>Hồ sơ gian hàng</span><span data-en>Store profile</span></a>
+  </nav>
+  <a class="back-link" href="../index.html">← <span data-vi>Trang chính</span><span data-en>Home</span></a>
+</aside>
+
+<!-- ── MAIN ── -->
+<main>
+  <div class="breadcrumb">
+    <a href="../index.html">DHTC</a><span>›</span>
+    <a href="index.html">Seller Studio</a><span>›</span>
+    <span data-vi>Đơn hàng</span><span data-en>Orders</span>
+  </div>
+
+  <div class="topbar">
+    <h1>
+      <span data-vi>Đơn hàng</span><span data-en>Orders</span>
+      <small><span data-vi>312 đơn tháng 5 · 14 cần xác nhận</span><span data-en>312 orders in May · 14 need confirmation</span></small>
+    </h1>
+    <div class="topbar-right">
+      <div class="lang-pill">
+        <button onclick="setLang('vi',this)" class="active">VI</button>
+        <button onclick="setLang('en',this)">EN</button>
+      </div>
+      <button class="icon-btn" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="dot"></span>
+      </button>
+      <button class="btn btn-ghost btn-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span data-vi>Xuất Excel</span><span data-en>Export Excel</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label"><span data-vi>Tổng đơn T5</span><span data-en>Total orders May</span></div>
+      <div class="kpi-value">312</div>
+      <div class="kpi-delta up">▲ 8.1%</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><span data-vi>Doanh thu T5</span><span data-en>Revenue May</span></div>
+      <div class="kpi-value" style="font-size:26px">₫92.4M</div>
+      <div class="kpi-delta up">▲ 12.4%</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><span data-vi>Đã hoàn thành</span><span data-en>Completed</span></div>
+      <div class="kpi-value" style="color:var(--success)">298</div>
+      <div class="kpi-delta up">▲ <span data-vi>tốt</span><span data-en>good</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><span data-vi>Hoàn hàng</span><span data-en>Returns</span></div>
+      <div class="kpi-value" style="color:var(--danger);font-size:32px">2</div>
+      <div class="kpi-delta down">0.64% <span data-vi>tỷ lệ hoàn</span><span data-en>return rate</span></div>
+    </div>
+  </div>
+
+  <!-- Tab filter -->
+  <div class="tab-bar" role="tablist">
+    <button class="tab-btn active" onclick="filterTab('all',this)" role="tab">
+      <span data-vi>Tất cả</span><span data-en>All</span><span class="count">312</span>
+    </button>
+    <button class="tab-btn" onclick="filterTab('pending',this)" role="tab">
+      <span data-vi>Chờ xử lý</span><span data-en>Pending</span><span class="count">14</span>
+    </button>
+    <button class="tab-btn" onclick="filterTab('processing',this)" role="tab">
+      <span data-vi>Đang xử lý</span><span data-en>Processing</span><span class="count">18</span>
+    </button>
+    <button class="tab-btn" onclick="filterTab('shipped',this)" role="tab">
+      <span data-vi>Đang vận chuyển</span><span data-en>Shipped</span><span class="count">18</span>
+    </button>
+    <button class="tab-btn" onclick="filterTab('delivered',this)" role="tab">
+      <span data-vi>Hoàn thành</span><span data-en>Completed</span><span class="count">278</span>
+    </button>
+    <button class="tab-btn" onclick="filterTab('cancelled',this)" role="tab">
+      <span data-vi>Đã hủy</span><span data-en>Cancelled</span><span class="count">2</span>
+    </button>
+  </div>
+
+  <!-- Search + filter bar -->
+  <div class="filter-row">
+    <div class="search-box" style="min-width:240px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="orderSearch" placeholder="Tìm mã đơn, khách hàng / Search…" oninput="searchOrders()">
+    </div>
+    <input type="date" value="2026-05-01" title="From date">
+    <input type="date" value="2026-05-15" title="To date">
+    <select>
+      <option data-vi>Tất cả quốc gia</option><option data-en>All countries</option>
+      <option>🇻🇳 Việt Nam</option>
+      <option>🇯🇵 Nhật Bản</option>
+      <option>🇰🇷 Hàn Quốc</option>
+      <option>🇸🇬 Singapore</option>
+      <option>🇺🇸 USA</option>
+      <option>🇩🇪 Germany</option>
+    </select>
+  </div>
+
+  <!-- Orders table -->
+  <div class="panel" style="padding:0">
+    <div id="noOrders" class="empty-state" style="display:none">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--line)" stroke-width="1.5" style="width:40px;height:40px;margin:0 auto"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l3 12h11l2-8H6"/></svg>
+      <p data-vi>Không có đơn hàng nào phù hợp.</p>
+      <p data-en>No matching orders found.</p>
+    </div>
+    <div class="table-wrap">
+      <table id="ordersTable">
+        <thead>
+          <tr>
+            <th><span data-vi>Mã đơn</span><span data-en>Order ID</span></th>
+            <th><span data-vi>Sản phẩm</span><span data-en>Product</span></th>
+            <th><span data-vi>Khách hàng</span><span data-en>Customer</span></th>
+            <th><span data-vi>Số lượng</span><span data-en>Qty</span></th>
+            <th><span data-vi>Tổng tiền</span><span data-en>Total</span></th>
+            <th><span data-vi>Quốc gia</span><span data-en>Country</span></th>
+            <th><span data-vi>Trạng thái</span><span data-en>Status</span></th>
+            <th><span data-vi>Thao tác</span><span data-en>Action</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-status="processing">
+            <td>
+              <div class="order-id-cell">
+                <span class="mono">DHTC-24050001</span>
+                <span class="date-sub">15/05/2026</span>
+              </div>
+            </td>
+            <td><span data-vi>Cà phê hữu cơ ×2</span><span data-en>Organic coffee ×2</span></td>
+            <td>Nguyễn Văn A</td>
+            <td>2</td>
+            <td style="font-family:'Fraunces',serif;font-size:15px;color:var(--green)">₫570,000</td>
+            <td><span class="flag-emoji">🇻🇳</span></td>
+            <td><span class="tag processing" data-vi>Đang xử lý</span><span class="tag processing" data-en>Processing</span></td>
+            <td>
+              <div style="display:flex;gap:5px;align-items:center">
+                <a href="order-detail.html" class="action-link">
+                  <span data-vi>Xác nhận</span><span data-en>Confirm</span>
+                </a>
+                <a href="order-detail.html" class="action-link" style="border-color:transparent;color:var(--ink-mute)">
+                  <span data-vi>Chi tiết</span><span data-en>Detail</span>
+                </a>
+              </div>
+            </td>
+          </tr>
+          <tr data-status="shipped">
+            <td>
+              <div class="order-id-cell">
+                <span class="mono">DHTC-24050002</span>
+                <span class="date-sub">15/05/2026</span>
+              </div>
+            </td>
+            <td><span data-vi>Bột cacao hữu cơ ×1</span><span data-en>Organic cacao powder ×1</span></td>
+            <td>Yuki Tanaka</td>
+            <td>1</td>
+            <td style="font-family:'Fraunces',serif;font-size:15px;color:var(--green)">₫220,000</td>
+            <td><span class="flag-emoji">🇯🇵</span></td>
+            <td><span class="tag shipped" data-vi>Đang vận chuyển</span><span class="tag shipped" data-en>Shipped</span></td>
+            <td>
+              <a href="../customer/tracking.html" class="action-link">
+                <span data-vi>Theo dõi</span><span data-en>Track</span>
+              </a>
+            </td>
+          </tr>
+          <tr data-status="delivered">
+            <td>
+              <div class="order-id-cell">
+                <span class="mono">DHTC-24050003</span>
+                <span class="date-sub">14/05/2026</span>
+              </div>
+            </td>
+            <td><span data-vi>Hạt điều rang muối ×2</span><span data-en>Salted cashews ×2</span></td>
+            <td>Park Ji Ho</td>
+            <td>2</td>
+            <td style="font-family:'Fraunces',serif;font-size:15px;color:var(--green)">₫390,000</td>
+            <td><span class="flag-emoji">🇰🇷</span></td>
+            <td><span class="tag verified" data-vi>Đã giao</span><span class="tag verified" data-en>Delivered</span></td>
+            <td><span class="action-delivered">✓</span></td>
+          </tr>
+          <tr data-status="pending">
+            <td>
+              <div class="order-id-cell">
+                <span class="mono">DHTC-24050004</span>
+                <span class="date-sub">14/05/2026</span>
+              </div>
+            </td>
+            <td><span data-vi>Mắc-ca sấy lạnh ×1</span><span data-en>Freeze-dried macadamia ×1</span></td>
+            <td>Wei Chen</td>
+            <td>1</td>
+            <td style="font-family:'Fraunces',serif;font-size:15px;color:var(--green)">₫420,000</td>
+            <td><span class="flag-emoji">🇸🇬</span></td>
+            <td><span class="tag pending" data-vi>Chờ xác nhận</span><span class="tag pending" data-en>Pending</span></td>
+            <td>
+              <a href="order-detail.html" class="action-link">
+                <span data-vi>Xác nhận</span><span data-en>Confirm</span>
+              </a>
+            </td>
+          </tr>
+          <tr data-status="delivered">
+            <td>
+              <div class="order-id-cell">
+                <span class="mono">DHTC-24050005</span>
+                <span class="date-sub">13/05/2026</span>
+              </div>
+            </td>
+            <td><span data-vi>Cà phê Cold Brew ×3</span><span data-en>Cold Brew Coffee ×3</span></td>
+            <td>Lê Thị Hoa</td>
+            <td>3</td>
+            <td style="font-family:'Fraunces',serif;font-size:15px;color:var(--green)">₫495,000</td>
+            <td><span class="flag-emoji">🇻🇳</span></td>
+            <td><span class="tag verified" data-vi>Đã giao</span><span class="tag verified" data-en>Delivered</span></td>
+            <td><span class="action-delivered">✓</span></td>
+          </tr>
+          <tr data-status="shipped">
+            <td>
+              <div class="order-id-cell">
+                <span class="mono">DHTC-24050006</span>
+                <span class="date-sub">13/05/2026</span>
+              </div>
+            </td>
+            <td><span data-vi>Cacao Nibs hữu cơ ×1</span><span data-en>Organic Cacao Nibs ×1</span></td>
+            <td>Kenji Yamamoto</td>
+            <td>1</td>
+            <td style="font-family:'Fraunces',serif;font-size:15px;color:var(--green)">₫280,000</td>
+            <td><span class="flag-emoji">🇯🇵</span></td>
+            <td><span class="tag shipped" data-vi>Đang vận chuyển</span><span class="tag shipped" data-en>Shipped</span></td>
+            <td>
+              <a href="../customer/tracking.html" class="action-link">
+                <span data-vi>Theo dõi</span><span data-en>Track</span>
+              </a>
+            </td>
+          </tr>
+          <tr data-status="delivered">
+            <td>
+              <div class="order-id-cell">
+                <span class="mono">DHTC-24050007</span>
+                <span class="date-sub">12/05/2026</span>
+              </div>
+            </td>
+            <td><span data-vi>Espresso Blend 500g ×1</span><span data-en>Espresso Blend 500g ×1</span></td>
+            <td>Trần Minh Khoa</td>
+            <td>1</td>
+            <td style="font-family:'Fraunces',serif;font-size:15px;color:var(--green)">₫320,000</td>
+            <td><span class="flag-emoji">🇻🇳</span></td>
+            <td><span class="tag verified" data-vi>Đã giao</span><span class="tag verified" data-en>Delivered</span></td>
+            <td><span class="action-delivered">✓</span></td>
+          </tr>
+          <tr data-status="processing">
+            <td>
+              <div class="order-id-cell">
+                <span class="mono">DHTC-24050008</span>
+                <span class="date-sub">12/05/2026</span>
+              </div>
+            </td>
+            <td><span data-vi>Hạt điều rang muối ×2</span><span data-en>Salted cashews ×2</span></td>
+            <td>Sarah Kim</td>
+            <td>2</td>
+            <td style="font-family:'Fraunces',serif;font-size:15px;color:var(--green)">₫390,000</td>
+            <td><span class="flag-emoji">🇺🇸</span></td>
+            <td><span class="tag processing" data-vi>Đang xử lý</span><span class="tag processing" data-en>Processing</span></td>
+            <td>
+              <a href="order-detail.html" class="action-link">
+                <span data-vi>Xác nhận</span><span data-en>Confirm</span>
+              </a>
+            </td>
+          </tr>
+          <tr data-status="delivered">
+            <td>
+              <div class="order-id-cell">
+                <span class="mono">DHTC-24050009</span>
+                <span class="date-sub">11/05/2026</span>
+              </div>
+            </td>
+            <td><span data-vi>Mắc-ca tươi nguyên vỏ ×1</span><span data-en>Fresh macadamia in shell ×1</span></td>
+            <td>Nguyen Thi Lan</td>
+            <td>1</td>
+            <td style="font-family:'Fraunces',serif;font-size:15px;color:var(--green)">₫380,000</td>
+            <td><span class="flag-emoji">🇻🇳</span></td>
+            <td><span class="tag verified" data-vi>Đã giao</span><span class="tag verified" data-en>Delivered</span></td>
+            <td><span class="action-delivered">✓</span></td>
+          </tr>
+          <tr data-status="cancelled">
+            <td>
+              <div class="order-id-cell">
+                <span class="mono">DHTC-24050010</span>
+                <span class="date-sub">11/05/2026</span>
+              </div>
+            </td>
+            <td><span data-vi>Cà phê hữu cơ rang xay ×1</span><span data-en>Organic roasted coffee ×1</span></td>
+            <td>Tomoko Sato</td>
+            <td>1</td>
+            <td style="font-family:'Fraunces',serif;font-size:15px;color:var(--ink-mute);text-decoration:line-through">₫285,000</td>
+            <td><span class="flag-emoji">🇯🇵</span></td>
+            <td><span class="tag error" data-vi>Đã hủy</span><span class="tag error" data-en>Cancelled</span></td>
+            <td><span class="action-cancelled">—</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination">
+      <span><span data-vi>Hiển thị</span><span data-en>Showing</span> 1–10 <span data-vi>trong</span><span data-en>of</span> 312 <span data-vi>đơn hàng</span><span data-en>orders</span></span>
+      <div class="page-btns">
+        <button class="page-btn" disabled>‹</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <span style="padding:5px 4px;color:var(--ink-mute)">…</span>
+        <button class="page-btn">32</button>
+        <button class="page-btn">›</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+/* ── Lang ── */
+function setLang(lang, btn) {
+  document.body.classList.toggle('en', lang === 'en');
+  document.querySelectorAll('.lang-pill button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  localStorage.setItem('dhtc-lang', lang);
+}
+if (localStorage.getItem('dhtc-lang') === 'en') {
+  document.body.classList.add('en');
+  document.querySelectorAll('.lang-pill button').forEach((b,i) => b.classList.toggle('active', i === 1));
+}
+
+/* ── Tab filter ── */
+function filterTab(status, btn) {
+  // Update tab active state
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  // Filter rows
+  const rows = document.querySelectorAll('#ordersTable tbody tr');
+  let visibleCount = 0;
+  rows.forEach(row => {
+    const show = status === 'all' || row.dataset.status === status;
+    row.style.display = show ? '' : 'none';
+    if (show) visibleCount++;
+  });
+
+  // Show/hide empty state
+  document.getElementById('noOrders').style.display = visibleCount === 0 ? 'block' : 'none';
+}
+
+/* ── Search ── */
+function searchOrders() {
+  const q = document.getElementById('orderSearch').value.toLowerCase();
+  const rows = document.querySelectorAll('#ordersTable tbody tr');
+  let visibleCount = 0;
+  rows.forEach(row => {
+    const text = row.textContent.toLowerCase();
+    const show = text.includes(q);
+    row.style.display = show ? '' : 'none';
+    if (show) visibleCount++;
+  });
+  document.getElementById('noOrders').style.display = visibleCount === 0 ? 'block' : 'none';
+}
+</script>
+</body>
+</html>
