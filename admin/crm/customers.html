@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hồ sơ khách hàng · DHTC CRM</title>
+<link rel="icon" href="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-270x270.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/styles.css">
+<style>
+  /* ── Source badges ── */
+  .source-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+  .sb-messenger { background: rgba(88,101,242,.12); color: #5865f2; }
+  .sb-web       { background: rgba(45,127,94,.12);  color: #2d7f5e; }
+  .sb-fanpage   { background: rgba(24,119,242,.12); color: #1877f2; }
+  .sb-zalo      { background: rgba(0,120,240,.12);  color: #0078f0; }
+
+  /* ── Customer cell ── */
+  .cust-av {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .cust-cell { display: flex; align-items: center; gap: 9px; }
+  .cust-info strong { display: block; font-size: 12.5px; font-weight: 600; line-height: 1.2; }
+  .cust-info span   { font-size: 10.5px; color: var(--ink-mute); }
+
+  /* ── Demographics bars ── */
+  .demo-list  { display: flex; flex-direction: column; gap: 9px; }
+  .demo-row   { display: flex; align-items: center; gap: 8px; }
+  .demo-label { font-size: 12px; font-weight: 500; min-width: 80px; }
+  .demo-bar-bg   { flex: 1; height: 5px; background: var(--cream-dark); border-radius: 999px; overflow: hidden; }
+  .demo-bar-fill { height: 100%; border-radius: 999px; background: var(--green); }
+  .demo-pct { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--ink-mute); min-width: 32px; text-align: right; }
+
+  /* ── Filter panel ── */
+  .filter-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+  .filter-grid select {
+    padding: 7px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    font: inherit;
+    font-size: 12.5px;
+    color: var(--ink);
+    outline: none;
+    cursor: pointer;
+    transition: border-color .15s;
+  }
+  .filter-grid select:focus { border-color: var(--green); }
+
+  /* ── Spend: VIP green ── */
+  .spend-vip { font-family: 'Fraunces', serif; color: var(--green); font-weight: 500; }
+  .spend-normal { font-family: 'Fraunces', serif; color: var(--ink-soft); font-weight: 400; }
+
+  /* ── Orders count ── */
+  .ord-count { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; }
+
+  /* ── Last seen ── */
+  .last-seen { font-size: 11px; color: var(--ink-mute); }
+
+  /* ── Intent text ── */
+  .intent-txt { font-size: 12px; white-space: nowrap; }
+
+  /* ── Demo panel mini heading ── */
+  .demo-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: 10px;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .table-wrap table { min-width: 820px; }
+    .row.thirds { grid-template-columns: 1fr; }
+    .filter-grid { gap: 8px; }
+  }
+  @media (max-width: 520px) {
+    .kpi-value { font-size: 24px; }
+    .filter-grid select { font-size: 12px; }
+  }
+</style>
+</head>
+<body class="app">
+
+<!-- ══════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="brand">
+    <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-e1693969421521.png" alt="DHTC">
+    <div class="brand-text">
+      <strong>DHTC</strong>
+      <span>Admin Console</span>
+    </div>
+  </div>
+
+  <nav class="menu">
+    <!-- Tổng quan -->
+    <div class="menu-group" data-vi>Tổng quan</div>
+    <div class="menu-group" data-en>Overview</div>
+
+    <a href="../index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <rect x="3" y="3" width="7" height="9"/>
+        <rect x="14" y="3" width="7" height="5"/>
+        <rect x="14" y="12" width="7" height="9"/>
+        <rect x="3" y="16" width="7" height="5"/>
+      </svg>
+      <span data-vi>Dashboard</span><span data-en>Dashboard</span>
+    </a>
+    <a href="../reports.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>
+      </svg>
+      <span data-vi>Báo cáo doanh thu</span><span data-en>Revenue reports</span>
+    </a>
+
+    <!-- Quản lý -->
+    <div class="menu-group" data-vi>Quản lý</div>
+    <div class="menu-group" data-en>Management</div>
+
+    <a href="../merchants.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+      </svg>
+      <span data-vi>Tiểu thương</span><span data-en>Merchants</span>
+      <span class="pill">287</span>
+    </a>
+    <a href="../products.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+      </svg>
+      <span data-vi>Sản phẩm</span><span data-en>Products</span>
+      <span class="pill">15k</span>
+    </a>
+    <a href="../approvals.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M9 11l3 3L22 4"/>
+        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+      </svg>
+      <span data-vi>Phê duyệt</span><span data-en>Approvals</span>
+      <span class="pill">8</span>
+    </a>
+    <a href="../orders.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/>
+        <path d="M3 4h2l3 12h11l2-8H6"/>
+      </svg>
+      <span data-vi>Đơn hàng</span><span data-en>Orders</span>
+    </a>
+
+    <!-- CRM & Khách hàng -->
+    <div class="menu-group" data-vi>CRM &amp; Khách hàng</div>
+    <div class="menu-group" data-en>CRM &amp; Customers</div>
+
+    <a href="customers.html" class="active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+      <span data-vi>Hồ sơ khách hàng</span><span data-en>Customer profiles</span>
+      <span class="pill">4.8k</span>
+    </a>
+    <a href="conversations.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      <span data-vi>Hội thoại &amp; Intent</span><span data-en>Conversations</span>
+    </a>
+    <a href="behavior.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </svg>
+      <span data-vi>Hành vi &amp; Session</span><span data-en>Behavior &amp; Session</span>
+    </a>
+
+    <!-- Vận hành -->
+    <div class="menu-group" data-vi>Vận hành</div>
+    <div class="menu-group" data-en>Operations</div>
+
+    <a href="../integrations.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+      <span data-vi>Tích hợp API</span><span data-en>API integrations</span>
+    </a>
+    <a href="../settings.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      <span data-vi>Quyền &amp; cài đặt</span><span data-en>Permissions &amp; settings</span>
+    </a>
+  </nav>
+
+  <div class="user-card">
+    <div class="avatar">N</div>
+    <div class="user-info">
+      <strong>Nguyễn Anh Tú</strong>
+      <span>Super Admin · DHTC</span>
+    </div>
+  </div>
+  <a class="back-link" href="../../index.html">
+    ← <span data-vi>Trang chính</span><span data-en>Home</span>
+  </a>
+</aside>
+
+<!-- ══════════════════════════════════════
+     MAIN
+══════════════════════════════════════ -->
+<main>
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="../../index.html">DHTC</a><span>›</span>
+    <a href="../index.html"><span data-vi>Admin</span><span data-en>Admin</span></a><span>›</span>
+    <a href="#"><span data-vi>CRM</span><span data-en>CRM</span></a><span>›</span>
+    <span data-vi>Hồ sơ khách hàng</span><span data-en>Customer profiles</span>
+  </div>
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <h1>
+      <span data-vi>Hồ sơ khách hàng</span><span data-en>Customer Profiles</span>
+      <small>
+        <span data-vi>Cập nhật lúc 14:35 · Hôm nay 19/05/2026</span>
+        <span data-en>Updated 14:35 · Today 19/05/2026</span>
+      </small>
+    </h1>
+    <div class="topbar-right">
+      <div class="lang-pill">
+        <button onclick="setLang('vi',this)" class="active">VI</button>
+        <button onclick="setLang('en',this)">EN</button>
+      </div>
+      <button class="icon-btn" aria-label="Thông báo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="dot"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- KPI Strip -->
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label">
+        <span data-vi>Tổng khách hàng</span><span data-en>Total customers</span>
+      </div>
+      <div class="kpi-value">4,847</div>
+      <div class="kpi-delta up">
+        ▲ <span data-vi>134 hôm nay</span><span data-en>134 today</span>
+      </div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">
+        <span data-vi>Khách mới tháng 5</span><span data-en>New customers May</span>
+      </div>
+      <div class="kpi-value">847</div>
+      <div class="kpi-delta up">
+        ▲ 18.3% <span data-vi>so tháng trước</span><span data-en>vs last month</span>
+      </div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">
+        <span data-vi>Tỉ lệ quay lại</span><span data-en>Return rate</span>
+      </div>
+      <div class="kpi-value">38.2<small>%</small></div>
+      <div class="kpi-delta up">▲ 4.1%</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">
+        <span data-vi>LTV trung bình</span><span data-en>Avg LTV</span>
+      </div>
+      <div class="kpi-value">₫1.24<small>M</small></div>
+      <div class="kpi-delta up">
+        ▲ ₫84K <span data-vi>vs tháng trước</span><span data-en>vs last month</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter panel -->
+  <div class="panel" style="margin-bottom:16px;">
+    <div class="filter-grid">
+      <div class="search-box" style="flex:1; min-width:220px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" placeholder="Tìm tên, email, SĐT…" aria-label="Tìm kiếm khách hàng">
+      </div>
+
+      <select aria-label="Lọc nguồn">
+        <option value="">
+          <span data-vi>Nguồn — Tất cả</span><span data-en>Source — All</span>
+        </option>
+        <option value="messenger">Messenger</option>
+        <option value="web">Web Store</option>
+        <option value="fanpage">Fanpage Checkin</option>
+        <option value="zalo">Zalo</option>
+      </select>
+
+      <select aria-label="Lọc quốc gia">
+        <option value="">
+          <span data-vi>Quốc gia — Tất cả</span><span data-en>Country — All</span>
+        </option>
+        <option value="vn">🇻🇳 VN</option>
+        <option value="jp">🇯🇵 JP</option>
+        <option value="kr">🇰🇷 KR</option>
+        <option value="us">🇺🇸 US</option>
+        <option value="sg">🇸🇬 SG</option>
+      </select>
+
+      <select aria-label="Lọc intent chính">
+        <option value="">
+          <span data-vi>Intent chính — Tất cả</span><span data-en>Intent — All</span>
+        </option>
+        <option value="find">🔍 Tìm sản phẩm</option>
+        <option value="price">💰 Hỏi giá &amp; KM</option>
+        <option value="order">📦 Tra đơn hàng</option>
+        <option value="shipping">🚚 Vận chuyển</option>
+        <option value="complaint">😤 Khiếu nại</option>
+      </select>
+
+      <select aria-label="Lọc trạng thái">
+        <option value="">
+          <span data-vi>Trạng thái — Tất cả</span><span data-en>Status — All</span>
+        </option>
+        <option value="vip">VIP</option>
+        <option value="active">
+          <span data-vi>Đã mua hàng</span><span data-en>Purchased</span>
+        </option>
+        <option value="lead">Lead (chưa mua)</option>
+        <option value="inactive">
+          <span data-vi>Không hoạt động</span><span data-en>Inactive</span>
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Demographics row -->
+  <div class="row thirds" style="margin-bottom:16px;">
+
+    <!-- Theo quốc gia -->
+    <div class="panel" style="margin-bottom:0;">
+      <div class="demo-section-label">
+        <span data-vi>Theo quốc gia</span><span data-en>By country</span>
+      </div>
+      <div class="demo-list">
+        <div class="demo-row">
+          <span class="demo-label">🇻🇳 VN</span>
+          <div class="demo-bar-bg"><div class="demo-bar-fill" style="width:68%"></div></div>
+          <span class="demo-pct">68%</span>
+        </div>
+        <div class="demo-row">
+          <span class="demo-label">🇯🇵 JP</span>
+          <div class="demo-bar-bg"><div class="demo-bar-fill" style="width:12%"></div></div>
+          <span class="demo-pct">12%</span>
+        </div>
+        <div class="demo-row">
+          <span class="demo-label">🇰🇷 KR</span>
+          <div class="demo-bar-bg"><div class="demo-bar-fill" style="width:8%"></div></div>
+          <span class="demo-pct">8%</span>
+        </div>
+        <div class="demo-row">
+          <span class="demo-label">🇸🇬 SG</span>
+          <div class="demo-bar-bg"><div class="demo-bar-fill" style="width:5%"></div></div>
+          <span class="demo-pct">5%</span>
+        </div>
+        <div class="demo-row">
+          <span class="demo-label">🇺🇸 US</span>
+          <div class="demo-bar-bg"><div class="demo-bar-fill" style="width:4%"></div></div>
+          <span class="demo-pct">4%</span>
+        </div>
+        <div class="demo-row">
+          <span class="demo-label" style="color:var(--ink-mute)">
+            <span data-vi>Khác</span><span data-en>Other</span>
+          </span>
+          <div class="demo-bar-bg"><div class="demo-bar-fill" style="width:3%; background:var(--ink-mute);"></div></div>
+          <span class="demo-pct">3%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Theo nguồn -->
+    <div class="panel" style="margin-bottom:0;">
+      <div class="demo-section-label">
+        <span data-vi>Theo nguồn</span><span data-en>By source</span>
+      </div>
+      <div class="demo-list">
+        <div class="demo-row">
+          <span class="demo-label">Messenger</span>
+          <div class="demo-bar-bg"><div class="demo-bar-fill" style="width:52%; background:#5865f2;"></div></div>
+          <span class="demo-pct">52%</span>
+        </div>
+        <div class="demo-row">
+          <span class="demo-label">Web Store</span>
+          <div class="demo-bar-bg"><div class="demo-bar-fill" style="width:31%; background:#2d7f5e;"></div></div>
+          <span class="demo-pct">31%</span>
+        </div>
+        <div class="demo-row">
+          <span class="demo-label">Fanpage</span>
+          <div class="demo-bar-bg"><div class="demo-bar-fill" style="width:17%; background:#1877f2;"></div></div>
+          <span class="demo-pct">17%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Theo thiết bị -->
+    <div class="panel" style="margin-bottom:0;">
+      <div class="demo-section-label">
+        <span data-vi>Theo thiết bị</span><span data-en>By device</span>
+      </div>
+      <div class="demo-list">
+        <div class="demo-row">
+          <span class="demo-label">
+            <span data-vi>Mobile</span><span data-en>Mobile</span>
+          </span>
+          <div class="demo-bar-bg"><div class="demo-bar-fill" style="width:74%"></div></div>
+          <span class="demo-pct">74%</span>
+        </div>
+        <div class="demo-row">
+          <span class="demo-label">
+            <span data-vi>Desktop</span><span data-en>Desktop</span>
+          </span>
+          <div class="demo-bar-bg"><div class="demo-bar-fill" style="width:22%; background:var(--gold);"></div></div>
+          <span class="demo-pct">22%</span>
+        </div>
+        <div class="demo-row">
+          <span class="demo-label">
+            <span data-vi>Tablet</span><span data-en>Tablet</span>
+          </span>
+          <div class="demo-bar-bg"><div class="demo-bar-fill" style="width:4%; background:var(--ink-mute);"></div></div>
+          <span class="demo-pct">4%</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /row.thirds -->
+
+  <!-- Customer table -->
+  <div class="panel">
+    <div class="panel-head">
+      <h2>
+        <span data-vi>Danh sách khách hàng (4,847)</span>
+        <span data-en>Customer list (4,847)</span>
+      </h2>
+      <a href="#" class="panel-action" onclick="return false;">
+        <span data-vi>Xuất CSV →</span><span data-en>Export CSV →</span>
+      </a>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th><span data-vi>Khách hàng</span><span data-en>Customer</span></th>
+            <th><span data-vi>Nguồn</span><span data-en>Source</span></th>
+            <th><span data-vi>Quốc gia</span><span data-en>Country</span></th>
+            <th><span data-vi>Intent chính</span><span data-en>Main intent</span></th>
+            <th><span data-vi>Đơn hàng</span><span data-en>Orders</span></th>
+            <th><span data-vi>Tổng chi tiêu</span><span data-en>Total spend</span></th>
+            <th><span data-vi>Lần cuối</span><span data-en>Last seen</span></th>
+            <th><span data-vi>Trạng thái</span><span data-en>Status</span></th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- 1. Lê Văn Hùng — VIP -->
+          <tr>
+            <td>
+              <div class="cust-cell">
+                <div class="cust-av" style="background:#2d7f5e;">LH</div>
+                <div class="cust-info">
+                  <strong>Lê Văn Hùng</strong>
+                  <span>lv.hung@gmail.com</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="source-badge sb-messenger">Messenger</span></td>
+            <td><span class="intent-txt">🇻🇳 VN</span></td>
+            <td><span class="intent-txt">📦 <span data-vi>Tra đơn hàng</span><span data-en>Track order</span></span></td>
+            <td><span class="ord-count">8</span></td>
+            <td><span class="spend-vip">₫3.12M</span></td>
+            <td><span class="last-seen">14:25 <span data-vi>hôm nay</span><span data-en>today</span></span></td>
+            <td><span class="tag gold">VIP</span></td>
+          </tr>
+
+          <!-- 2. Phạm Minh Đức — VIP -->
+          <tr>
+            <td>
+              <div class="cust-cell">
+                <div class="cust-av" style="background:#3b6cb8;">PĐ</div>
+                <div class="cust-info">
+                  <strong>Phạm Minh Đức</strong>
+                  <span>p.duc@gmail.com</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="source-badge sb-web">Web Store</span></td>
+            <td><span class="intent-txt">🇻🇳 VN</span></td>
+            <td><span class="intent-txt">🚚 <span data-vi>Vận chuyển</span><span data-en>Shipping</span></span></td>
+            <td><span class="ord-count">5</span></td>
+            <td><span class="spend-vip">₫2.34M</span></td>
+            <td><span class="last-seen">13:58 <span data-vi>hôm nay</span><span data-en>today</span></span></td>
+            <td><span class="tag gold">VIP</span></td>
+          </tr>
+
+          <!-- 3. Yuki Tanaka — VIP -->
+          <tr>
+            <td>
+              <div class="cust-cell">
+                <div class="cust-av" style="background:#7c4dbc;">YT</div>
+                <div class="cust-info">
+                  <strong>Yuki Tanaka</strong>
+                  <span>y.tanaka@jp.com</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="source-badge sb-web">Web Store</span></td>
+            <td><span class="intent-txt">🇯🇵 JP</span></td>
+            <td><span class="intent-txt">🔍 <span data-vi>Tìm sản phẩm</span><span data-en>Find product</span></span></td>
+            <td><span class="ord-count">6</span></td>
+            <td><span class="spend-vip">₫2.18M</span></td>
+            <td><span class="last-seen">10:15 <span data-vi>hôm nay</span><span data-en>today</span></span></td>
+            <td><span class="tag gold">VIP</span></td>
+          </tr>
+
+          <!-- 4. Nguyễn Thị Mai — Hoạt động -->
+          <tr>
+            <td>
+              <div class="cust-cell">
+                <div class="cust-av" style="background:#c96a20;">NM</div>
+                <div class="cust-info">
+                  <strong>Nguyễn Thị Mai</strong>
+                  <span>nt.mai@gmail.com</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="source-badge sb-messenger">Messenger</span></td>
+            <td><span class="intent-txt">🇻🇳 VN</span></td>
+            <td><span class="intent-txt">💰 <span data-vi>Hỏi giá</span><span data-en>Ask price</span></span></td>
+            <td><span class="ord-count">3</span></td>
+            <td><span class="spend-normal">₫1.71M</span></td>
+            <td><span class="last-seen">14:31 <span data-vi>hôm nay</span><span data-en>today</span></span></td>
+            <td><span class="tag verified"><span data-vi>Hoạt động</span><span data-en>Active</span></span></td>
+          </tr>
+
+          <!-- 5. Đặng Thị Lan — Hoạt động -->
+          <tr>
+            <td>
+              <div class="cust-cell">
+                <div class="cust-av" style="background:#8b4513;">ĐL</div>
+                <div class="cust-info">
+                  <strong>Đặng Thị Lan</strong>
+                  <span>dt.lan@gmail.com</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="source-badge sb-messenger">Messenger</span></td>
+            <td><span class="intent-txt">🇻🇳 VN</span></td>
+            <td><span class="intent-txt">🏷️ <span data-vi>Khuyến mãi</span><span data-en>Promotions</span></span></td>
+            <td><span class="ord-count">4</span></td>
+            <td><span class="spend-normal">₫1.48M</span></td>
+            <td><span class="last-seen">13:15 <span data-vi>hôm nay</span><span data-en>today</span></span></td>
+            <td><span class="tag verified"><span data-vi>Hoạt động</span><span data-en>Active</span></span></td>
+          </tr>
+
+          <!-- 6. Watanabe Yuki — Hoạt động -->
+          <tr>
+            <td>
+              <div class="cust-cell">
+                <div class="cust-av" style="background:#5865f2;">WY</div>
+                <div class="cust-info">
+                  <strong>Watanabe Yuki</strong>
+                  <span>w.yuki@jp.com</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="source-badge sb-messenger">Messenger</span></td>
+            <td><span class="intent-txt">🇯🇵 JP</span></td>
+            <td><span class="intent-txt">⭐ <span data-vi>Tư vấn</span><span data-en>Consult</span></span></td>
+            <td><span class="ord-count">2</span></td>
+            <td><span class="spend-normal">₫680K</span></td>
+            <td><span class="last-seen">13:30 <span data-vi>hôm nay</span><span data-en>today</span></span></td>
+            <td><span class="tag verified"><span data-vi>Hoạt động</span><span data-en>Active</span></span></td>
+          </tr>
+
+          <!-- 7. Wei Chen — Hoạt động -->
+          <tr>
+            <td>
+              <div class="cust-cell">
+                <div class="cust-av" style="background:#1877f2;">WC</div>
+                <div class="cust-info">
+                  <strong>Wei Chen</strong>
+                  <span>w.chen@sg.com</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="source-badge sb-fanpage">Fanpage</span></td>
+            <td><span class="intent-txt">🇸🇬 SG</span></td>
+            <td><span class="intent-txt">🔍 <span data-vi>Tìm sản phẩm</span><span data-en>Find product</span></span></td>
+            <td><span class="ord-count">2</span></td>
+            <td><span class="spend-normal">₫780K</span></td>
+            <td><span class="last-seen">11:30 <span data-vi>hôm nay</span><span data-en>today</span></span></td>
+            <td><span class="tag verified"><span data-vi>Hoạt động</span><span data-en>Active</span></span></td>
+          </tr>
+
+          <!-- 8. Bùi Ngọc Anh — Hoạt động -->
+          <tr>
+            <td>
+              <div class="cust-cell">
+                <div class="cust-av" style="background:#b23a4a;">BA</div>
+                <div class="cust-info">
+                  <strong>Bùi Ngọc Anh</strong>
+                  <span>bn.anh@gmail.com</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="source-badge sb-web">Web Store</span></td>
+            <td><span class="intent-txt">🇻🇳 VN</span></td>
+            <td><span class="intent-txt">😤 <span data-vi>Khiếu nại</span><span data-en>Complaint</span></span></td>
+            <td><span class="ord-count">3</span></td>
+            <td><span class="spend-normal">₫890K</span></td>
+            <td><span class="last-seen">12:58 <span data-vi>hôm nay</span><span data-en>today</span></span></td>
+            <td><span class="tag verified"><span data-vi>Hoạt động</span><span data-en>Active</span></span></td>
+          </tr>
+
+          <!-- 9. Sarah Kim — Mới -->
+          <tr>
+            <td>
+              <div class="cust-cell">
+                <div class="cust-av" style="background:#2563a8;">SK</div>
+                <div class="cust-info">
+                  <strong>Sarah Kim</strong>
+                  <span>sarah.k@gmail.com</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="source-badge sb-web">Web Store</span></td>
+            <td><span class="intent-txt">🇺🇸 US</span></td>
+            <td><span class="intent-txt">🔍 <span data-vi>Tìm sản phẩm</span><span data-en>Find product</span></span></td>
+            <td><span class="ord-count">1</span></td>
+            <td><span class="spend-normal">₫420K</span></td>
+            <td><span class="last-seen">12:50 <span data-vi>hôm nay</span><span data-en>today</span></span></td>
+            <td><span class="tag processing"><span data-vi>Mới</span><span data-en>New</span></span></td>
+          </tr>
+
+          <!-- 10. Park Jimin — Mới -->
+          <tr>
+            <td>
+              <div class="cust-cell">
+                <div class="cust-av" style="background:#4a9080;">PJ</div>
+                <div class="cust-info">
+                  <strong>Park Jimin</strong>
+                  <span>p.jimin@kr.com</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="source-badge sb-messenger">Messenger</span></td>
+            <td><span class="intent-txt">🇰🇷 KR</span></td>
+            <td><span class="intent-txt">🚚 <span data-vi>Vận chuyển</span><span data-en>Shipping</span></span></td>
+            <td><span class="ord-count">1</span></td>
+            <td><span class="spend-normal">₫390K</span></td>
+            <td><span class="last-seen">14:10 <span data-vi>hôm nay</span><span data-en>today</span></span></td>
+            <td><span class="tag processing"><span data-vi>Mới</span><span data-en>New</span></span></td>
+          </tr>
+
+          <!-- 11. Kenji Yamamoto — Hoạt động -->
+          <tr>
+            <td>
+              <div class="cust-cell">
+                <div class="cust-av" style="background:#6d4c9e;">KY</div>
+                <div class="cust-info">
+                  <strong>Kenji Yamamoto</strong>
+                  <span>k.yamamoto@jp.com</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="source-badge sb-messenger">Messenger</span></td>
+            <td><span class="intent-txt">🇯🇵 JP</span></td>
+            <td><span class="intent-txt">⭐ <span data-vi>Tư vấn</span><span data-en>Consult</span></span></td>
+            <td><span class="ord-count">1</span></td>
+            <td><span class="spend-normal">₫280K</span></td>
+            <td><span class="last-seen">11:08 <span data-vi>hôm nay</span><span data-en>today</span></span></td>
+            <td><span class="tag verified"><span data-vi>Hoạt động</span><span data-en>Active</span></span></td>
+          </tr>
+
+          <!-- 12. Trần Thu Trang — Lead -->
+          <tr>
+            <td>
+              <div class="cust-cell">
+                <div class="cust-av" style="background:#767676;">TT</div>
+                <div class="cust-info">
+                  <strong>Trần Thu Trang</strong>
+                  <span>tt.trang@gmail.com</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="source-badge sb-messenger">Messenger</span></td>
+            <td><span class="intent-txt">🇻🇳 VN</span></td>
+            <td><span class="intent-txt">🔍 <span data-vi>Tìm sản phẩm</span><span data-en>Find product</span></span></td>
+            <td><span class="ord-count mono" style="color:var(--ink-mute);">0</span></td>
+            <td><span class="spend-normal" style="color:var(--ink-mute);">₫0</span></td>
+            <td><span class="last-seen">14:18 <span data-vi>hôm nay</span><span data-en>today</span></span></td>
+            <td><span class="tag pending">Lead</span></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div><!-- /table-wrap -->
+  </div><!-- /panel -->
+
+</main>
+
+<script src="../../assets/app.js" defer></script>
+<script>
+  /* ── Lang toggle ── */
+  function setLang(lang, btn) {
+    document.body.classList.toggle('en', lang === 'en');
+    document.querySelectorAll('.lang-pill button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    try { localStorage.setItem('dhtc_lang', lang); } catch(e) {}
+  }
+
+  /* ── Restore lang from localStorage ── */
+  (function () {
+    try {
+      var saved = localStorage.getItem('dhtc_lang');
+      if (saved === 'en') {
+        document.body.classList.add('en');
+        var pills = document.querySelectorAll('.lang-pill button');
+        if (pills.length >= 2) {
+          pills[0].classList.remove('active');
+          pills[1].classList.add('active');
+        }
+      }
+    } catch(e) {}
+  })();
+</script>
+</body>
+</html>
