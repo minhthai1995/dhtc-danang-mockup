@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hội thoại &amp; Intent · DHTC CRM</title>
+<link rel="icon" href="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-270x270.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/styles.css">
+<style>
+  /* ── Channel badges ── */
+  .ch-badge { font-size:10px; padding:2px 8px; border-radius:999px; font-weight:600; }
+  .ch-messenger { background:rgba(88,101,242,.13); color:#5865f2; }
+  .ch-web      { background:rgba(45,127,94,.13);  color:#2d7f5e; }
+  .ch-zalo     { background:rgba(0,120,240,.13);  color:#0078f0; }
+
+  /* ── Conversation table ── */
+  .ch-msg  { font-size:11px; color:var(--ink-soft); max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .conv-av { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10.5px; font-weight:700; color:#fff; flex-shrink:0; }
+  .conv-cell { display:flex; align-items:center; gap:8px; }
+
+  /* ── Intent breakdown bars ── */
+  .ibar-bg   { flex:1; height:5px; background:var(--cream-dark); border-radius:999px; overflow:hidden; }
+  .ibar-fill { height:100%; border-radius:999px; }
+  .irow      { display:flex; align-items:center; gap:8px; margin-bottom:9px; }
+  .irow-label { font-size:12px; font-weight:500; min-width:150px; }
+  .irow-cnt  { font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--ink-mute); min-width:28px; text-align:right; }
+
+  /* ── Funnel ── */
+  .funnel-f { display:flex; flex-direction:column; gap:4px; margin-top:12px; }
+  .funnel-r { display:flex; align-items:center; gap:10px; padding:6px 12px; border-radius:8px; }
+  .f-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .f-lbl { font-size:12px; flex:1; }
+  .f-num { font-family:'Fraunces',serif; font-size:15px; font-weight:600; }
+  .f-pct { font-size:10px; color:var(--ink-mute); min-width:36px; text-align:right; }
+
+  /* ── Mini bar chart ── */
+  .mini-bar-wrap { display:flex; align-items:flex-end; gap:3px; height:60px; margin-bottom:6px; }
+  .mini-bar-col  { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; }
+  .mini-bar      { width:100%; border-radius:3px 3px 0 0; }
+  .mini-lbl      { font-size:9px; color:var(--ink-mute); font-family:'JetBrains Mono',monospace; }
+
+  /* ── Channel breakdown (right panel) ── */
+  .ch-row     { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+  .ch-name    { font-size:12px; font-weight:500; min-width:80px; }
+  .ch-bar-bg  { flex:1; height:5px; background:var(--cream-dark); border-radius:999px; overflow:hidden; }
+  .ch-bar-fill { height:100%; border-radius:999px; }
+  .ch-cnt     { font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--ink-mute); min-width:36px; text-align:right; }
+
+  /* ── Filter bar ── */
+  .filter-grid {
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+    margin-bottom:16px;
+  }
+  .filter-grid select {
+    padding:7px 12px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    background:#fff;
+    font:inherit;
+    font-size:12.5px;
+    color:var(--ink);
+    outline:none;
+    cursor:pointer;
+    transition:border-color .15s;
+  }
+  .filter-grid select:focus { border-color:var(--green); }
+
+  /* ── Duration mono ── */
+  .dur-mono { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-mute); }
+
+  /* ── Panel divider ── */
+  .panel-divider { border:none; border-top:1px solid var(--line-soft); margin:14px 0; }
+
+  /* ── Sub heading in panel ── */
+  .sub-head {
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink-mute);
+    margin-bottom:10px;
+  }
+
+  /* ── Avatar colours ── */
+  .av-g  { background:#2d7f5e; }
+  .av-b  { background:#3b6cb8; }
+  .av-p  { background:#7c4dbc; }
+  .av-gl { background:var(--gold); }
+  .av-o  { background:#c96a20; }
+  .av-r  { background:#8b2635; }
+  .av-t  { background:#0078f0; }
+  .av-br { background:#7a5c0a; }
+
+  /* ── Responsive ── */
+  @media (max-width:900px) {
+    .table-wrap table { min-width:800px; }
+    .ch-msg { max-width:140px; }
+    .irow-label { min-width:110px; }
+  }
+  @media (max-width:520px) {
+    .kpi-value { font-size:24px; }
+  }
+</style>
+</head>
+<body class="app">
+
+<!-- ══════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="brand">
+    <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-e1693969421521.png" alt="DHTC">
+    <div class="brand-text">
+      <strong>DHTC</strong>
+      <span>Admin Console</span>
+    </div>
+  </div>
+
+  <nav class="menu">
+    <!-- Tổng quan -->
+    <div class="menu-group" data-vi>Tổng quan</div>
+    <div class="menu-group" data-en>Overview</div>
+
+    <a href="../index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <rect x="3" y="3" width="7" height="9"/>
+        <rect x="14" y="3" width="7" height="5"/>
+        <rect x="14" y="12" width="7" height="9"/>
+        <rect x="3" y="16" width="7" height="5"/>
+      </svg>
+      <span data-vi>Dashboard</span><span data-en>Dashboard</span>
+    </a>
+    <a href="../reports.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>
+      </svg>
+      <span data-vi>Báo cáo doanh thu</span><span data-en>Revenue reports</span>
+    </a>
+
+    <!-- Quản lý -->
+    <div class="menu-group" data-vi>Quản lý</div>
+    <div class="menu-group" data-en>Management</div>
+
+    <a href="../merchants.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+      </svg>
+      <span data-vi>Tiểu thương</span><span data-en>Merchants</span>
+      <span class="pill">287</span>
+    </a>
+    <a href="../products.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+      </svg>
+      <span data-vi>Sản phẩm</span><span data-en>Products</span>
+      <span class="pill">15k</span>
+    </a>
+    <a href="../approvals.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M9 11l3 3L22 4"/>
+        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+      </svg>
+      <span data-vi>Phê duyệt</span><span data-en>Approvals</span>
+      <span class="pill">8</span>
+    </a>
+    <a href="../orders.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/>
+        <path d="M3 4h2l3 12h11l2-8H6"/>
+      </svg>
+      <span data-vi>Đơn hàng</span><span data-en>Orders</span>
+    </a>
+
+    <!-- CRM & Khách hàng -->
+    <div class="menu-group" data-vi>CRM &amp; Khách hàng</div>
+    <div class="menu-group" data-en>CRM &amp; Customers</div>
+
+    <a href="customers.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+      <span data-vi>Hồ sơ khách hàng</span><span data-en>Customer profiles</span>
+      <span class="pill">4.8k</span>
+    </a>
+    <a href="conversations.html" class="active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      <span data-vi>Hội thoại &amp; Intent</span><span data-en>Conversations</span>
+    </a>
+    <a href="behavior.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </svg>
+      <span data-vi>Hành vi &amp; Session</span><span data-en>Behavior &amp; Session</span>
+    </a>
+
+    <!-- Vận hành -->
+    <div class="menu-group" data-vi>Vận hành</div>
+    <div class="menu-group" data-en>Operations</div>
+
+    <a href="../integrations.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+      <span data-vi>Tích hợp API</span><span data-en>API integrations</span>
+    </a>
+    <a href="../settings.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      <span data-vi>Quyền &amp; cài đặt</span><span data-en>Permissions &amp; settings</span>
+    </a>
+  </nav>
+
+  <div class="user-card">
+    <div class="avatar">N</div>
+    <div class="user-info">
+      <strong>Nguyễn Anh Tú</strong>
+      <span>Super Admin · DHTC</span>
+    </div>
+  </div>
+  <a class="back-link" href="../../index.html">
+    ← <span data-vi>Trang chính</span><span data-en>Home</span>
+  </a>
+</aside>
+
+<!-- ══════════════════════════════════════
+     MAIN
+══════════════════════════════════════ -->
+<main>
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="../../index.html">DHTC</a><span>›</span>
+    <a href="../index.html"><span data-vi>Admin</span><span data-en>Admin</span></a><span>›</span>
+    <a href="#"><span data-vi>CRM</span><span data-en>CRM</span></a><span>›</span>
+    <span data-vi>Hội thoại &amp; Intent</span><span data-en>Conversations &amp; Intent</span>
+  </div>
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <h1>
+      <span data-vi>Hội thoại &amp; Intent · CRM</span><span data-en>Conversations &amp; Intent · CRM</span>
+      <small>
+        <span data-vi>Cập nhật lúc 14:32 · Hôm nay 19/05/2026</span>
+        <span data-en>Updated 14:32 · Today 19/05/2026</span>
+      </small>
+    </h1>
+    <div class="topbar-right">
+      <div class="lang-pill">
+        <button onclick="setLang('vi',this)" class="active">VI</button>
+        <button onclick="setLang('en',this)">EN</button>
+      </div>
+      <button class="icon-btn" aria-label="Thông báo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="dot"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── KPI STRIP ── -->
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label">
+        <span data-vi>Tổng hội thoại hôm nay</span><span data-en>Total conversations today</span>
+      </div>
+      <div class="kpi-value">847</div>
+      <div class="kpi-delta up">▲ 12.3% <span data-vi>so hôm qua</span><span data-en>vs yesterday</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">
+        <span data-vi>Đã chuyển đổi</span><span data-en>Converted</span>
+      </div>
+      <div class="kpi-value">198<small> / 23.4%</small></div>
+      <div class="kpi-delta up">▲ <span data-vi>conversion hôm nay</span><span data-en>today's conversion</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">
+        <span data-vi>Thời gian phản hồi TB</span><span data-en>Avg. response time</span>
+      </div>
+      <div class="kpi-value" style="font-family:'JetBrains Mono',monospace;font-size:24px">1m 24s</div>
+      <div class="kpi-delta up">▼ 18s <span data-vi>so hôm qua</span><span data-en>vs yesterday</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">
+        <span data-vi>Bỏ chat không trả lời</span><span data-en>Unanswered drop-offs</span>
+      </div>
+      <div class="kpi-value" style="color:var(--warning)">63</div>
+      <div class="kpi-delta up">▼ 7.4% <span data-vi>so hôm qua</span><span data-en>vs yesterday</span></div>
+    </div>
+  </div>
+
+  <!-- ── ROW 2: Intent breakdown + 7-day trend ── -->
+  <div class="row">
+
+    <!-- LEFT: Intent breakdown + Funnel -->
+    <div class="panel">
+      <div class="panel-head">
+        <h2><span data-vi>Phân loại Intent hôm nay</span><span data-en>Intent breakdown today</span></h2>
+        <a href="#" class="panel-action"><span data-vi>Xem 7 ngày →</span><span data-en>View 7 days →</span></a>
+      </div>
+
+      <!-- Intent bars -->
+      <div class="irow">
+        <span class="irow-label">🔍 <span data-vi>Tìm sản phẩm</span><span data-en>Product search</span></span>
+        <div class="ibar-bg"><div class="ibar-fill" style="width:100%;background:var(--green)"></div></div>
+        <span class="irow-cnt">312</span>
+      </div>
+      <div class="irow">
+        <span class="irow-label">💰 <span data-vi>Hỏi giá &amp; KM</span><span data-en>Price &amp; promos</span></span>
+        <div class="ibar-bg"><div class="ibar-fill" style="width:63%;background:var(--gold)"></div></div>
+        <span class="irow-cnt">198</span>
+      </div>
+      <div class="irow">
+        <span class="irow-label">📦 <span data-vi>Tra cứu đơn hàng</span><span data-en>Order tracking</span></span>
+        <div class="ibar-bg"><div class="ibar-fill" style="width:50%;background:#3b6cb8"></div></div>
+        <span class="irow-cnt">156</span>
+      </div>
+      <div class="irow">
+        <span class="irow-label">🚚 <span data-vi>Hỏi vận chuyển</span><span data-en>Shipping enquiry</span></span>
+        <div class="ibar-bg"><div class="ibar-fill" style="width:40%;background:#7c4dbc"></div></div>
+        <span class="irow-cnt">124</span>
+      </div>
+      <div class="irow" style="margin-bottom:0">
+        <span class="irow-label">😤 <span data-vi>Khiếu nại / hỗ trợ</span><span data-en>Complaint / support</span></span>
+        <div class="ibar-bg"><div class="ibar-fill" style="width:18%;background:var(--warning)"></div></div>
+        <span class="irow-cnt">57</span>
+      </div>
+
+      <hr class="panel-divider">
+
+      <!-- Funnel -->
+      <div class="sub-head"><span data-vi>Phễu chuyển đổi hôm nay</span><span data-en>Today's conversion funnel</span></div>
+      <div class="funnel-f">
+        <div class="funnel-r" style="background:rgba(45,127,94,.08)">
+          <span class="f-dot" style="background:var(--green)"></span>
+          <span class="f-lbl"><span data-vi>Tổng hội thoại</span><span data-en>Total conversations</span></span>
+          <span class="f-num">847</span>
+          <span class="f-pct">100%</span>
+        </div>
+        <div class="funnel-r" style="background:rgba(201,169,97,.12)">
+          <span class="f-dot" style="background:var(--gold)"></span>
+          <span class="f-lbl"><span data-vi>Quan tâm sản phẩm</span><span data-en>Product interest</span></span>
+          <span class="f-num">421</span>
+          <span class="f-pct">49.7%</span>
+        </div>
+        <div class="funnel-r" style="background:rgba(45,127,94,.14)">
+          <span class="f-dot" style="background:var(--green)"></span>
+          <span class="f-lbl"><span data-vi>Đã đặt hàng</span><span data-en>Ordered</span></span>
+          <span class="f-num">198</span>
+          <span class="f-pct">23.4%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: 7-day trend + Channel breakdown -->
+    <div class="panel">
+      <div class="panel-head">
+        <h2><span data-vi>Xu hướng 7 ngày</span><span data-en>7-day trend</span></h2>
+      </div>
+
+      <!-- Mini bar chart -->
+      <div class="mini-bar-wrap" id="convChart"></div>
+
+      <hr class="panel-divider">
+
+      <!-- Channel breakdown -->
+      <div class="sub-head"><span data-vi>Kênh hội thoại hôm nay</span><span data-en>Channels today</span></div>
+
+      <div class="ch-row">
+        <span class="ch-name">💬 Messenger</span>
+        <div class="ch-bar-bg"><div class="ch-bar-fill" style="width:100%;background:var(--green)"></div></div>
+        <span class="ch-cnt">624 <span style="color:var(--ink-mute);font-size:9px">(73.7%)</span></span>
+      </div>
+      <div class="ch-row">
+        <span class="ch-name">🌐 Web chat</span>
+        <div class="ch-bar-bg"><div class="ch-bar-fill" style="width:25%;background:#3b6cb8"></div></div>
+        <span class="ch-cnt">156 <span style="color:var(--ink-mute);font-size:9px">(18.4%)</span></span>
+      </div>
+      <div class="ch-row" style="margin-bottom:0">
+        <span class="ch-name">📱 Zalo OA</span>
+        <div class="ch-bar-bg"><div class="ch-bar-fill" style="width:11%;background:var(--gold)"></div></div>
+        <span class="ch-cnt">67 <span style="color:var(--ink-mute);font-size:9px">(7.9%)</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FULL-WIDTH TABLE ── -->
+  <div class="panel">
+    <div class="panel-head">
+      <h2>
+        <span data-vi>Hội thoại gần đây (847)</span><span data-en>Recent conversations (847)</span>
+      </h2>
+      <a href="#" class="panel-action"><span data-vi>Xuất CSV →</span><span data-en>Export CSV →</span></a>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-grid">
+      <div class="search-box" style="flex:1;min-width:200px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" placeholder="Tên khách, nội dung…" aria-label="Tìm kiếm hội thoại">
+      </div>
+
+      <select aria-label="Lọc intent">
+        <option value=""><span data-vi>Intent — Tất cả</span><span data-en>Intent — All</span></option>
+        <option value="find">🔍 Tìm sản phẩm</option>
+        <option value="price">💰 Hỏi giá &amp; KM</option>
+        <option value="order">📦 Tra đơn hàng</option>
+        <option value="shipping">🚚 Vận chuyển</option>
+        <option value="complaint">😤 Khiếu nại</option>
+        <option value="consult">⭐ Tư vấn</option>
+      </select>
+
+      <select aria-label="Lọc kênh">
+        <option value=""><span data-vi>Kênh — Tất cả</span><span data-en>Channel — All</span></option>
+        <option value="messenger">Messenger</option>
+        <option value="web">Web chat</option>
+        <option value="zalo">Zalo OA</option>
+      </select>
+
+      <select aria-label="Lọc trạng thái">
+        <option value=""><span data-vi>Trạng thái — Tất cả</span><span data-en>Status — All</span></option>
+        <option value="converted"><span data-vi>Đã chuyển đổi</span><span data-en>Converted</span></option>
+        <option value="supported"><span data-vi>Đã hỗ trợ</span><span data-en>Supported</span></option>
+        <option value="active"><span data-vi>Đang tư vấn</span><span data-en>Active</span></option>
+        <option value="processing"><span data-vi>Đang xử lý</span><span data-en>Processing</span></option>
+        <option value="dropped"><span data-vi>Bỏ chat</span><span data-en>Dropped</span></option>
+      </select>
+
+      <select aria-label="Lọc khoảng thời gian">
+        <option value="today"><span data-vi>Hôm nay</span><span data-en>Today</span></option>
+        <option value="7d"><span data-vi>7 ngày</span><span data-en>7 days</span></option>
+        <option value="30d"><span data-vi>30 ngày</span><span data-en>30 days</span></option>
+      </select>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th><span data-vi>Khách hàng</span><span data-en>Customer</span></th>
+            <th><span data-vi>Kênh</span><span data-en>Channel</span></th>
+            <th><span data-vi>Intent</span><span data-en>Intent</span></th>
+            <th><span data-vi>Tin nhắn cuối</span><span data-en>Last message</span></th>
+            <th><span data-vi>Thời gian</span><span data-en>Time</span></th>
+            <th><span data-vi>Thời lượng</span><span data-en>Duration</span></th>
+            <th><span data-vi>Trạng thái</span><span data-en>Status</span></th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- 1 -->
+          <tr>
+            <td>
+              <div class="conv-cell">
+                <div class="conv-av av-g">NM</div>
+                <strong>Nguyễn Thị Mai</strong>
+              </div>
+            </td>
+            <td><span class="ch-badge ch-messenger">Messenger</span></td>
+            <td>💰 <span data-vi>Hỏi giá</span><span data-en>Price</span></td>
+            <td><div class="ch-msg">Em muốn hỏi về giá cà phê…</div></td>
+            <td class="mono" style="color:var(--ink-mute)">14:31</td>
+            <td><span class="dur-mono">8m 42s</span></td>
+            <td><span class="tag verified"><span data-vi>Đã chuyển đổi</span><span data-en>Converted</span></span></td>
+          </tr>
+
+          <!-- 2 -->
+          <tr>
+            <td>
+              <div class="conv-cell">
+                <div class="conv-av av-b">LH</div>
+                <strong>Lê Văn Hùng</strong>
+              </div>
+            </td>
+            <td><span class="ch-badge ch-messenger">Messenger</span></td>
+            <td>📦 <span data-vi>Tra đơn</span><span data-en>Order track</span></td>
+            <td><div class="ch-msg">Đơn DHTC-24051201 tới chưa?</div></td>
+            <td class="mono" style="color:var(--ink-mute)">14:25</td>
+            <td><span class="dur-mono">3m 15s</span></td>
+            <td><span class="tag verified"><span data-vi>Đã hỗ trợ</span><span data-en>Supported</span></span></td>
+          </tr>
+
+          <!-- 3 -->
+          <tr>
+            <td>
+              <div class="conv-cell">
+                <div class="conv-av av-p">TT</div>
+                <strong>Trần Thu Trang</strong>
+              </div>
+            </td>
+            <td><span class="ch-badge ch-messenger">Messenger</span></td>
+            <td>🔍 <span data-vi>Tìm SP</span><span data-en>Product search</span></td>
+            <td><div class="ch-msg">Shop có hạt điều không muối không?</div></td>
+            <td class="mono" style="color:var(--ink-mute)">14:18</td>
+            <td><span class="dur-mono">12m 30s</span></td>
+            <td><span class="tag processing"><span data-vi>Đang tư vấn</span><span data-en>Active</span></span></td>
+          </tr>
+
+          <!-- 4 -->
+          <tr>
+            <td>
+              <div class="conv-cell">
+                <div class="conv-av av-gl">PJ</div>
+                <strong>Park Jimin 🇰🇷</strong>
+              </div>
+            </td>
+            <td><span class="ch-badge ch-messenger">Messenger</span></td>
+            <td>🚚 <span data-vi>Vận chuyển</span><span data-en>Shipping</span></td>
+            <td><div class="ch-msg">Do you ship to Korea?</div></td>
+            <td class="mono" style="color:var(--ink-mute)">14:10</td>
+            <td><span class="dur-mono">6m 58s</span></td>
+            <td><span class="tag processing"><span data-vi>Đang tư vấn</span><span data-en>Active</span></span></td>
+          </tr>
+
+          <!-- 5 -->
+          <tr>
+            <td>
+              <div class="conv-cell">
+                <div class="conv-av av-o">PD</div>
+                <strong>Phạm Minh Đức</strong>
+              </div>
+            </td>
+            <td><span class="ch-badge ch-messenger">Messenger</span></td>
+            <td>🚚 <span data-vi>Vận chuyển</span><span data-en>Shipping</span></td>
+            <td><div class="ch-msg">Ship Hà Nội mất mấy ngày?</div></td>
+            <td class="mono" style="color:var(--ink-mute)">13:58</td>
+            <td><span class="dur-mono">5m 12s</span></td>
+            <td><span class="tag verified"><span data-vi>Đã chuyển đổi</span><span data-en>Converted</span></span></td>
+          </tr>
+
+          <!-- 6 -->
+          <tr>
+            <td>
+              <div class="conv-cell">
+                <div class="conv-av av-g">NV</div>
+                <strong>Nguyễn Hồng Vân</strong>
+              </div>
+            </td>
+            <td><span class="ch-badge ch-web">Web chat</span></td>
+            <td>⭐ <span data-vi>Tư vấn</span><span data-en>Consult</span></td>
+            <td><div class="ch-msg">Mua set quà tặng cà phê 500k</div></td>
+            <td class="mono" style="color:var(--ink-mute)">13:44</td>
+            <td><span class="dur-mono">18m 05s</span></td>
+            <td><span class="tag processing"><span data-vi>Đang tư vấn</span><span data-en>Active</span></span></td>
+          </tr>
+
+          <!-- 7 -->
+          <tr>
+            <td>
+              <div class="conv-cell">
+                <div class="conv-av av-br">WY</div>
+                <strong>Watanabe Yuki 🇯🇵</strong>
+              </div>
+            </td>
+            <td><span class="ch-badge ch-messenger">Messenger</span></td>
+            <td>⭐ <span data-vi>Tư vấn</span><span data-en>Consult</span></td>
+            <td><div class="ch-msg">Are these USDA certified organic?</div></td>
+            <td class="mono" style="color:var(--ink-mute)">13:30</td>
+            <td><span class="dur-mono">4m 20s</span></td>
+            <td><span class="tag" style="background:rgba(139,38,53,.1);color:var(--danger)"><span data-vi>Bỏ chat</span><span data-en>Dropped</span></span></td>
+          </tr>
+
+          <!-- 8 -->
+          <tr>
+            <td>
+              <div class="conv-cell">
+                <div class="conv-av av-gl">DL</div>
+                <strong>Đặng Thị Lan</strong>
+              </div>
+            </td>
+            <td><span class="ch-badge ch-messenger">Messenger</span></td>
+            <td>💰 <span data-vi>KM</span><span data-en>Promo</span></td>
+            <td><div class="ch-msg">Hôm nay có flash sale không?</div></td>
+            <td class="mono" style="color:var(--ink-mute)">13:15</td>
+            <td><span class="dur-mono">7m 48s</span></td>
+            <td><span class="tag verified"><span data-vi>Đã chuyển đổi</span><span data-en>Converted</span></span></td>
+          </tr>
+
+          <!-- 9 -->
+          <tr>
+            <td>
+              <div class="conv-cell">
+                <div class="conv-av av-r">BN</div>
+                <strong>Bùi Ngọc Anh</strong>
+              </div>
+            </td>
+            <td><span class="ch-badge ch-web">Web chat</span></td>
+            <td>😤 <span data-vi>Khiếu nại</span><span data-en>Complaint</span></td>
+            <td><div class="ch-msg">Tôi bị giao sai sản phẩm</div></td>
+            <td class="mono" style="color:var(--ink-mute)">12:58</td>
+            <td><span class="dur-mono">22m 10s</span></td>
+            <td><span class="tag" style="background:rgba(183,121,31,.12);color:var(--warning)"><span data-vi>Đang xử lý</span><span data-en>Processing</span></span></td>
+          </tr>
+
+          <!-- 10 -->
+          <tr>
+            <td>
+              <div class="conv-cell">
+                <div class="conv-av av-b">WC</div>
+                <strong>Wei Chen 🇸🇬</strong>
+              </div>
+            </td>
+            <td><span class="ch-badge ch-messenger">Messenger</span></td>
+            <td>🔍 <span data-vi>Tìm SP</span><span data-en>Product search</span></td>
+            <td><div class="ch-msg">Looking for freeze-dried fruits</div></td>
+            <td class="mono" style="color:var(--ink-mute)">12:40</td>
+            <td><span class="dur-mono">9m 33s</span></td>
+            <td><span class="tag verified"><span data-vi>Đã chuyển đổi</span><span data-en>Converted</span></span></td>
+          </tr>
+
+          <!-- 11 -->
+          <tr>
+            <td>
+              <div class="conv-cell">
+                <div class="conv-av av-p">SK</div>
+                <strong>Sarah Kim 🇺🇸</strong>
+              </div>
+            </td>
+            <td><span class="ch-badge ch-web">Web chat</span></td>
+            <td>🔍 <span data-vi>Tìm SP</span><span data-en>Product search</span></td>
+            <td><div class="ch-msg">Where do the cashews come from?</div></td>
+            <td class="mono" style="color:var(--ink-mute)">12:20</td>
+            <td><span class="dur-mono">11m 15s</span></td>
+            <td><span class="tag verified"><span data-vi>Đã hỗ trợ</span><span data-en>Supported</span></span></td>
+          </tr>
+
+          <!-- 12 -->
+          <tr>
+            <td>
+              <div class="conv-cell">
+                <div class="conv-av av-t">KY</div>
+                <strong>Kenji Yamamoto 🇯🇵</strong>
+              </div>
+            </td>
+            <td><span class="ch-badge ch-zalo">Zalo OA</span></td>
+            <td>🔍 <span data-vi>Tìm SP</span><span data-en>Product search</span></td>
+            <td><div class="ch-msg">マカダミアナッツについて…</div></td>
+            <td class="mono" style="color:var(--ink-mute)">11:08</td>
+            <td><span class="dur-mono">6m 44s</span></td>
+            <td><span class="tag verified"><span data-vi>Đã chuyển đổi</span><span data-en>Converted</span></span></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<!-- ══════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════ -->
+<script src="../../assets/app.js"></script>
+<script>
+/* ── Lang toggle ── */
+function setLang(lang, btn) {
+  document.body.classList.toggle('en', lang === 'en');
+  document.querySelectorAll('.lang-pill button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  try { localStorage.setItem('dhtc_lang', lang); } catch(e) {}
+}
+(function() {
+  try {
+    var saved = localStorage.getItem('dhtc_lang');
+    if (saved === 'en') {
+      var btn = document.querySelector('.lang-pill button:last-child');
+      if (btn) setLang('en', btn);
+    }
+  } catch(e) {}
+})();
+
+/* ── Mini bar chart ── */
+(function() {
+  var c = document.getElementById('convChart');
+  if (!c) return;
+  var vals = [612, 684, 721, 695, 743, 778, 847];
+  var days = ['9/5','10/5','11/5','12/5','13/5','14/5','15/5'];
+  var mx = Math.max.apply(null, vals);
+  vals.forEach(function(v, i) {
+    var col = document.createElement('div');
+    col.className = 'mini-bar-col';
+    var bar = document.createElement('div');
+    bar.className = 'mini-bar';
+    bar.style.height = Math.round(v / mx * 54) + 'px';
+    bar.style.background = i === 6 ? 'var(--green)' : 'rgba(45,127,94,.35)';
+    bar.title = v + ' chats';
+    var lbl = document.createElement('span');
+    lbl.className = 'mini-lbl';
+    lbl.textContent = days[i];
+    col.appendChild(bar);
+    col.appendChild(lbl);
+    c.appendChild(col);
+  });
+})();
+</script>
+</body>
+</html>

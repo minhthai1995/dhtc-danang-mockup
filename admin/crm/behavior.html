@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hành vi &amp; Session · DHTC CRM</title>
+<link rel="icon" href="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-270x270.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/styles.css">
+<style>
+  /* ── Behavior avatar ── */
+  .beh-av {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .beh-cell { display: flex; align-items: center; gap: 8px; }
+
+  /* ── Source / device bars ── */
+  .src-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+  .src-label { font-size: 12px; font-weight: 500; min-width: 140px; }
+  .src-bar-bg { flex: 1; height: 5px; background: var(--cream-dark); border-radius: 999px; overflow: hidden; }
+  .src-bar-fill { height: 100%; border-radius: 999px; }
+  .src-pct { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--ink-mute); min-width: 32px; text-align: right; }
+
+  /* ── Funnel rows ── */
+  .funnel-row { display: flex; align-items: center; gap: 12px; padding: 8px 14px; border-radius: 8px; margin-bottom: 4px; }
+  .fr-icon { font-size: 16px; flex-shrink: 0; }
+  .fr-label { font-size: 12.5px; flex: 1; }
+  .fr-num { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; color: var(--green); }
+  .fr-pct { font-size: 10.5px; color: var(--ink-mute); min-width: 36px; text-align: right; }
+
+  /* ── Hourly chart ── */
+  .hour-wrap { display: flex; align-items: flex-end; gap: 2px; height: 70px; margin-bottom: 8px; }
+  .hour-col { flex: 1; display: flex; flex-direction: column; align-items: center; }
+  .hour-bar { width: 100%; border-radius: 2px 2px 0 0; min-height: 2px; }
+  .hour-lbl { font-size: 8px; color: var(--ink-mute); font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+
+  /* ── Top pages bar ── */
+  .page-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .page-name { font-size: 12px; font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; }
+  .page-bar-bg { flex: 1; height: 5px; background: var(--cream-dark); border-radius: 999px; overflow: hidden; }
+  .page-bar-fill { height: 100%; border-radius: 999px; background: var(--green); }
+  .page-cnt { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--ink-mute); min-width: 40px; text-align: right; }
+
+  /* ── Session insight rows ── */
+  .insight-row { display: flex; justify-content: space-between; font-size: 12px; padding: 5px 0; border-bottom: 1px solid var(--cream-dark); }
+  .insight-label { color: var(--ink-mute); }
+  .insight-val { font-weight: 600; }
+
+  /* ── Panel sub-heading divider ── */
+  .sub-divider {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin: 14px 0 10px;
+    padding-top: 12px;
+    border-top: 1px solid var(--cream-dark);
+  }
+
+  /* ── Filter panel ── */
+  .filter-inline { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .filter-inline select {
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    font: inherit;
+    font-size: 12px;
+    color: var(--ink);
+    outline: none;
+    cursor: pointer;
+    transition: border-color .15s;
+  }
+  .filter-inline select:focus { border-color: var(--green); }
+
+  /* ── Session status tags ── */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .tag-verified { background: rgba(45,127,94,.12); color: #2d7f5e; }
+  .tag-processing { background: rgba(59,108,184,.12); color: #3b6cb8; }
+  .tag-pending { background: rgba(201,169,97,.15); color: #9a7c30; }
+  .tag-warning { background: rgba(220,85,47,.12); color: #c0460f; }
+
+  /* ── Add-to-cart cell ── */
+  .atc-yes { color: var(--green); font-weight: 600; font-size: 12px; }
+  .atc-no  { color: var(--ink-mute); font-size: 12px; }
+
+  /* ── Device cell ── */
+  .dev-cell { display: flex; flex-direction: column; line-height: 1.3; }
+  .dev-main { font-size: 12px; font-weight: 500; }
+  .dev-sub  { font-size: 10.5px; color: var(--ink-mute); }
+
+  /* ── Pages cell ── */
+  .pg-cell strong { font-size: 13px; font-weight: 700; font-family: 'Fraunces', serif; color: var(--green); }
+  .pg-cell small  { display: block; font-size: 10px; color: var(--ink-mute); margin-top: 1px; }
+
+  /* ── Duration mono ── */
+  .dur-mono { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; }
+
+  /* ── Customer info in beh-cell ── */
+  .beh-info strong { display: block; font-size: 12.5px; font-weight: 600; line-height: 1.2; }
+  .beh-info span   { font-size: 10.5px; color: var(--ink-mute); }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .table-wrap table { min-width: 820px; }
+  }
+  @media (max-width: 768px) {
+    .row.eq { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 520px) {
+    .kpi-value { font-size: 24px; }
+    .filter-inline select { font-size: 11px; }
+  }
+</style>
+</head>
+<body class="app">
+
+<!-- ══════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="brand">
+    <img src="https://dhtcdanang.com/wp-content/uploads/2023/07/cropped-Logo_Food-01-e1693969421521.png" alt="DHTC">
+    <div class="brand-text">
+      <strong>DHTC</strong>
+      <span>Admin Console</span>
+    </div>
+  </div>
+
+  <nav class="menu">
+    <!-- Tổng quan -->
+    <div class="menu-group" data-vi>Tổng quan</div>
+    <div class="menu-group" data-en>Overview</div>
+
+    <a href="../index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <rect x="3" y="3" width="7" height="9"/>
+        <rect x="14" y="3" width="7" height="5"/>
+        <rect x="14" y="12" width="7" height="9"/>
+        <rect x="3" y="16" width="7" height="5"/>
+      </svg>
+      <span data-vi>Dashboard</span><span data-en>Dashboard</span>
+    </a>
+    <a href="../reports.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>
+      </svg>
+      <span data-vi>Báo cáo doanh thu</span><span data-en>Revenue reports</span>
+    </a>
+
+    <!-- Quản lý -->
+    <div class="menu-group" data-vi>Quản lý</div>
+    <div class="menu-group" data-en>Management</div>
+
+    <a href="../merchants.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+      </svg>
+      <span data-vi>Tiểu thương</span><span data-en>Merchants</span>
+      <span class="pill">287</span>
+    </a>
+    <a href="../products.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+      </svg>
+      <span data-vi>Sản phẩm</span><span data-en>Products</span>
+      <span class="pill">15k</span>
+    </a>
+    <a href="../approvals.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M9 11l3 3L22 4"/>
+        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+      </svg>
+      <span data-vi>Phê duyệt</span><span data-en>Approvals</span>
+      <span class="pill">8</span>
+    </a>
+    <a href="../orders.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/>
+        <path d="M3 4h2l3 12h11l2-8H6"/>
+      </svg>
+      <span data-vi>Đơn hàng</span><span data-en>Orders</span>
+    </a>
+
+    <!-- CRM & Khách hàng -->
+    <div class="menu-group" data-vi>CRM &amp; Khách hàng</div>
+    <div class="menu-group" data-en>CRM &amp; Customers</div>
+
+    <a href="customers.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+      <span data-vi>Hồ sơ khách hàng</span><span data-en>Customer profiles</span>
+      <span class="pill">4.8k</span>
+    </a>
+    <a href="conversations.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+      <span data-vi>Hội thoại &amp; Intent</span><span data-en>Conversations</span>
+    </a>
+    <a href="behavior.html" class="active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </svg>
+      <span data-vi>Hành vi &amp; Session</span><span data-en>Behavior &amp; Session</span>
+    </a>
+
+    <!-- Vận hành -->
+    <div class="menu-group" data-vi>Vận hành</div>
+    <div class="menu-group" data-en>Operations</div>
+
+    <a href="../integrations.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+      <span data-vi>Tích hợp API</span><span data-en>API integrations</span>
+    </a>
+    <a href="../settings.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      <span data-vi>Quyền &amp; cài đặt</span><span data-en>Permissions &amp; settings</span>
+    </a>
+  </nav>
+
+  <div class="user-card">
+    <div class="avatar">N</div>
+    <div class="user-info">
+      <strong>Nguyễn Anh Tú</strong>
+      <span>Super Admin · DHTC</span>
+    </div>
+  </div>
+  <a class="back-link" href="../../index.html">
+    ← <span data-vi>Trang chính</span><span data-en>Home</span>
+  </a>
+</aside>
+
+<!-- ══════════════════════════════════════
+     MAIN
+══════════════════════════════════════ -->
+<main>
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="../../index.html">DHTC</a><span>›</span>
+    <a href="../index.html"><span data-vi>Admin</span><span data-en>Admin</span></a><span>›</span>
+    <a href="#"><span data-vi>CRM</span><span data-en>CRM</span></a><span>›</span>
+    <span data-vi>Hành vi &amp; Session</span><span data-en>Behavior &amp; Session</span>
+  </div>
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <h1>
+      <span data-vi>Hành vi &amp; Session</span><span data-en>Behavior &amp; Session</span>
+      <small>
+        <span data-vi>Cập nhật lúc 14:35 · Hôm nay 19/05/2026</span>
+        <span data-en>Updated 14:35 · Today 19/05/2026</span>
+      </small>
+    </h1>
+    <div class="topbar-right">
+      <div class="lang-pill">
+        <button onclick="setLang('vi',this)" class="active">VI</button>
+        <button onclick="setLang('en',this)">EN</button>
+      </div>
+      <button class="icon-btn" aria-label="Thông báo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="dot"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── KPI Strip ── -->
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label">
+        <span data-vi>Lượt truy cập hôm nay</span><span data-en>Visits today</span>
+      </div>
+      <div class="kpi-value">3,847</div>
+      <div class="kpi-delta up">
+        ▲ 14.2% <span data-vi>so hôm qua</span><span data-en>vs yesterday</span>
+      </div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">
+        <span data-vi>Thời lượng trung bình</span><span data-en>Avg session duration</span>
+      </div>
+      <div class="kpi-value" style="font-family:'JetBrains Mono',monospace; font-size:22px;">4m 38s</div>
+      <div class="kpi-delta up">▲ 22s <span data-vi>so hôm qua</span><span data-en>vs yesterday</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">
+        <span data-vi>Tỉ lệ thoát (Bounce)</span><span data-en>Bounce rate</span>
+      </div>
+      <div class="kpi-value">28.4<small>%</small></div>
+      <div class="kpi-delta down" style="color:var(--success);">
+        ▼ 3.1% <span data-vi>— tốt hơn</span><span data-en>— improved</span>
+      </div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">
+        <span data-vi>Add-to-cart rate</span><span data-en>Add-to-cart rate</span>
+      </div>
+      <div class="kpi-value">18.7<small>%</small></div>
+      <div class="kpi-delta up">
+        ▲ 2.3% <span data-vi>so hôm qua</span><span data-en>vs yesterday</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Row 3 equal panels: Thiết bị / Nguồn / Top trang ── -->
+  <div class="row eq" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:14px;">
+
+    <!-- Panel: Thiết bị -->
+    <div class="panel" style="margin-bottom:0;">
+      <div class="panel-head" style="margin-bottom:14px;">
+        <h2><span data-vi>Thiết bị truy cập</span><span data-en>Device breakdown</span></h2>
+      </div>
+
+      <div class="src-row">
+        <span class="src-label">📱 <span data-vi>Mobile</span><span data-en>Mobile</span></span>
+        <div class="src-bar-bg"><div class="src-bar-fill" style="width:74%; background:var(--green);"></div></div>
+        <span class="src-pct">74%</span>
+      </div>
+      <div class="src-row">
+        <span class="src-label">💻 <span data-vi>Desktop</span><span data-en>Desktop</span></span>
+        <div class="src-bar-bg"><div class="src-bar-fill" style="width:22%; background:#3b6cb8;"></div></div>
+        <span class="src-pct">22%</span>
+      </div>
+      <div class="src-row">
+        <span class="src-label">📟 <span data-vi>Tablet</span><span data-en>Tablet</span></span>
+        <div class="src-bar-bg"><div class="src-bar-fill" style="width:4%; background:var(--gold);"></div></div>
+        <span class="src-pct">4%</span>
+      </div>
+
+      <div class="sub-divider">
+        <span data-vi>Hệ điều hành</span><span data-en>Operating system</span>
+      </div>
+
+      <div class="src-row">
+        <span class="src-label">iOS</span>
+        <div class="src-bar-bg"><div class="src-bar-fill" style="width:44%; background:var(--green);"></div></div>
+        <span class="src-pct">44%</span>
+      </div>
+      <div class="src-row">
+        <span class="src-label">Android</span>
+        <div class="src-bar-bg"><div class="src-bar-fill" style="width:30%; background:#3b6cb8;"></div></div>
+        <span class="src-pct">30%</span>
+      </div>
+      <div class="src-row">
+        <span class="src-label">Windows</span>
+        <div class="src-bar-bg"><div class="src-bar-fill" style="width:18%; background:var(--gold);"></div></div>
+        <span class="src-pct">18%</span>
+      </div>
+      <div class="src-row" style="margin-bottom:0;">
+        <span class="src-label">macOS</span>
+        <div class="src-bar-bg"><div class="src-bar-fill" style="width:8%; background:#7c4dbc;"></div></div>
+        <span class="src-pct">8%</span>
+      </div>
+    </div>
+
+    <!-- Panel: Nguồn truy cập -->
+    <div class="panel" style="margin-bottom:0;">
+      <div class="panel-head" style="margin-bottom:14px;">
+        <h2><span data-vi>Nguồn truy cập</span><span data-en>Traffic source</span></h2>
+      </div>
+
+      <div class="src-row">
+        <span class="src-label">💬 Messenger / Social</span>
+        <div class="src-bar-bg"><div class="src-bar-fill" style="width:52%; background:var(--green);"></div></div>
+        <span class="src-pct">52%</span>
+      </div>
+      <div class="src-row">
+        <span class="src-label">🔍 Organic Search</span>
+        <div class="src-bar-bg"><div class="src-bar-fill" style="width:24%; background:#3b6cb8;"></div></div>
+        <span class="src-pct">24%</span>
+      </div>
+      <div class="src-row">
+        <span class="src-label">🔗 Direct</span>
+        <div class="src-bar-bg"><div class="src-bar-fill" style="width:14%; background:var(--gold);"></div></div>
+        <span class="src-pct">14%</span>
+      </div>
+      <div class="src-row" style="margin-bottom:0;">
+        <span class="src-label">📧 Email / Zalo</span>
+        <div class="src-bar-bg"><div class="src-bar-fill" style="width:10%; background:#7c4dbc;"></div></div>
+        <span class="src-pct">10%</span>
+      </div>
+    </div>
+
+    <!-- Panel: Top trang xem -->
+    <div class="panel" style="margin-bottom:0;">
+      <div class="panel-head" style="margin-bottom:14px;">
+        <h2><span data-vi>Trang phổ biến nhất</span><span data-en>Top pages</span></h2>
+      </div>
+
+      <div class="page-row">
+        <span class="page-name">/products (Cà phê)</span>
+        <div class="page-bar-bg"><div class="page-bar-fill" style="width:100%;"></div></div>
+        <span class="page-cnt">1,284</span>
+      </div>
+      <div class="page-row">
+        <span class="page-name">/products (Hạt điều)</span>
+        <div class="page-bar-bg"><div class="page-bar-fill" style="width:77%;"></div></div>
+        <span class="page-cnt">987</span>
+      </div>
+      <div class="page-row">
+        <span class="page-name">/products (Mắc-ca)</span>
+        <div class="page-bar-bg"><div class="page-bar-fill" style="width:58%;"></div></div>
+        <span class="page-cnt">743</span>
+      </div>
+      <div class="page-row">
+        <span class="page-name">/cart</span>
+        <div class="page-bar-bg"><div class="page-bar-fill" style="width:48%; background:var(--gold);"></div></div>
+        <span class="page-cnt">621</span>
+      </div>
+      <div class="page-row" style="margin-bottom:0;">
+        <span class="page-name">/products (Cacao)</span>
+        <div class="page-bar-bg"><div class="page-bar-fill" style="width:42%;"></div></div>
+        <span class="page-cnt">534</span>
+      </div>
+    </div>
+
+  </div><!-- /row.eq -->
+
+  <!-- ── Row 2 panels: Phễu hành vi + Session theo giờ ── -->
+  <div class="row eq" style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px;">
+
+    <!-- Panel trái: Phễu hành vi -->
+    <div class="panel" style="margin-bottom:0;">
+      <div class="panel-head" style="margin-bottom:14px;">
+        <h2><span data-vi>Phễu hành vi hôm nay</span><span data-en>Behavior funnel today</span></h2>
+      </div>
+
+      <div class="funnel-row" style="background:rgba(45,127,94,.12);">
+        <span class="fr-icon">👀</span>
+        <span class="fr-label"><span data-vi>Xem trang sản phẩm</span><span data-en>Product page views</span></span>
+        <span class="fr-num">3,847</span>
+        <span class="fr-pct">100%</span>
+      </div>
+
+      <div class="funnel-row" style="background:rgba(45,127,94,.09);">
+        <span class="fr-icon">🛒</span>
+        <span class="fr-label"><span data-vi>Click xem chi tiết SP</span><span data-en>Product detail clicks</span></span>
+        <span class="fr-num">2,134</span>
+        <span class="fr-pct">55.5%</span>
+      </div>
+
+      <div class="funnel-row" style="background:rgba(45,127,94,.07);">
+        <span class="fr-icon">➕</span>
+        <span class="fr-label"><span data-vi>Thêm vào giỏ hàng</span><span data-en>Add to cart</span></span>
+        <span class="fr-num">719</span>
+        <span class="fr-pct" style="white-space:nowrap;">
+          <span title="Tỉ lệ / tổng lượt xem">18.7%</span>
+        </span>
+      </div>
+
+      <div class="funnel-row" style="background:rgba(201,169,97,.1);">
+        <span class="fr-icon">💳</span>
+        <span class="fr-label"><span data-vi>Tiến hành thanh toán</span><span data-en>Proceed to checkout</span></span>
+        <span class="fr-num" style="color:var(--gold);">312</span>
+        <span class="fr-pct">8.1%</span>
+      </div>
+
+      <div class="funnel-row" style="background:rgba(201,169,97,.14); margin-bottom:0;">
+        <span class="fr-icon">✅</span>
+        <span class="fr-label"><span data-vi>Hoàn tất đơn hàng</span><span data-en>Order completed</span></span>
+        <span class="fr-num" style="color:var(--gold);">198</span>
+        <span class="fr-pct">5.1%</span>
+      </div>
+    </div>
+
+    <!-- Panel phải: Session theo giờ -->
+    <div class="panel" style="margin-bottom:0;">
+      <div class="panel-head" style="margin-bottom:14px;">
+        <h2><span data-vi>Session theo giờ hôm nay</span><span data-en>Hourly sessions today</span></h2>
+      </div>
+
+      <div class="hour-wrap" id="hourChart"></div>
+
+      <div class="sub-divider">
+        <span data-vi>Session insights</span><span data-en>Session insights</span>
+      </div>
+
+      <div class="insight-row">
+        <span class="insight-label"><span data-vi>Giờ cao điểm</span><span data-en>Peak hour</span></span>
+        <span class="insight-val" style="font-family:'JetBrains Mono',monospace; font-size:12px;">18:00 – 19:00 (312)</span>
+      </div>
+      <div class="insight-row">
+        <span class="insight-label"><span data-vi>Giờ thấp điểm</span><span data-en>Off-peak hour</span></span>
+        <span class="insight-val" style="font-family:'JetBrains Mono',monospace; font-size:12px;">03:00 – 04:00 (4)</span>
+      </div>
+      <div class="insight-row">
+        <span class="insight-label"><span data-vi>Session dài nhất</span><span data-en>Longest session</span></span>
+        <span class="insight-val" style="font-family:'JetBrains Mono',monospace; font-size:12px;">28m 14s</span>
+      </div>
+      <div class="insight-row" style="border-bottom:none;">
+        <span class="insight-label"><span data-vi>Trang thoát phổ biến nhất</span><span data-en>Top exit page</span></span>
+        <span class="insight-val" style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--warning);">/checkout</span>
+      </div>
+    </div>
+
+  </div><!-- /row.eq 2-col -->
+
+  <!-- ── Bảng Session gần đây ── -->
+  <div class="panel">
+    <div class="panel-head">
+      <h2>
+        <span data-vi>Session gần đây</span><span data-en>Recent sessions</span>
+      </h2>
+      <div class="filter-inline">
+        <select aria-label="Lọc thiết bị">
+          <option value=""><span data-vi>Thiết bị — Tất cả</span><span data-en>Device — All</span></option>
+          <option value="mobile">📱 Mobile</option>
+          <option value="desktop">💻 Desktop</option>
+          <option value="tablet">📟 Tablet</option>
+        </select>
+        <select aria-label="Lọc nguồn">
+          <option value=""><span data-vi>Nguồn — Tất cả</span><span data-en>Source — All</span></option>
+          <option value="messenger">💬 Messenger</option>
+          <option value="organic">🔍 Organic</option>
+          <option value="direct">🔗 Direct</option>
+          <option value="zalo">📧 Zalo</option>
+          <option value="social">📣 Social</option>
+        </select>
+        <select aria-label="Lọc thời gian">
+          <option value="today"><span data-vi>Hôm nay</span><span data-en>Today</span></option>
+          <option value="yesterday"><span data-vi>Hôm qua</span><span data-en>Yesterday</span></option>
+          <option value="week"><span data-vi>7 ngày qua</span><span data-en>Last 7 days</span></option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th><span data-vi>Khách hàng</span><span data-en>Customer</span></th>
+            <th><span data-vi>Thiết bị</span><span data-en>Device</span></th>
+            <th><span data-vi>Nguồn</span><span data-en>Source</span></th>
+            <th><span data-vi>Trang xem</span><span data-en>Pages</span></th>
+            <th><span data-vi>Thời lượng</span><span data-en>Duration</span></th>
+            <th>Add-to-cart</th>
+            <th><span data-vi>Trạng thái</span><span data-en>Status</span></th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- Row 1 -->
+          <tr>
+            <td>
+              <div class="beh-cell">
+                <div class="beh-av" style="background:#2d7f5e;">NM</div>
+                <div class="beh-info">
+                  <strong>Nguyễn Thị Mai</strong>
+                  <span>nguyen.mai@gmail.com</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="dev-cell">
+                <span class="dev-main">📱 iOS</span>
+                <span class="dev-sub">iPhone 14</span>
+              </div>
+            </td>
+            <td><span style="font-size:12px;">💬 Messenger</span></td>
+            <td>
+              <div class="pg-cell">
+                <strong>8</strong>
+                <small>/products/ca-phe-arabica</small>
+              </div>
+            </td>
+            <td><span class="dur-mono">12m 34s</span></td>
+            <td><span class="atc-yes">✓ Có <span style="font-size:10px; font-family:'JetBrains Mono',monospace;">(2 SP)</span></span></td>
+            <td><span class="tag tag-verified">✓ Đã chuyển đổi</span></td>
+          </tr>
+
+          <!-- Row 2 -->
+          <tr>
+            <td>
+              <div class="beh-cell">
+                <div class="beh-av" style="background:#7c4dbc;">PJ</div>
+                <div class="beh-info">
+                  <strong>Park Jimin 🇰🇷</strong>
+                  <span>park.jimin@naver.com</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="dev-cell">
+                <span class="dev-main">📱 Android</span>
+                <span class="dev-sub">Galaxy S24</span>
+              </div>
+            </td>
+            <td><span style="font-size:12px;">💬 Messenger</span></td>
+            <td>
+              <div class="pg-cell">
+                <strong>5</strong>
+                <small>/products/hat-dieu-rang</small>
+              </div>
+            </td>
+            <td><span class="dur-mono">8m 12s</span></td>
+            <td><span class="atc-no">✗ Không</span></td>
+            <td><span class="tag tag-processing">⟳ Đang xem</span></td>
+          </tr>
+
+          <!-- Row 3 -->
+          <tr>
+            <td>
+              <div class="beh-cell">
+                <div class="beh-av" style="background:#3b6cb8;">PM</div>
+                <div class="beh-info">
+                  <strong>Phạm Minh Đức</strong>
+                  <span>duc.pham@work.vn</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="dev-cell">
+                <span class="dev-main">💻 Windows</span>
+                <span class="dev-sub">Chrome 124</span>
+              </div>
+            </td>
+            <td><span style="font-size:12px;">🔗 Direct</span></td>
+            <td>
+              <div class="pg-cell">
+                <strong>12</strong>
+                <small>/products/macca-rang-bo</small>
+              </div>
+            </td>
+            <td><span class="dur-mono">24m 45s</span></td>
+            <td><span class="atc-yes">✓ Có <span style="font-size:10px; font-family:'JetBrains Mono',monospace;">(3 SP)</span></span></td>
+            <td><span class="tag tag-verified">✓ Đã chuyển đổi</span></td>
+          </tr>
+
+          <!-- Row 4 -->
+          <tr>
+            <td>
+              <div class="beh-cell">
+                <div class="beh-av" style="background:#c0460f;">WY</div>
+                <div class="beh-info">
+                  <strong>Watanabe Yuki 🇯🇵</strong>
+                  <span>yuki.w@yahoo.co.jp</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="dev-cell">
+                <span class="dev-main">💻 macOS</span>
+                <span class="dev-sub">Safari 17</span>
+              </div>
+            </td>
+            <td><span style="font-size:12px;">🔍 Organic</span></td>
+            <td>
+              <div class="pg-cell">
+                <strong>6</strong>
+                <small>/checkout (thoát)</small>
+              </div>
+            </td>
+            <td><span class="dur-mono">9m 18s</span></td>
+            <td><span class="atc-no">✗ Không</span></td>
+            <td><span class="tag tag-warning">⚠ Thoát tại checkout</span></td>
+          </tr>
+
+          <!-- Row 5 -->
+          <tr>
+            <td>
+              <div class="beh-cell">
+                <div class="beh-av" style="background:#2d7f5e;">LH</div>
+                <div class="beh-info">
+                  <strong>Lê Văn Hùng</strong>
+                  <span>le.hung@gmail.com</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="dev-cell">
+                <span class="dev-main">📱 iOS</span>
+                <span class="dev-sub">iPhone 13</span>
+              </div>
+            </td>
+            <td><span style="font-size:12px;">💬 Messenger</span></td>
+            <td>
+              <div class="pg-cell">
+                <strong>4</strong>
+                <small>/orders/tra-don-hang</small>
+              </div>
+            </td>
+            <td><span class="dur-mono">5m 02s</span></td>
+            <td><span class="atc-no">✗ Không</span></td>
+            <td><span class="tag tag-verified">✓ Tra đơn → Xong</span></td>
+          </tr>
+
+          <!-- Row 6 -->
+          <tr>
+            <td>
+              <div class="beh-cell">
+                <div class="beh-av" style="background:#9a7c30;">SK</div>
+                <div class="beh-info">
+                  <strong>Sarah Kim 🇺🇸</strong>
+                  <span>sarah.kim@gmail.com</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="dev-cell">
+                <span class="dev-main">💻 Windows</span>
+                <span class="dev-sub">Chrome 124</span>
+              </div>
+            </td>
+            <td><span style="font-size:12px;">🔍 Organic</span></td>
+            <td>
+              <div class="pg-cell">
+                <strong>9</strong>
+                <small>/products/cacao-bao-thi</small>
+              </div>
+            </td>
+            <td><span class="dur-mono">16m 30s</span></td>
+            <td><span class="atc-yes">✓ Có <span style="font-size:10px; font-family:'JetBrains Mono',monospace;">(1 SP)</span></span></td>
+            <td><span class="tag tag-processing">⟳ Đang xem</span></td>
+          </tr>
+
+          <!-- Row 7 -->
+          <tr>
+            <td>
+              <div class="beh-cell">
+                <div class="beh-av" style="background:#3b6cb8;">DL</div>
+                <div class="beh-info">
+                  <strong>Đặng Thị Lan</strong>
+                  <span>dang.lan@yahoo.com</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="dev-cell">
+                <span class="dev-main">📱 Android</span>
+                <span class="dev-sub">Pixel 7</span>
+              </div>
+            </td>
+            <td><span style="font-size:12px;">📣 Social</span></td>
+            <td>
+              <div class="pg-cell">
+                <strong>7</strong>
+                <small>/products/ca-phe-robusta</small>
+              </div>
+            </td>
+            <td><span class="dur-mono">10m 55s</span></td>
+            <td><span class="atc-yes">✓ Có <span style="font-size:10px; font-family:'JetBrains Mono',monospace;">(4 SP)</span></span></td>
+            <td><span class="tag tag-verified">✓ Đã chuyển đổi</span></td>
+          </tr>
+
+          <!-- Row 8 -->
+          <tr>
+            <td>
+              <div class="beh-cell">
+                <div class="beh-av" style="background:#7c4dbc;">TT</div>
+                <div class="beh-info">
+                  <strong>Trần Thu Trang</strong>
+                  <span>thu.trang@gmail.com</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="dev-cell">
+                <span class="dev-main">📱 iOS</span>
+                <span class="dev-sub">iPhone 15</span>
+              </div>
+            </td>
+            <td><span style="font-size:12px;">💬 Messenger</span></td>
+            <td>
+              <div class="pg-cell">
+                <strong>3</strong>
+                <small>/products/hat-macca-tuoi</small>
+              </div>
+            </td>
+            <td><span class="dur-mono">4m 11s</span></td>
+            <td><span class="atc-no">✗ Không</span></td>
+            <td><span class="tag tag-processing">⟳ Đang xem</span></td>
+          </tr>
+
+          <!-- Row 9 -->
+          <tr>
+            <td>
+              <div class="beh-cell">
+                <div class="beh-av" style="background:#2d7f5e;">WC</div>
+                <div class="beh-info">
+                  <strong>Wei Chen 🇸🇬</strong>
+                  <span>wei.chen@sg.com</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="dev-cell">
+                <span class="dev-main">💻 macOS</span>
+                <span class="dev-sub">Chrome 124</span>
+              </div>
+            </td>
+            <td><span style="font-size:12px;">🔗 Direct</span></td>
+            <td>
+              <div class="pg-cell">
+                <strong>11</strong>
+                <small>/cart/review-order</small>
+              </div>
+            </td>
+            <td><span class="dur-mono">19m 42s</span></td>
+            <td><span class="atc-yes">✓ Có <span style="font-size:10px; font-family:'JetBrains Mono',monospace;">(2 SP)</span></span></td>
+            <td><span class="tag tag-verified">✓ Đã chuyển đổi</span></td>
+          </tr>
+
+          <!-- Row 10 -->
+          <tr>
+            <td>
+              <div class="beh-cell">
+                <div class="beh-av" style="background:#c0460f;">BN</div>
+                <div class="beh-info">
+                  <strong>Bùi Ngọc Anh</strong>
+                  <span>bui.anh@gmail.com</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="dev-cell">
+                <span class="dev-main">📱 Android</span>
+                <span class="dev-sub">Galaxy A54</span>
+              </div>
+            </td>
+            <td><span style="font-size:12px;">📧 Zalo</span></td>
+            <td>
+              <div class="pg-cell">
+                <strong>6</strong>
+                <small>/support/khieu-nai</small>
+              </div>
+            </td>
+            <td><span class="dur-mono">8m 24s</span></td>
+            <td><span class="atc-no">✗ Không</span></td>
+            <td><span class="tag tag-warning">⚠ Khiếu nại → Support</span></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div><!-- /table-wrap -->
+  </div><!-- /panel -->
+
+</main>
+
+<script src="../../assets/app.js"></script>
+<script>
+/* ── Lang toggle ── */
+function setLang(lang, btn) {
+  try { localStorage.setItem('dhtc_lang', lang); } catch(e) {}
+  document.querySelectorAll('[data-vi],[data-en]').forEach(function(el) {
+    if (el.hasAttribute('data-vi')) el.style.display = (lang === 'vi') ? '' : 'none';
+    if (el.hasAttribute('data-en')) el.style.display = (lang === 'en') ? '' : 'none';
+  });
+  document.querySelectorAll('.lang-pill button').forEach(function(b) {
+    b.classList.toggle('active', b === btn);
+  });
+}
+
+/* ── Init lang from localStorage ── */
+(function() {
+  var saved;
+  try { saved = localStorage.getItem('dhtc_lang'); } catch(e) {}
+  var lang = saved || 'vi';
+  var btn = document.querySelector('.lang-pill button:' + (lang === 'en' ? 'last-child' : 'first-child'));
+  if (btn) setLang(lang, btn);
+})();
+
+/* ── Hourly bar chart ── */
+(function() {
+  var c = document.getElementById('hourChart');
+  if (!c) return;
+  var vals = [12,8,5,4,6,18,45,89,124,156,178,198,189,167,145,178,234,287,312,276,198,134,78,34];
+  var mx = Math.max.apply(null, vals);
+  var showLabel = [0,6,12,18,23];
+  vals.forEach(function(v, i) {
+    var col = document.createElement('div');
+    col.className = 'hour-col';
+
+    var bar = document.createElement('div');
+    bar.className = 'hour-bar';
+    var ratio = v / mx;
+    bar.style.height = Math.max(2, Math.round(ratio * 62)) + 'px';
+    var isPeak = (i >= 17 && i <= 19);
+    if (isPeak) {
+      bar.style.background = 'var(--green)';
+    } else {
+      bar.style.background = 'rgba(45,127,94,' + (ratio * 0.6 + 0.15).toFixed(2) + ')';
+    }
+    bar.title = i + 'h: ' + v + ' sessions';
+
+    var lbl = document.createElement('span');
+    lbl.className = 'hour-lbl';
+    lbl.textContent = showLabel.indexOf(i) !== -1 ? i + 'h' : '';
+
+    col.appendChild(bar);
+    col.appendChild(lbl);
+    c.appendChild(col);
+  });
+})();
+</script>
+</body>
+</html>
