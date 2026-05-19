@@ -75,6 +75,53 @@
     .merch-rank { font-size: 15px; width: 18px; }
     .merch-gmv strong { font-size: 13px; }
   }
+
+  /* ─── Chatbot / CRM ─── */
+  .section-lbl { display:flex; align-items:center; gap:10px; margin:28px 0 14px; border-bottom:1px solid var(--line-soft); padding-bottom:11px; }
+  .section-lbl svg { width:17px; height:17px; color:var(--green); flex-shrink:0; }
+  .section-lbl h3 { font-size:12px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--ink-soft); margin:0; flex:1; }
+
+  .chat-feed { display:flex; flex-direction:column; gap:6px; max-height:390px; overflow-y:auto; }
+  .chat-item { display:flex; align-items:flex-start; gap:10px; padding:10px 12px; background:var(--cream); border-radius:10px; text-decoration:none; color:inherit; transition:background .15s; }
+  .chat-item:hover { background:var(--cream-dark); }
+  .chat-av { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; }
+  .cav-g{background:#2d7f5e}.cav-gl{background:var(--gold)}.cav-b{background:#3b6cb8}.cav-p{background:#7c4dbc}.cav-o{background:#c96a20}
+  .chat-body { flex:1; min-width:0; }
+  .chat-nm-row { display:flex; align-items:center; justify-content:space-between; gap:6px; }
+  .chat-nm { font-size:12.5px; font-weight:600; }
+  .chat-ts { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--ink-mute); white-space:nowrap; }
+  .chat-prev { font-size:11.5px; color:var(--ink-mute); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:2px; }
+  .chat-tags { display:flex; align-items:center; gap:5px; margin-top:5px; flex-wrap:wrap; }
+  .ci { font-size:10px; padding:2px 7px; border-radius:999px; background:var(--cream-dark); color:var(--ink-soft); font-weight:500; }
+  .ci-ok{background:rgba(45,127,94,.14);color:var(--green)}.ci-act{background:rgba(201,169,97,.22);color:#7a5c0a}.ci-drop{background:rgba(0,0,0,.07);color:var(--ink-mute)}
+
+  .intent-list { display:flex; flex-direction:column; gap:9px; }
+  .intent-row { display:flex; align-items:center; gap:8px; }
+  .intent-ico { font-size:13px; flex-shrink:0; }
+  .intent-nm { font-size:12px; font-weight:500; min-width:132px; }
+  .ib-bg { flex:1; height:5px; background:var(--cream-dark); border-radius:999px; overflow:hidden; }
+  .ib-fill { height:100%; border-radius:999px; }
+  .intent-cnt { font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--ink-mute); min-width:28px; text-align:right; }
+
+  .spark-wrap { display:flex; align-items:flex-end; gap:3px; height:38px; }
+  .spark-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; }
+  .spark-bar { width:100%; border-radius:3px 3px 0 0; }
+  .spark-lbl { font-size:9px; color:var(--ink-mute); font-family:'JetBrains Mono',monospace; }
+
+  .funnel-list { display:flex; flex-direction:column; gap:4px; }
+  .funnel-step { display:flex; align-items:center; gap:10px; padding:7px 12px; border-radius:8px; }
+  .funnel-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+  .funnel-lbl { font-size:12px; flex:1; }
+  .funnel-num { font-family:'Fraunces',serif; font-size:15px; font-weight:600; }
+  .funnel-pct { font-size:10px; color:var(--ink-mute); min-width:28px; text-align:right; }
+
+  .newcust-list { display:flex; flex-direction:column; gap:7px; }
+  .newcust-item { display:flex; align-items:center; gap:8px; font-size:12px; }
+  .newcust-av { width:26px; height:26px; border-radius:50%; background:var(--cream-dark); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:var(--ink-soft); flex-shrink:0; }
+  .newcust-name { flex:1; font-weight:500; }
+  .newcust-src { font-size:10.5px; color:var(--ink-mute); }
+
+  @media (max-width:900px) { .intent-nm { min-width:90px; } .chat-feed { max-height:280px; } }
 </style>
 </head>
 <body class="app">
@@ -331,6 +378,277 @@
     </div>
   </div>
 
+  <!-- ── Chatbot & CRM ── -->
+  <div class="section-lbl">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <h3>Chatbot &amp; CRM · Messenger</h3>
+    <span class="tag processing" data-vi>Trực tiếp</span><span class="tag processing" data-en>Live</span>
+    <a href="customers.html" class="panel-action" style="margin-left:auto"><span data-vi>Quản lý CRM →</span><span data-en>Manage CRM →</span></a>
+  </div>
+
+  <!-- Chatbot KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label"><span data-vi>Hội thoại hôm nay</span><span data-en>Chats today</span></div>
+      <div class="kpi-value">847</div>
+      <div class="kpi-delta up">▲ 12.3% <span data-vi>so hôm qua</span><span data-en>vs yesterday</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><span data-vi>Khách mới qua Messenger</span><span data-en>New via Messenger</span></div>
+      <div class="kpi-value">134</div>
+      <div class="kpi-delta up">▲ 18 <span data-vi>so hôm qua</span><span data-en>vs yesterday</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><span data-vi>Tỉ lệ chuyển đổi</span><span data-en>Conversion rate</span></div>
+      <div class="kpi-value">23.4%</div>
+      <div class="kpi-delta up">▲ 2.1% <span data-vi>so tuần trước</span><span data-en>vs last week</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label"><span data-vi>GMV từ chatbot</span><span data-en>Chatbot GMV</span></div>
+      <div class="kpi-value">₫42.3<small> M</small></div>
+      <div class="kpi-delta up">▲ 198 <span data-vi>đơn hôm nay</span><span data-en>orders today</span></div>
+    </div>
+  </div>
+
+  <!-- Chatbot feed + CRM analytics -->
+  <div class="row">
+
+    <!-- Left: Messenger conversation feed -->
+    <div class="panel" style="flex:1.4">
+      <div class="panel-head">
+        <h2><span data-vi>Hội thoại Messenger gần đây</span><span data-en>Recent conversations</span></h2>
+        <a href="customers.html" class="panel-action"><span data-vi>Xem tất cả →</span><span data-en>View all →</span></a>
+      </div>
+      <div class="chat-feed">
+
+        <a class="chat-item" href="customers.html">
+          <div class="chat-av cav-g">NT</div>
+          <div class="chat-body">
+            <div class="chat-nm-row"><span class="chat-nm">Nguyễn Thị Mai</span><span class="chat-ts">14:31</span></div>
+            <div class="chat-prev">"Em muốn hỏi về giá cà phê hữu cơ Đắk Lắk 250g ạ, có ship ra Hà Nội không?"</div>
+            <div class="chat-tags">
+              <span class="ci">💰 Hỏi giá</span>
+              <span class="ci ci-ok">✓ Đã đặt hàng</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="chat-item" href="customers.html">
+          <div class="chat-av cav-b">LH</div>
+          <div class="chat-body">
+            <div class="chat-nm-row"><span class="chat-nm">Lê Văn Hùng</span><span class="chat-ts">14:25</span></div>
+            <div class="chat-prev">"Đơn DHTC-24051201 của em đã tới chưa anh ơi? Đặt 3 ngày rồi."</div>
+            <div class="chat-tags">
+              <span class="ci">📦 Tra đơn hàng</span>
+              <span class="ci ci-ok">✓ Đã hỗ trợ</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="chat-item" href="customers.html">
+          <div class="chat-av cav-p">TT</div>
+          <div class="chat-body">
+            <div class="chat-nm-row"><span class="chat-nm">Trần Thu Trang</span><span class="chat-ts">14:18</span></div>
+            <div class="chat-prev">"Shop có hạt điều không muối không ạ? Mua cho bé ăn nên cần loại nguyên chất."</div>
+            <div class="chat-tags">
+              <span class="ci">🔍 Tìm sản phẩm</span>
+              <span class="ci ci-act">● Đang tư vấn</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="chat-item" href="customers.html">
+          <div class="chat-av cav-gl" style="color:#fff">PJ</div>
+          <div class="chat-body">
+            <div class="chat-nm-row"><span class="chat-nm">Park Jimin &nbsp;<span style="font-size:10px;color:var(--ink-mute)">🇰🇷</span></span><span class="chat-ts">14:10</span></div>
+            <div class="chat-prev">"Do you ship to Korea? What's the delivery time for macadamia nuts?"</div>
+            <div class="chat-tags">
+              <span class="ci">🚚 Hỏi vận chuyển</span>
+              <span class="ci ci-act">● Đang tư vấn</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="chat-item" href="customers.html">
+          <div class="chat-av cav-o">PM</div>
+          <div class="chat-body">
+            <div class="chat-nm-row"><span class="chat-nm">Phạm Minh Đức</span><span class="chat-ts">13:58</span></div>
+            <div class="chat-prev">"Ship ra Hà Nội mất mấy ngày vậy shop? Mình cần gấp trước 20/5."</div>
+            <div class="chat-tags">
+              <span class="ci">🚚 Hỏi vận chuyển</span>
+              <span class="ci ci-ok">✓ Đã đặt hàng</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="chat-item" href="customers.html">
+          <div class="chat-av cav-g">NH</div>
+          <div class="chat-body">
+            <div class="chat-nm-row"><span class="chat-nm">Nguyễn Hồng Vân</span><span class="chat-ts">13:44</span></div>
+            <div class="chat-prev">"Tôi muốn mua set quà tặng cà phê cao cấp, ngân sách khoảng 500k. Tư vấn giúp."</div>
+            <div class="chat-tags">
+              <span class="ci">⭐ Tư vấn sản phẩm</span>
+              <span class="ci ci-act">● Đang tư vấn</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="chat-item" href="customers.html">
+          <div class="chat-av cav-b">WY</div>
+          <div class="chat-body">
+            <div class="chat-nm-row"><span class="chat-nm">Watanabe Yuki &nbsp;<span style="font-size:10px;color:var(--ink-mute)">🇯🇵</span></span><span class="chat-ts">13:30</span></div>
+            <div class="chat-prev">"Are the macadamia nuts from Khánh Hòa certified organic by USDA?"</div>
+            <div class="chat-tags">
+              <span class="ci">⭐ Tư vấn sản phẩm</span>
+              <span class="ci ci-drop">✗ Bỏ chat</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="chat-item" href="customers.html">
+          <div class="chat-av cav-p">ĐL</div>
+          <div class="chat-body">
+            <div class="chat-nm-row"><span class="chat-nm">Đặng Thị Lan</span><span class="chat-ts">13:15</span></div>
+            <div class="chat-prev">"Hôm nay có deal flash sale gì không shop ơi? Muốn mua nhiều để tặng."</div>
+            <div class="chat-tags">
+              <span class="ci">🏷️ Hỏi khuyến mãi</span>
+              <span class="ci ci-ok">✓ Đã đặt hàng</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="chat-item" href="customers.html">
+          <div class="chat-av cav-o">BN</div>
+          <div class="chat-body">
+            <div class="chat-nm-row"><span class="chat-nm">Bùi Ngọc Anh</span><span class="chat-ts">12:58</span></div>
+            <div class="chat-prev">"Tôi bị giao sai sản phẩm, đặt cà phê robusta nhưng nhận được arabica."</div>
+            <div class="chat-tags">
+              <span class="ci">😤 Khiếu nại</span>
+              <span class="ci ci-act">● Đang xử lý</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- Right: CRM analytics -->
+    <div class="panel">
+      <div class="panel-head">
+        <h2><span data-vi>Phân tích CRM</span><span data-en>CRM Analytics</span></h2>
+      </div>
+
+      <!-- Intent breakdown -->
+      <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:10px">
+        <span data-vi>Phân loại câu hỏi hôm nay</span><span data-en>Query breakdown today</span>
+      </div>
+      <div class="intent-list">
+        <div class="intent-row">
+          <span class="intent-ico">🔍</span>
+          <span class="intent-nm"><span data-vi>Tìm sản phẩm</span><span data-en>Product search</span></span>
+          <div class="ib-bg"><div class="ib-fill" style="width:100%;background:var(--green)"></div></div>
+          <span class="intent-cnt">312</span>
+        </div>
+        <div class="intent-row">
+          <span class="intent-ico">💰</span>
+          <span class="intent-nm"><span data-vi>Hỏi giá / KM</span><span data-en>Price / promo</span></span>
+          <div class="ib-bg"><div class="ib-fill" style="width:64%;background:var(--gold)"></div></div>
+          <span class="intent-cnt">198</span>
+        </div>
+        <div class="intent-row">
+          <span class="intent-ico">📦</span>
+          <span class="intent-nm"><span data-vi>Tra cứu đơn hàng</span><span data-en>Order tracking</span></span>
+          <div class="ib-bg"><div class="ib-fill" style="width:50%;background:#3b6cb8"></div></div>
+          <span class="intent-cnt">156</span>
+        </div>
+        <div class="intent-row">
+          <span class="intent-ico">🚚</span>
+          <span class="intent-nm"><span data-vi>Hỏi vận chuyển</span><span data-en>Shipping</span></span>
+          <div class="ib-bg"><div class="ib-fill" style="width:40%;background:#7c4dbc"></div></div>
+          <span class="intent-cnt">124</span>
+        </div>
+        <div class="intent-row">
+          <span class="intent-ico">😤</span>
+          <span class="intent-nm"><span data-vi>Khiếu nại / hỗ trợ</span><span data-en>Support</span></span>
+          <div class="ib-bg"><div class="ib-fill" style="width:18%;background:var(--warning)"></div></div>
+          <span class="intent-cnt">57</span>
+        </div>
+      </div>
+
+      <!-- 7-day trend -->
+      <div class="divider" style="margin:14px 0 10px"></div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:8px">
+        <span data-vi>Xu hướng 7 ngày qua</span><span data-en>7-day conversation trend</span>
+      </div>
+      <div class="spark-wrap" id="sparkChart"></div>
+
+      <!-- Conversion funnel -->
+      <div class="divider" style="margin:14px 0 10px"></div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:8px">
+        <span data-vi>Phễu chuyển đổi hôm nay</span><span data-en>Conversion funnel today</span>
+      </div>
+      <div class="funnel-list">
+        <div class="funnel-step" style="background:rgba(45,127,94,.08)">
+          <div class="funnel-dot" style="background:var(--green)"></div>
+          <span class="funnel-lbl" data-vi>Tổng hội thoại</span><span class="funnel-lbl" data-en>Total chats</span>
+          <span class="funnel-num" style="color:var(--green)">847</span>
+          <span class="funnel-pct">100%</span>
+        </div>
+        <div class="funnel-step" style="background:rgba(201,169,97,.1)">
+          <div class="funnel-dot" style="background:var(--gold)"></div>
+          <span class="funnel-lbl" data-vi>Quan tâm sản phẩm</span><span class="funnel-lbl" data-en>Showed interest</span>
+          <span class="funnel-num" style="color:var(--gold)">421</span>
+          <span class="funnel-pct">49.7%</span>
+        </div>
+        <div class="funnel-step" style="background:rgba(59,108,184,.08)">
+          <div class="funnel-dot" style="background:#3b6cb8"></div>
+          <span class="funnel-lbl" data-vi>Đã đặt hàng</span><span class="funnel-lbl" data-en>Converted</span>
+          <span class="funnel-num" style="color:#3b6cb8">198</span>
+          <span class="funnel-pct">23.4%</span>
+        </div>
+      </div>
+
+      <!-- New customers today -->
+      <div class="divider" style="margin:14px 0 10px"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-mute)">
+          <span data-vi>Khách mới hôm nay</span><span data-en>New customers today</span>
+        </div>
+        <a href="customers.html" class="panel-action" style="font-size:11px">
+          <span data-vi>134 khách →</span><span data-en>134 new →</span>
+        </a>
+      </div>
+      <div class="newcust-list">
+        <div class="newcust-item">
+          <div class="newcust-av" style="background:#2d7f5e;color:#fff">NT</div>
+          <span class="newcust-name">Nguyễn Thị Mai</span>
+          <span class="newcust-src">Messenger · Hà Nội</span>
+        </div>
+        <div class="newcust-item">
+          <div class="newcust-av" style="background:var(--gold);color:#fff">PJ</div>
+          <span class="newcust-name">Park Jimin</span>
+          <span class="newcust-src">Messenger · 🇰🇷 Seoul</span>
+        </div>
+        <div class="newcust-item">
+          <div class="newcust-av" style="background:#7c4dbc;color:#fff">ĐL</div>
+          <span class="newcust-name">Đặng Thị Lan</span>
+          <span class="newcust-src">Messenger · TP.HCM</span>
+        </div>
+        <div class="newcust-item">
+          <div class="newcust-av" style="background:#3b6cb8;color:#fff">WY</div>
+          <span class="newcust-name">Watanabe Yuki</span>
+          <span class="newcust-src">Messenger · 🇯🇵 Tokyo</span>
+        </div>
+        <div class="newcust-item">
+          <div class="newcust-av">BN</div>
+          <span class="newcust-name">Bùi Ngọc Anh</span>
+          <span class="newcust-src">Messenger · Đà Nẵng</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Top merchants + System health -->
   <div class="row eq">
     <!-- Left: Top merchants -->
@@ -525,6 +843,26 @@ function approveItem(btn) {
   btn.textContent = '✓';
   btn.style.background = 'var(--success)';
 }
+
+/* ── Spark chart — 7-day conversation trend ── */
+(function buildSpark() {
+  const c = document.getElementById('sparkChart');
+  if (!c) return;
+  const days = ['9/5','10/5','11/5','12/5','13/5','14/5','15/5'];
+  const vals = [612, 684, 721, 695, 743, 778, 847];
+  const mx = Math.max(...vals);
+  days.forEach((d, i) => {
+    const col = document.createElement('div'); col.className = 'spark-col';
+    const bar = document.createElement('div'); bar.className = 'spark-bar';
+    bar.style.height = Math.round((vals[i] / mx) * 32) + 'px';
+    bar.style.background = i === 6 ? 'var(--green)' : 'rgba(45,127,94,.35)';
+    bar.title = vals[i] + ' cuộc hội thoại';
+    const lbl = document.createElement('span'); lbl.className = 'spark-lbl';
+    lbl.textContent = d;
+    col.appendChild(bar); col.appendChild(lbl);
+    c.appendChild(col);
+  });
+})();
 </script>
 <script src="../assets/app.js"></script>
 </body>
